@@ -14,7 +14,9 @@ internal static class ServiceRegistrar
 {
     internal static void AddRequiredServices(IServiceCollection services, ShopperiorEFCoreConfiguration configuration)
     {
-        services.AddDbContext<ShopperiorDbContext>(builder => builder.UseSqlServer(configuration.ConnectionString));
+        if (configuration.DatabaseType == DatabaseType.SqlServer)
+            services.AddDbContext<ShopperiorDbContext>(builder => builder.UseSqlServer(configuration.ConnectionString));
+
         services.AddScoped<IShopperiorDbContext>(provider => provider.GetService<ShopperiorDbContext>());
 
         services.AddScoped<ICategoryRepository, CategoryRepository>();

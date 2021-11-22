@@ -7,7 +7,20 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Ardalis.ApiEndpoints" Version="3.1.0" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.2.3" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Shopperior.Application.DependencyInjection.Microsoft\Shopperior.Application.DependencyInjection.Microsoft.csproj" />
+    <ProjectReference Include="..\Shopperior.Application\Shopperior.Application.csproj" />
+    <ProjectReference Include="..\Shopperior.Data.EFCore.DependencyInjection.Microsoft\Shopperior.Data.EFCore.DependencyInjection.Microsoft.csproj" />
+    <ProjectReference Include="..\Shopperior.Data.EFCore\Shopperior.Data.EFCore.csproj" />
+    <ProjectReference Include="..\Shopperior.Domain.Contracts\Shopperior.Domain.Contracts.csproj" />
+    <ProjectReference Include="..\Shopperior.Domain\Shopperior.Domain.csproj" />
+    <ProjectReference Include="..\Shopperior.Logging.DependencyInjection.Microsoft\Shopperior.Logging.DependencyInjection.Microsoft.csproj" />
+    <ProjectReference Include="..\Shopperior.Logging\Shopperior.Logging.csproj" />
+    <ProjectReference Include="..\StratmanMedia.ResponseObjects\StratmanMedia.ResponseObjects.csproj" />
   </ItemGroup>
 
 </Project>

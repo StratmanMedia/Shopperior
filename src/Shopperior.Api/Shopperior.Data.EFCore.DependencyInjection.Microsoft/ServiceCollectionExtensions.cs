@@ -4,7 +4,7 @@ namespace Shopperior.Data.EFCore.DependencyInjection.Microsoft;
 
 public static class ServiceCollectionExtensions
 {
-    public static IServiceCollection AddShopperiorApplication(this IServiceCollection services, ShopperiorEFCoreConfiguration configuration)
+    public static IServiceCollection AddShopperiorEFCoreDbContext(this IServiceCollection services, ShopperiorEFCoreConfiguration configuration)
     {
         ServiceRegistrar.AddRequiredServices(services, configuration);
 
