@@ -1,0 +1,16 @@
+<mat-toolbar>
+  <p>Lists</p>
+  <span class="toolbar-spacer"></span>
+  <a mat-icon-button routerLink="/lists/create" aria-label="Button with a plus icon">
+    <mat-icon>add</mat-icon>
+  </a>
+</mat-toolbar>
+<mat-nav-list>
+  <mat-list-item *ngFor="let shoppingList of shoppingLists">
+    <a matLine routerLink="/lists/{{shoppingList.guid.toString()}}">{{ shoppingList.name }}</a>
+    <button mat-icon-button (click)="onDeleteListClick()">
+      <mat-icon>delete</mat-icon>
+    </button>
+    <mat-divider></mat-divider>
+  </mat-list-item>
+</mat-nav-list>

@@ -1,0 +1,16 @@
+<div class="form-container">
+  <form [formGroup]="listForm" (submit)="onSubmit()">
+    <mat-form-field appearance="fill" class="width-100">
+      <mat-label>Name</mat-label>
+      <input matInput formControlName="name" />
+    </mat-form-field>
+    <mat-form-field appearance="fill" class="width-100">
+      <mat-label>Description</mat-label>
+      <textarea matInput formControlName="description"></textarea>
+    </mat-form-field>
+    <mat-action-list>
+      <button mat-raised-button color="primary" type="submit" class="width-100" [disabled]="!listForm.valid">Save</button>
+      <button mat-raised-button type="button" class="width-100" routerLink="/lists">Cancel</button>
+    </mat-action-list>
+  </form>
+</div>
