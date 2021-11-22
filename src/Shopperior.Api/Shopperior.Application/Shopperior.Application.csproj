@@ -1,0 +1,32 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Infrastructure\**" />
+    <EmbeddedResource Remove="Infrastructure\**" />
+    <None Remove="Infrastructure\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Items\" />
+    <Folder Include="ListItems\" />
+    <Folder Include="ShoppingLists\" />
+    <Folder Include="Stores\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Ardalis.GuardClauses" Version="3.2.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Shopperior.Domain.Contracts\Shopperior.Domain.Contracts.csproj" />
+    <ProjectReference Include="..\Shopperior.Domain\Shopperior.Domain.csproj" />
+    <ProjectReference Include="..\Shopperior.Logging\Shopperior.Logging.csproj" />
+    <ProjectReference Include="..\StratmanMedia.Repositories.EFCore\StratmanMedia.Repositories.EFCore.csproj" />
+    <ProjectReference Include="..\StratmanMedia.ResponseObjects\StratmanMedia.ResponseObjects.csproj" />
+  </ItemGroup>
+
+</Project>
