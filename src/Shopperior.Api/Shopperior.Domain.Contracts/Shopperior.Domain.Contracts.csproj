@@ -7,15 +7,8 @@
   <ItemGroup>
     <ProjectReference Include="..\Shopperior.Domain\Shopperior.Domain.csproj" />
     <ProjectReference Include="..\Shopperior.Logging\Shopperior.Logging.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Reference Include="StratmanMedia.Repositories.EFCore">
-      <HintPath>..\..\lib\StratmanMedia.Repositories.EFCore.dll</HintPath>
-    </Reference>
-    <Reference Include="StratmanMedia.ResponseObjects">
-      <HintPath>..\..\lib\StratmanMedia.ResponseObjects.dll</HintPath>
-    </Reference>
+    <ProjectReference Include="..\StratmanMedia.Repositories.EFCore\StratmanMedia.Repositories.EFCore.csproj" />
+    <ProjectReference Include="..\StratmanMedia.ResponseObjects\StratmanMedia.ResponseObjects.csproj" />
   </ItemGroup>
 
   <ItemGroup>
