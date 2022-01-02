@@ -16,7 +16,7 @@ const routes: Routes = [
     ]
   },
   {
-    path: '',
+    path: 'app',
     component: UserLayoutComponent,
     canActivate: [AuthGuard],
     children: [
