@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
-import { VisitorLayoutComponent } from './core/visitor-layout/visitor-layout.component';
-import { UserLayoutComponent } from './core/user-layout/user-layout.component';
+import { VisitorLayoutComponent } from './modules/visitor-layout/pages/visitor-layout/visitor-layout.component';
+import { UserLayoutComponent } from './modules/user-layout/pages/user-layout/user-layout.component';
 import { AuthGuard } from './core/guards/auth.guard';
 
 const routes: Routes = [
