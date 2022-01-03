@@ -8,8 +8,8 @@ import { Component, OnInit } from '@angular/core';
 export class UserLayoutComponent implements OnInit {
 
   fillerNav = [
-    { name: 'Dashboard', link: '/dashboard' },
-    { name: 'Lists', link: '/lists' }
+    { name: 'Dashboard', link: '/app/dashboard' },
+    { name: 'Lists', link: '/app/lists' }
   ];
 
   constructor() { }
