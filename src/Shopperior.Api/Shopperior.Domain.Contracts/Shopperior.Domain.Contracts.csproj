@@ -2,6 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
+	  <ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
 
   <ItemGroup>
@@ -12,7 +13,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Shared\" />
+    <Folder Include="Shared\Cqrs\" />
+    <Folder Include="ShoppingLists\Models\" />
+    <Folder Include="ShoppingLists\Queries\" />
   </ItemGroup>
 
 </Project>
