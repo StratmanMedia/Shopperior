@@ -1,20 +1,20 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Ardalis.GuardClauses;
+using Microsoft.Extensions.Logging;
 using Shopperior.Domain.Contracts.Users;
 using Shopperior.Domain.Contracts.Users.Repositories;
 using Shopperior.Domain.Entities;
-using Shopperior.Logging;
 
 namespace Shopperior.Application.Users.Queries
 {
     public class GetOneUserQuery : IGetOneUserQuery
     {
-        private readonly IShopperiorLogger _logger;
+        private readonly ILogger _logger;
         private readonly IUserRepository _userRepository;
 
         public GetOneUserQuery(
-            IShopperiorLogger logger,
+            ILogger<GetOneUserQuery> logger,
             IUserRepository userRepository)
         {
             _logger = Guard.Against.Null(logger, nameof(logger));

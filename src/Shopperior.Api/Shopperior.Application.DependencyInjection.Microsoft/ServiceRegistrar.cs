@@ -1,6 +1,8 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
+using Shopperior.Application.ShoppingLists.Queries;
 using Shopperior.Application.Users.Commands;
 using Shopperior.Application.Users.Queries;
+using Shopperior.Domain.Contracts.ShoppingLists.Queries;
 using Shopperior.Domain.Contracts.Users;
 
 namespace Shopperior.Application.DependencyInjection.Microsoft;
@@ -11,5 +13,6 @@ internal static class ServiceRegistrar
     {
         services.AddScoped<ICreateUserCommand, CreateUserCommand>();
         services.AddScoped<IGetOneUserQuery, GetOneUserQuery>();
+        services.AddScoped<IGetAllShoppingListsQuery, GetAllShoppingListsQuery>();
     }
 }

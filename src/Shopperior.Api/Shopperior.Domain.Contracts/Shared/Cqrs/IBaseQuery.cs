@@ -2,10 +2,10 @@
 
 public interface IBaseQuery<TResponse>
 {
-    Task<TResponse> ExecuteAsync();
+    Task<TResponse> ExecuteAsync(CancellationToken cancellationToken = new CancellationToken());
 }
 
 public interface IBaseQuery<TRequest, TResponse>
 {
-    Task<TResponse> ExecuteAsyc(TRequest request);
+    Task<TResponse> ExecuteAsync(TRequest request, CancellationToken cancellationToken = new CancellationToken());
 }

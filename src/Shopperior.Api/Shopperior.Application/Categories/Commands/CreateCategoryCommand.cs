@@ -1,20 +1,20 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Ardalis.GuardClauses;
+using Microsoft.Extensions.Logging;
 using Shopperior.Domain.Contracts.Categories;
 using Shopperior.Domain.Contracts.Categories.Repositories;
 using Shopperior.Domain.Entities;
-using Shopperior.Logging;
 
 namespace Shopperior.Application.Categories.Commands
 {
     public class CreateCategoryCommand : ICreateCategoryCommand
     {
-        private readonly IShopperiorLogger _logger;
+        private readonly ILogger _logger;
         private readonly ICategoryRepository _categoryRepository;
 
         public CreateCategoryCommand(
-            IShopperiorLogger logger,
+            ILogger<CreateCategoryCommand> logger,
             ICategoryRepository categoryRepository)
         {
             _logger = Guard.Against.Null(logger, nameof(logger));
