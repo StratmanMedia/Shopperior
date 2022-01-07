@@ -1,7 +1,9 @@
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { BehaviorSubject, Observable, of, ReplaySubject } from 'rxjs';
+import { map } from 'rxjs/operators';
 import { constants } from 'src/app/shared/classes/constants';
 import { LocalDataService } from '../local/local-data.service';
+import { ShopperiorApiService } from '../shopperior-api/shopperior-api.service';
 import { ShoppingListModel } from './models/shopping-list-model';
 
 @Injectable({
@@ -9,17 +11,21 @@ import { ShoppingListModel } from './models/shopping-list-model';
 })
 export class ShoppingListService {
 
-  constructor(private local: LocalDataService) { }
+  private _listSubject = new ReplaySubject<ShoppingListModel[]>(1);
+
+  constructor(
+    private _local: LocalDataService,
+    private _api: ShopperiorApiService) {
+      this.loadLists();
+      this._listSubject.subscribe(
+        (lists: ShoppingListModel[]) => {
+          this._local.set(constants.storageKeys.shoppingLists, lists);
+        }
+      );
+    }
 
   public getAll(): Observable<ShoppingListModel[]> {
-    return new Observable(observer => {
-      let savedLists = this.local.get<ShoppingListModel[]>(constants.storageKeys.shoppingLists);
-      if (savedLists === null) {
-        savedLists = [];
-      }
-      observer.next(savedLists);
-      observer.complete();
-    });
+    return this._listSubject.asObservable();
   }
 
   public getOne(guid: string): Observable<ShoppingListModel> {
@@ -37,7 +43,7 @@ export class ShoppingListService {
       try {
         this.getAll().subscribe(savedLists => {
           savedLists.push(shoppingList);
-          this.local.set(constants.storageKeys.shoppingLists, savedLists);
+          this._local.set(constants.storageKeys.shoppingLists, savedLists);
           observer.next();
           observer.complete();
         });
@@ -55,10 +61,23 @@ export class ShoppingListService {
         foundList.name = shoppingList.name;
         foundList.description = shoppingList.description;
         foundList.items = shoppingList.items;
-        this.local.set(constants.storageKeys.shoppingLists, savedLists);
+        this._local.set(constants.storageKeys.shoppingLists, savedLists);
         observer.next();
         observer.complete();
       });
-    })
+    });
+  }
+
+  private loadLists(): void {
+    this._api.ShoppingLists.getAll().subscribe(
+      (lists: ShoppingListModel[]) => {
+        this._listSubject.next(lists);
+      },
+      (error: any) => {
+        console.log('Could not load shopping lists form API.');
+        const lists = this._local.get<ShoppingListModel[]>(constants.storageKeys.shoppingLists);
+        this._listSubject.next(lists);
+      }
+    );
   }
 }

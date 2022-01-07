@@ -5,6 +5,15 @@ var builder = WebApplication.CreateBuilder(args);
 var config = builder.Configuration;
 
 // Add services to the container.
+builder.Services.AddCors(options =>
+{
+    options.AddDefaultPolicy(
+        builder =>
+        {
+            // TODO: use a white list to be more secure
+            builder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader();
+        });
+});
 builder.Services.AddShopperiorEFCoreDbContext(new ShopperiorEFCoreConfiguration
 {
     ConnectionString = config.GetConnectionString("ShopperiorDb"),
@@ -26,9 +35,7 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-
+app.UseCors();
 app.UseAuthorization();
-
 app.MapControllers();
-
 app.Run();

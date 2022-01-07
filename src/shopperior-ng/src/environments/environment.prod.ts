@@ -9,5 +9,6 @@ export const environment = {
     response_mode: '',
     post_logout_redirect_uri: '',
     loadUserInfo: true
-  }
+  },
+  baseApiUrl: 'https://localhost:7080'
 };
