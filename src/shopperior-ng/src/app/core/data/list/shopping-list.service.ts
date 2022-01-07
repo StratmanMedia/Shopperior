@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable, of, ReplaySubject } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { Observable, ReplaySubject } from 'rxjs';
 import { constants } from 'src/app/shared/classes/constants';
+import { environment } from 'src/environments/environment';
+import { LoggingService } from '../../logging/logging.service';
 import { LocalDataService } from '../local/local-data.service';
 import { ShopperiorApiService } from '../shopperior-api/shopperior-api.service';
 import { ShoppingListModel } from './models/shopping-list-model';
@@ -10,7 +11,10 @@ import { ShoppingListModel } from './models/shopping-list-model';
   providedIn: 'root'
 })
 export class ShoppingListService {
-
+  private _logger = new LoggingService({
+    minimumLogLevel: environment.minimumLogLevel,
+    callerName: 'ShoppingListService'
+  });
   private _listSubject = new ReplaySubject<ShoppingListModel[]>(1);
 
   constructor(
@@ -74,7 +78,7 @@ export class ShoppingListService {
         this._listSubject.next(lists);
       },
       (error: any) => {
-        console.log('Could not load shopping lists form API.');
+        this._logger.debug('Could not load shopping lists form API.');
         const lists = this._local.get<ShoppingListModel[]>(constants.storageKeys.shoppingLists);
         this._listSubject.next(lists);
       }

@@ -7,6 +7,8 @@ import { ItemService } from 'src/app/core/data/item/item.service';
 import { ListItemModel } from 'src/app/core/data/list/models/list-tem-model';
 import { ShoppingListModel } from 'src/app/core/data/list/models/shopping-list-model';
 import { ShoppingListService } from 'src/app/core/data/list/shopping-list.service';
+import { LoggingService } from 'src/app/core/logging/logging.service';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-list-item-form',
@@ -14,7 +16,10 @@ import { ShoppingListService } from 'src/app/core/data/list/shopping-list.servic
   styleUrls: ['./list-item-form.component.scss']
 })
 export class ListItemFormComponent implements OnInit {
-
+  private _logger = new LoggingService({
+    minimumLogLevel: environment.minimumLogLevel,
+    callerName: typeof ListItemFormComponent
+  });
   itemForm: FormGroup = this.buildItemForm();
   private shoppingListSubject = new BehaviorSubject<ShoppingListModel>(null);
   
@@ -37,7 +42,7 @@ export class ListItemFormComponent implements OnInit {
   }
 
   onSubmit(): void {
-    console.warn(this.itemForm.value);
+    this._logger.warn(this.itemForm.value);
     const formItem = <ItemModel>{
       guid: '',
       name: this.itemForm.controls.name.value,

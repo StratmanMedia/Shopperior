@@ -1,5 +1,6 @@
 export const environment = {
   production: true,
+  minimumLogLevel: 'INFO',
   oidcClientSettings: {
     authority: 'https://dev-178567.okta.com/oauth2/default',
     client_id: '0oa1udi7d2ymhwN4R357',

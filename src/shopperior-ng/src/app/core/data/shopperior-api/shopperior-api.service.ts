@@ -1,8 +1,9 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, of, throwError } from 'rxjs';
-import { catchError, map, tap } from 'rxjs/operators';
+import { map } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
+import { LoggingService } from '../../logging/logging.service';
 import { ShoppingListModel } from '../list/models/shopping-list-model';
 import { ApiResponseModel } from './models/api-response-model';
 import { ShoppingListDto } from './models/shopping-list-dto';
@@ -11,6 +12,10 @@ import { ShoppingListDto } from './models/shopping-list-dto';
   providedIn: 'root'
 })
 export class ShopperiorApiService {
+  private _logger = new LoggingService({
+    minimumLogLevel: environment.minimumLogLevel,
+    callerName: 'ShopperiorApiService'
+  });
   private _url = environment.baseApiUrl;
 
   constructor(
@@ -37,7 +42,7 @@ export class ShopperiorApiService {
     const uri = `${this._url}${path}`;
     return this._http.get<ApiResponseModel<T>>(uri).pipe(
       map((res: ApiResponseModel<T>) => {
-        console.log(`GET:${uri} Completed.`)
+        this._logger.debug(`GET:${uri} Completed.`)
         if (!res) { throwError(`GET:${uri}: There was no response from the endpoint.`); }
         if (!res.isSuccess) { throwError(res.messages.join()); }
         return res.data;
@@ -59,8 +64,8 @@ export class ShopperiorApiService {
 
   private handleError<T>(operation: string, result?: T) {
     return (error: any): Observable<T> => {
-      console.error(`ShopperiorApiService.${operation}: An error occurred.`);
-      console.error(error);
+      this._logger.error(`ShopperiorApiService.${operation}: An error occurred.`);
+      this._logger.error(error);
       return of(result as T);
     };
   }
