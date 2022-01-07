@@ -73,6 +73,7 @@ export class ShoppingListService {
       },
       (error: any) => {
         this._logger.debug('Could not load shopping lists from API. Loading from local storage.');
+        this._logger.error(error);
         const lists = this._local.get<ShoppingListModel[]>(constants.storageKeys.shoppingLists);
         this._listSubject.next(lists);
       }

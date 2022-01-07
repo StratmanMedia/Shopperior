@@ -7,6 +7,8 @@ import { HttpClientModule } from '@angular/common/http';
 import { MaterialModule } from './material/material.module';
 import { LocalDataService } from './data/local/local-data.service';
 import { ShoppingListService } from './data/list/shopping-list.service';
+import { GoogleLoginProvider } from 'angularx-social-login';
+import { environment } from 'src/environments/environment';
 
 @NgModule({
   declarations: [],
@@ -17,6 +19,18 @@ import { ShoppingListService } from './data/list/shopping-list.service';
     MaterialModule
   ],
   providers: [
+    {
+      provide: 'SocialAuthServiceConfig',
+      useValue: {
+        autoLogin: true,
+        providers: [
+          {
+            id: GoogleLoginProvider.PROVIDER_ID,
+            provider: new GoogleLoginProvider(environment.googleSignInClientId)
+          }
+        ]
+      }
+    },
     AuthGuard,
     AuthService,
     LocalDataService,

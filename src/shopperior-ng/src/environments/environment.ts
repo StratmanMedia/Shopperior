@@ -1,6 +1,4 @@
-// This file can be replaced during build by using the `fileReplacements` array.
-// `ng build --prod` replaces `environment.ts` with `environment.prod.ts`.
-// The list of file replacements can be found in `angular.json`.
+import { secrets } from '../../../../../shopperior-ng-secrets';
 
 export const environment = {
   production: false,
@@ -15,7 +13,8 @@ export const environment = {
     post_logout_redirect_uri: '',
     loadUserInfo: true
   },
-  baseApiUrl: 'https://localhost:7080'
+  baseApiUrl: 'https://localhost:7080',
+  googleSignInClientId: secrets.googleSignInClientId
 };
 
 /*
