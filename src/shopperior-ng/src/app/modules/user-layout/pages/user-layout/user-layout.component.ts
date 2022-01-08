@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { SocialAuthService, SocialUser } from 'angularx-social-login';
+import { tap } from 'rxjs/operators';
 
 @Component({
   selector: 'app-user-layout',
@@ -6,15 +8,16 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./user-layout.component.scss']
 })
 export class UserLayoutComponent implements OnInit {
+  user: SocialUser;
 
-  fillerNav = [
-    { name: 'Dashboard', link: '/app/dashboard' },
-    { name: 'Lists', link: '/app/lists' }
-  ];
-
-  constructor() { }
+  constructor(private _socialAuthService: SocialAuthService) { }
 
   ngOnInit() {
+    this._socialAuthService.authState.subscribe(
+      socialUser => {
+        this.user = socialUser;
+      }
+    );
   }
 
 }

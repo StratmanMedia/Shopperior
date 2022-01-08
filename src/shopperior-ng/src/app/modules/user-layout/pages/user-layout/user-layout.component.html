@@ -1,18 +1,24 @@
-<div class="container">
-  <mat-toolbar color="primary" class="toolbar">
-    <button mat-icon-button (click)="sidenav.toggle()"><mat-icon>menu</mat-icon></button>
-    <h1 class="app-name">Shopperior</h1>
-  </mat-toolbar>
-
-  <mat-sidenav-container class="sidenav-container">
-    <mat-sidenav #sidenav (keydown.escape)="sidenav.close()">
-      <mat-nav-list>
-        <a mat-list-item routerLink="{{nav.link}}" *ngFor="let nav of fillerNav">{{nav.name}}</a>
-      </mat-nav-list>
-    </mat-sidenav>
-
-    <mat-sidenav-content>
-      <router-outlet></router-outlet>
-    </mat-sidenav-content>
-  </mat-sidenav-container>
-</div>
+<mat-toolbar color="primary" class="toolbar">
+  <button mat-icon-button class="example-icon mat-icon-button" (click)="sidenav.toggle()">
+    <mat-icon>menu</mat-icon>
+  </button>
+  <span>Shopperior</span>
+</mat-toolbar>
+<mat-sidenav-container class="sidenav-container">
+  <mat-sidenav #sidenav mode="over" (keydown.escape)="sidenav.close()">
+    <mat-nav-list>
+      <mat-list-item>
+        {{user.name}}
+      </mat-list-item>
+      <mat-list-item>
+        <a routerLink="/app/dashboard">Dashboard</a>
+      </mat-list-item>
+      <mat-list-item>
+        <a routerLink="/app/lists">Lists</a>
+      </mat-list-item>
+    </mat-nav-list>
+  </mat-sidenav>
+  <mat-sidenav-content>
+    <router-outlet></router-outlet>
+  </mat-sidenav-content>
+</mat-sidenav-container>

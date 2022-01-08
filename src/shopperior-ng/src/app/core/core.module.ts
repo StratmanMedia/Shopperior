@@ -2,12 +2,11 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { AuthGuard } from './guards/auth.guard';
-import { AuthService } from './auth/auth.service';
 import { HttpClientModule } from '@angular/common/http';
 import { MaterialModule } from './material/material.module';
 import { LocalDataService } from './data/local/local-data.service';
 import { ShoppingListService } from './data/list/shopping-list.service';
-import { GoogleLoginProvider } from 'angularx-social-login';
+import { GoogleLoginProvider, SocialAuthServiceConfig, SocialLoginModule } from 'angularx-social-login';
 import { environment } from 'src/environments/environment';
 
 @NgModule({
@@ -16,7 +15,8 @@ import { environment } from 'src/environments/environment';
     CommonModule,
     RouterModule,
     HttpClientModule,
-    MaterialModule
+    MaterialModule,
+    SocialLoginModule
   ],
   providers: [
     {
@@ -29,10 +29,9 @@ import { environment } from 'src/environments/environment';
             provider: new GoogleLoginProvider(environment.googleSignInClientId)
           }
         ]
-      }
+      } as SocialAuthServiceConfig
     },
     AuthGuard,
-    AuthService,
     LocalDataService,
     ShoppingListService
   ]

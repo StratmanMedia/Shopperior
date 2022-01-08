@@ -40,6 +40,7 @@ export class ShopperiorApiService {
 
   private get<T>(path: string): Observable<T> {
     const uri = `${this._url}${path}`;
+    this._logger.debug(`GET:${uri} Started.`);
     return this._http.get<ApiResponseModel<T>>(uri).pipe(
       map((res: ApiResponseModel<T>) => {
         this._logger.debug(`GET:${uri} Completed.`)
