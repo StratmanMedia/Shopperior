@@ -2,17 +2,18 @@
 
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
+	  <ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\Shopperior.Domain\Shopperior.Domain.csproj" />
-    <ProjectReference Include="..\Shopperior.Logging\Shopperior.Logging.csproj" />
     <ProjectReference Include="..\StratmanMedia.Repositories.EFCore\StratmanMedia.Repositories.EFCore.csproj" />
     <ProjectReference Include="..\StratmanMedia.ResponseObjects\StratmanMedia.ResponseObjects.csproj" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Shared\" />
+    <Folder Include="Shared\Cqrs\" />
+    <Folder Include="ShoppingLists\Queries\" />
   </ItemGroup>
 
 </Project>

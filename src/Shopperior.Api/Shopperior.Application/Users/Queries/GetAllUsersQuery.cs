@@ -2,21 +2,21 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Ardalis.GuardClauses;
+using Microsoft.Extensions.Logging;
 using Shopperior.Domain.Contracts.Users;
 using Shopperior.Domain.Contracts.Users.Repositories;
 using Shopperior.Domain.Entities;
-using Shopperior.Logging;
 
 namespace Shopperior.Application.Users.Queries
 {
     public class GetAllUsersQuery : IGetAllUsersQuery
     {
-        private readonly IShopperiorLogger _logger;
+        private readonly ILogger _logger;
         private readonly IUserRepository _userRepository;
 
         public GetAllUsersQuery(
             IUserRepository userRepository,
-            IShopperiorLogger logger)
+            ILogger<GetAllUsersQuery> logger)
         {
             _logger = Guard.Against.Null(logger, nameof(logger));
             _userRepository = Guard.Against.Null(userRepository, nameof(userRepository));

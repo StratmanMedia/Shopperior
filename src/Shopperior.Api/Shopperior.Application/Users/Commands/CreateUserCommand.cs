@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Ardalis.GuardClauses;
+using Microsoft.Extensions.Logging;
 using Shopperior.Domain.Contracts.Users;
 using Shopperior.Domain.Contracts.Users.Repositories;
 using Shopperior.Domain.Entities;
-using Shopperior.Logging;
 using StratmanMedia.ResponseObjects;
 
 namespace Shopperior.Application.Users.Commands
@@ -12,11 +12,11 @@ namespace Shopperior.Application.Users.Commands
     public class CreateUserCommand : ICreateUserCommand
     {
         private readonly IUserRepository _userRepository;
-        private readonly IShopperiorLogger _logger;
+        private readonly ILogger _logger;
 
         public CreateUserCommand(
             IUserRepository userRepository,
-            IShopperiorLogger logger)
+            ILogger<CreateUserCommand> logger)
         {
             _userRepository = Guard.Against.Null(userRepository, nameof(userRepository));
             _logger = Guard.Against.Null(logger, nameof(logger));

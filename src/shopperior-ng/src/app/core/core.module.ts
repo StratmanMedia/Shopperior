@@ -1,29 +1,37 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { VisitorLayoutComponent } from './visitor-layout/visitor-layout.component';
 import { RouterModule } from '@angular/router';
-import { UserLayoutComponent } from './user-layout/user-layout.component';
 import { AuthGuard } from './guards/auth.guard';
-import { AuthService } from './auth/auth.service';
 import { HttpClientModule } from '@angular/common/http';
 import { MaterialModule } from './material/material.module';
 import { LocalDataService } from './data/local/local-data.service';
 import { ShoppingListService } from './data/list/shopping-list.service';
+import { GoogleLoginProvider, SocialAuthServiceConfig, SocialLoginModule } from 'angularx-social-login';
+import { environment } from 'src/environments/environment';
 
 @NgModule({
-  declarations: [
-    VisitorLayoutComponent,
-    UserLayoutComponent
-  ],
+  declarations: [],
   imports: [
     CommonModule,
     RouterModule,
     HttpClientModule,
-    MaterialModule
+    MaterialModule,
+    SocialLoginModule
   ],
   providers: [
+    {
+      provide: 'SocialAuthServiceConfig',
+      useValue: {
+        autoLogin: true,
+        providers: [
+          {
+            id: GoogleLoginProvider.PROVIDER_ID,
+            provider: new GoogleLoginProvider(environment.googleSignInClientId)
+          }
+        ]
+      } as SocialAuthServiceConfig
+    },
     AuthGuard,
-    AuthService,
     LocalDataService,
     ShoppingListService
   ]
