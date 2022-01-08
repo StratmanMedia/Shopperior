@@ -1,10 +1,9 @@
-﻿using System.Threading.Tasks;
-using StratmanMedia.ResponseObjects;
+﻿using Shopperior.Domain.Contracts.Shared.Cqrs;
+using Shopperior.Domain.Entities;
 
 namespace Shopperior.Domain.Contracts.Users
 {
-    public interface ICreateUserCommand
+    public interface ICreateUserCommand : IBaseCommand<ICreateUserRequest>
     {
-        Task<Response> ExecuteAsync(ICreateUserRequest request);
     }
 }

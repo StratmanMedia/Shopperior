@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading;
 using System.Threading.Tasks;
 using Ardalis.GuardClauses;
 using Microsoft.Extensions.Logging;
@@ -22,7 +23,7 @@ namespace Shopperior.Application.Users.Commands
             _logger = Guard.Against.Null(logger, nameof(logger));
         }
 
-        public async Task<Response> ExecuteAsync(ICreateUserRequest request)
+        public async Task<Response> ExecuteAsync(ICreateUserRequest request, CancellationToken cancellationToken = new CancellationToken())
         {
             try
             {

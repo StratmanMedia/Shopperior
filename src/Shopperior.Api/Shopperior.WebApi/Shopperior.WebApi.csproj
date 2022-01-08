@@ -28,6 +28,8 @@
     <Folder Include="Shared\Endpoints\" />
     <Folder Include="ShoppingLists\Models\" />
     <Folder Include="ShoppingLists\Endpoints\" />
+    <Folder Include="Users\Endpoints\" />
+    <Folder Include="Users\Models\" />
   </ItemGroup>
 
 </Project>

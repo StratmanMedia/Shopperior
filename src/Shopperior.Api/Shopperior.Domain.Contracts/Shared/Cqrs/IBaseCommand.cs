@@ -1,6 +1,8 @@
-﻿namespace Shopperior.Domain.Contracts.Shared.Cqrs;
+﻿using StratmanMedia.ResponseObjects;
+
+namespace Shopperior.Domain.Contracts.Shared.Cqrs;
 
 public interface IBaseCommand<TRequest>
 {
-    Task ExecuteAsync(TRequest request);
+    Task<Response> ExecuteAsync(TRequest request, CancellationToken cancellationToken);
 }
