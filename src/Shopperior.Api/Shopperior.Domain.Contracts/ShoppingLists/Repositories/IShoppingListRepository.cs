@@ -5,5 +5,5 @@ namespace Shopperior.Domain.Contracts.ShoppingLists.Repositories;
 
 public interface IShoppingListRepository : IRepository<ShoppingList>
 {
-    Task<IEnumerable<ShoppingList>> GetAllByUserAsync();
+    Task<IEnumerable<ShoppingList>> GetManyByUserAsync(string username, CancellationToken cancellationToken = new());
 }

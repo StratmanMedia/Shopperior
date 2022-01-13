@@ -17,18 +17,18 @@ public class GetAllShoppingListsQuery : IGetAllShoppingListsQuery
         _shoppingListRepository = shoppingListRepository;
     }
 
-    public async Task<IEnumerable<ShoppingList>> ExecuteAsync(CancellationToken cancellationToken = new CancellationToken())
+    public async Task<IEnumerable<ShoppingList>> ExecuteAsync(string username, CancellationToken cancellationToken = new())
     {
-        var lists = await _shoppingListRepository.GetAllAsync();
+        var lists = await _shoppingListRepository.GetManyByUserAsync(username, cancellationToken);
         return lists;
     }
 
-    public async Task<IEnumerable<ShoppingList>> ExecuteAsync(long request, CancellationToken cancellationToken = new CancellationToken())
+    public async Task<IEnumerable<ShoppingList>> ExecuteAsync(long request, CancellationToken cancellationToken = new())
     {
         throw new NotImplementedException();
     }
 
-    public async Task<IEnumerable<ShoppingList>> ExecuteAsync(Guid request, CancellationToken cancellationToken = new CancellationToken())
+    public async Task<IEnumerable<ShoppingList>> ExecuteAsync(Guid request, CancellationToken cancellationToken = new())
     {
         throw new NotImplementedException();
     }

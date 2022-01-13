@@ -1,11 +1,17 @@
-﻿namespace Shopperior.Domain.Enumerations
+﻿using Ardalis.SmartEnum;
+
+namespace Shopperior.Domain.Enumerations
 {
-    public enum ShoppingListPermission
+    public class ShoppingListPermission : SmartEnum<ShoppingListPermission>
     {
-        EditList,
-        DeleteList,
-        AddItemToList,
-        EditItemOnList,
-        RemoveItemFromList
+        public readonly ShoppingListPermission Owner = new("Owner", 0);
+        public readonly ShoppingListPermission Administrator = new("Administrator", 1);
+        public readonly ShoppingListPermission Contributor = new("Contributor", 2);
+        public readonly ShoppingListPermission Viewer = new("Viewer", 3);
+
+        private ShoppingListPermission(string name, int value) : base(name, value)
+        {
+
+        }
     }
 }

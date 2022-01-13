@@ -9,6 +9,6 @@ namespace Shopperior.Domain.Entities
         public User User { get; set; }
         public long ShoppingListId { get; set; }
         public ShoppingList ShoppingList { get; set; }
-        public ShoppingListPermission Permission { get; set; }
+        public string Permission { get; set; }
     }
 }
