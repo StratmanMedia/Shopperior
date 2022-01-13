@@ -3,18 +3,18 @@ import { secrets } from '../../../../../shopperior-ng-secrets';
 export const environment = {
   production: false,
   minimumLogLevel: 'DEBUG',
-  oidcClientSettings: {
-    authority: 'https://dev-178567.okta.com/oauth2/default',
-    client_id: '0oa1udi7d2ymhwN4R357',
-    redirect_uri: 'http://localhost:4200/assets/html/signin-oidc.html',
+  oidc: {
+    authority: secrets.auth0Domain,
+    audience: secrets.auth0Audience,
+    client_id: secrets.auth0ClientId,
+    redirect_uri: 'http://localhost:4200/app/dashboard',
     scope: 'openid profile',
     response_type: 'id_token token',
     response_mode: '',
     post_logout_redirect_uri: '',
     loadUserInfo: true
   },
-  baseApiUrl: 'https://localhost:7080',
-  googleSignInClientId: secrets.googleSignInClientId
+  baseApiUrl: 'https://localhost:7080'
 };
 
 /*
