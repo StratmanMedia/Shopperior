@@ -4,8 +4,15 @@ namespace Shopperior.WebApi.Shared.Endpoints;
 
 public class BaseEndpoint : ControllerBase
 {
-    public IActionResult InternalServerError()
+    protected IActionResult InternalServerError()
     {
         return StatusCode(500);
+    }
+
+    protected string GetAuthorizationHeaderValue()
+    {
+        var authorizationHeaderValue = HttpContext.Request.Headers["Authorization"].ToString();
+
+        return authorizationHeaderValue;
     }
 }

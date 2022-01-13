@@ -4,10 +4,13 @@
     <TargetFramework>net6.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
+    <UserSecretsId>5735cba9-be3e-4b39-b2a9-54ae12dd0691</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="Ardalis.ApiEndpoints" Version="3.1.0" />
+    <PackageReference Include="Ardalis.GuardClauses" Version="3.3.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="6.0.1" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="6.0.1">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
@@ -20,16 +23,16 @@
     <ProjectReference Include="..\Shopperior.Application\Shopperior.Application.csproj" />
     <ProjectReference Include="..\Shopperior.Data.EFCore.DependencyInjection.Microsoft\Shopperior.Data.EFCore.DependencyInjection.Microsoft.csproj" />
     <ProjectReference Include="..\Shopperior.Data.EFCore\Shopperior.Data.EFCore.csproj" />
+    <ProjectReference Include="..\StratmanMedia.Auth\StratmanMedia.Auth.csproj" />
     <ProjectReference Include="..\StratmanMedia.Exceptions\StratmanMedia.Exceptions.csproj" />
     <ProjectReference Include="..\StratmanMedia.ResponseObjects\StratmanMedia.ResponseObjects.csproj" />
   </ItemGroup>
 
   <ItemGroup>
     <Folder Include="Shared\Endpoints\" />
+    <Folder Include="Shared\Interfaces\" />
     <Folder Include="ShoppingLists\Models\" />
     <Folder Include="ShoppingLists\Endpoints\" />
-    <Folder Include="Users\Endpoints\" />
-    <Folder Include="Users\Models\" />
   </ItemGroup>
 
 </Project>
