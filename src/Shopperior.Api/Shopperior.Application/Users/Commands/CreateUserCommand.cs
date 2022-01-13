@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading;
 using System.Threading.Tasks;
 using Ardalis.GuardClauses;
 using Microsoft.Extensions.Logging;
@@ -22,12 +23,12 @@ namespace Shopperior.Application.Users.Commands
             _logger = Guard.Against.Null(logger, nameof(logger));
         }
 
-        public async Task<Response> ExecuteAsync(ICreateUserRequest request)
+        public async Task<Response<User>> ExecuteAsync(User request, CancellationToken cancellationToken = new())
         {
             try
             {
                 var validation = await ValidateRequest(request);
-                if (!string.IsNullOrWhiteSpace(validation)) return new Response(validation);
+                if (!validation.IsSuccess) return new Response<User>(validation.Messages);
 
                 var entity = new User
                 {
@@ -36,12 +37,13 @@ namespace Shopperior.Application.Users.Commands
                     FirstName = request.FirstName,
                     LastName = request.LastName,
                     EmailAddress = request.EmailAddress,
-                    IsActive = true,
+                    Idp = request.Idp,
+                    IdpSubject = request.IdpSubject,
                     CreatedTime = DateTime.UtcNow
                 };
                 await _userRepository.CreateAsync(entity);
 
-                return new Response();
+                return new Response<User>(entity);
             }
             catch (Exception ex)
             {
@@ -50,15 +52,13 @@ namespace Shopperior.Application.Users.Commands
             }
         }
 
-        private async Task<string> ValidateRequest(ICreateUserRequest request)
+        private async Task<Response> ValidateRequest(User request)
         {
-            var existing = await _userRepository.GetByUsernameAsync(request.Username);
-            if (existing != null) return $"{nameof(request.Username)} of {request.Username} already exists.";
+            var existing = await _userRepository.GetByEmailAddressAsync(request.EmailAddress);
+            if (existing != null)
+                return new Response($"{nameof(request.EmailAddress)} of {request.EmailAddress} already exists.");
 
-            existing = await _userRepository.GetByEmailAddressAsync(request.EmailAddress);
-            if (existing != null) return $"{nameof(request.EmailAddress)} of {request.EmailAddress} already exists.";
-
-            return null;
+            return new Response();
         }
     }
 }

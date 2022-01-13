@@ -364,11 +364,11 @@ FodyWeavers.xsd
 # See http://help.github.com/ignore-files/ for more about ignoring files.
 
 # compiled output
-/dist
-/tmp
-/out-tsc
+**/dist
+**/tmp
+**/out-tsc
 # Only exists if Bazel was run
-/bazel-out
+**/bazel-out
 
 # dependencies
 **/node_modules

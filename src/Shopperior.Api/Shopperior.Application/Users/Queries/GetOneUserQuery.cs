@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading;
 using System.Threading.Tasks;
 using Ardalis.GuardClauses;
 using Microsoft.Extensions.Logging;
@@ -21,7 +22,7 @@ namespace Shopperior.Application.Users.Queries
             _userRepository = Guard.Against.Null(userRepository, nameof(userRepository));
         }
 
-        public async Task<User> ExecuteAsync(Guid guid)
+        public async Task<User> ExecuteAsync(Guid guid, CancellationToken cancellationToken = new())
         {
             try
             {
@@ -36,7 +37,7 @@ namespace Shopperior.Application.Users.Queries
             }
         }
 
-        public async Task<User> ExecuteAsync(string username)
+        public async Task<User> ExecuteAsync(string username, CancellationToken cancellationToken = new())
         {
             try
             {

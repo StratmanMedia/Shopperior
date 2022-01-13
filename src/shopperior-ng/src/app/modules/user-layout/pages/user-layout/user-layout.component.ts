@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { SocialAuthService, SocialUser } from 'angularx-social-login';
-import { tap } from 'rxjs/operators';
+import { AuthService, User } from '@auth0/auth0-angular';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-user-layout',
@@ -8,16 +8,12 @@ import { tap } from 'rxjs/operators';
   styleUrls: ['./user-layout.component.scss']
 })
 export class UserLayoutComponent implements OnInit {
-  user: SocialUser;
+  user: Observable<User>;
 
-  constructor(private _socialAuthService: SocialAuthService) { }
+  constructor(private _auth: AuthService) { }
 
   ngOnInit() {
-    this._socialAuthService.authState.subscribe(
-      socialUser => {
-        this.user = socialUser;
-      }
-    );
+    this.user = this._auth.user$;
   }
 
 }

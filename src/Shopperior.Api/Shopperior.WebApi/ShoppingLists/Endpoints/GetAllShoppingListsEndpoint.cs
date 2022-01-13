@@ -1,7 +1,11 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using System.Net.Http.Headers;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Shopperior.Domain.Contracts.ShoppingLists.Queries;
 using Shopperior.WebApi.Shared.Endpoints;
 using Shopperior.WebApi.ShoppingLists.Models;
+using Shopperior.WebApi.Users.Resolvers;
+using StratmanMedia.Auth;
 using StratmanMedia.Exceptions.Extensions;
 using StratmanMedia.ResponseObjects;
 
@@ -11,18 +15,24 @@ public class GetAllShoppingListsEndpoint : BaseEndpoint
 {
     private readonly ILogger<GetAllShoppingListsEndpoint> _logger;
     private readonly IGetAllShoppingListsQuery _getAllShoppingListsQuery;
+    private readonly ICurrentUserResolver _currentUserResolver;
 
     public GetAllShoppingListsEndpoint(
         ILogger<GetAllShoppingListsEndpoint> logger,
-        IGetAllShoppingListsQuery getAllShoppingListsQuery)
+        IGetAllShoppingListsQuery getAllShoppingListsQuery,
+        ICurrentUserResolver currentUserResolver)
     {
         _logger = logger;
         _getAllShoppingListsQuery = getAllShoppingListsQuery;
+        _currentUserResolver = currentUserResolver;
     }
 
+    [Authorize("shop.api.access")]
     [HttpGet("api/v1/lists")]
-    public async Task<ActionResult<Response<ShoppingListDto[]>>> HandleAsync(CancellationToken cancellationToken = new CancellationToken())
+    public async Task<ActionResult<Response<ShoppingListDto[]>>> HandleAsync(CancellationToken cancellationToken = new())
     {
+        var currentUser = await _currentUserResolver.Resolve(User, GetAuthorizationHeaderValue(), cancellationToken);
+
         try
         {
             var lists = await _getAllShoppingListsQuery.ExecuteAsync(cancellationToken);
