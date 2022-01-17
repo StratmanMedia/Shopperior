@@ -2,6 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
+	<ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
 
   <ItemGroup>
@@ -13,6 +14,8 @@
   <ItemGroup>
     <Folder Include="Items\" />
     <Folder Include="ListItems\" />
+    <Folder Include="ShoppingLists\Commands\" />
+    <Folder Include="ShoppingLists\Models\" />
     <Folder Include="ShoppingLists\Queries\" />
     <Folder Include="Stores\" />
   </ItemGroup>
@@ -24,6 +27,7 @@
   <ItemGroup>
     <ProjectReference Include="..\Shopperior.Domain.Contracts\Shopperior.Domain.Contracts.csproj" />
     <ProjectReference Include="..\Shopperior.Domain\Shopperior.Domain.csproj" />
+    <ProjectReference Include="..\StratmanMedia.Exceptions\StratmanMedia.Exceptions.csproj" />
     <ProjectReference Include="..\StratmanMedia.Repositories.EFCore\StratmanMedia.Repositories.EFCore.csproj" />
     <ProjectReference Include="..\StratmanMedia.ResponseObjects\StratmanMedia.ResponseObjects.csproj" />
   </ItemGroup>

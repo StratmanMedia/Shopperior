@@ -44,7 +44,7 @@ public class GetAllShoppingListsEndpoint : BaseEndpoint
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex.JoinAllMessages());
+            _logger.LogError(ex, ex.JoinAllMessages());
             return StatusCode(500);
         }
     }

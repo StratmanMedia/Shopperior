@@ -1,6 +1,4 @@
-using Microsoft.EntityFrameworkCore;
 using Shopperior.Application.DependencyInjection.Microsoft;
-using Shopperior.Data.EFCore;
 using Shopperior.Data.EFCore.DependencyInjection.Microsoft;
 using Shopperior.WebApi.Users.Resolvers;
 using StratmanMedia.Auth;
@@ -48,12 +46,12 @@ var app = builder.Build();
         app.UseSwaggerUI();
     }
 
-    using (var scope = app.Services.CreateScope())
-    {
-        var services = scope.ServiceProvider;
-        var context = services.GetRequiredService<ShopperiorDbContext>();
-        context.Database.Migrate();
-    }
+    //using (var scope = app.Services.CreateScope())
+    //{
+    //    var services = scope.ServiceProvider;
+    //    var context = services.GetRequiredService<ShopperiorDbContext>();
+    //    context.Database.Migrate();
+    //}
 
     app.UseHttpsRedirection();
     app.UseCors();

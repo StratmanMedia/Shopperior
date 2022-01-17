@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
-using Shopperior.Domain.Contracts.ShoppingLists.Repositories;
+﻿using Shopperior.Domain.Contracts.ShoppingLists.Repositories;
 using Shopperior.Domain.Entities;
 using StratmanMedia.Repositories.EFCore;
 
@@ -15,13 +10,12 @@ public class ShoppingListRepository : Repository<ShopperiorDbContext, ShoppingLi
     {
     }
 
-    public async Task<IEnumerable<ShoppingList>> GetManyByUserAsync(string username, CancellationToken cancellationToken = new())
+    public Task<IEnumerable<ShoppingList>> GetManyByUserAsync(long userId, CancellationToken ct = new())
     {
-        return await Task.Run(() =>
-        {
-            var lists = Context.ShoppingLists.Where(l => l.UserListPermissions.Any(p => p.User.Username == username)).AsEnumerable();
+        //Table.Include(t => t.UserListPermissions);
+        //var lists = Table.Where(l => l.UserListPermissions.Any(p => p.UserId == userId)).AsEnumerable();
+        var lists = Table.AsEnumerable();
 
-            return lists;
-        }, cancellationToken);
+        return Task.FromResult(lists);
     }
 }

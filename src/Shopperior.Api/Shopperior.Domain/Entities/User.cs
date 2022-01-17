@@ -1,10 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
 
 namespace Shopperior.Domain.Entities
 {
-    public class User : BaseEntity
+    public class User
     {
+        public long Id { get; set; }
         public Guid Guid { get; set; }
         public string Username { get; set; }
         public string FirstName { get; set; }
@@ -12,6 +12,8 @@ namespace Shopperior.Domain.Entities
         public string EmailAddress { get; set; }
         public string Idp { get; set; }
         public string IdpSubject { get; set; }
-        public ICollection<UserListPermission> UserListPermissions => new HashSet<UserListPermission>();
+        public DateTime CreatedTime { get; set; }
+        public DateTime? LastModifiedTime { get; set; }
+        public DateTime? TrashedTime { get; set; }
     }
 }

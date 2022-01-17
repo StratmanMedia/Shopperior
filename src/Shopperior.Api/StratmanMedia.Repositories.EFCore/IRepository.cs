@@ -1,15 +1,11 @@
-﻿using System.Collections.Generic;
-using System.Threading.Tasks;
+﻿namespace StratmanMedia.Repositories.EFCore;
 
-namespace StratmanMedia.Repositories.EFCore
+public interface IRepository<TEntity> where TEntity : class
 {
-    public interface IRepository<TEntity> where TEntity : class
-    {
-        void Create(TEntity entity);
-        Task CreateAsync(TEntity entity);
-        void Delete(TEntity entity);
-        Task DeleteAsync(TEntity entity);
-        IEnumerable<TEntity> GetAll();
-        Task<IEnumerable<TEntity>> GetAllAsync();
-    }
+    void Create(TEntity entity);
+    Task CreateAsync(TEntity entity, CancellationToken ct = new());
+    void Delete(TEntity entity);
+    Task DeleteAsync(TEntity entity, CancellationToken ct = new());
+    IEnumerable<TEntity> GetAll();
+    Task<IEnumerable<TEntity>> GetAllAsync(CancellationToken ct = new());
 }

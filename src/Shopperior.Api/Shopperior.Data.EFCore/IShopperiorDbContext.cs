@@ -1,16 +1,15 @@
-﻿using System;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Shopperior.Domain.Entities;
 
 namespace Shopperior.Data.EFCore
 {
     public interface IShopperiorDbContext : IDisposable
     {
-        DbSet<Category> Categories { get; set; }
-        DbSet<Item> Items { get; set; }
-        DbSet<ListItem> ListItems { get; set; }
-        DbSet<ShoppingList> ShoppingLists { get; set; }
-        DbSet<Store> Stores { get; set; }
-        DbSet<User> Users { get; set; }
+        DbSet<Category> Category { get; set; }
+        DbSet<Item> Item { get; set; }
+        DbSet<ListItem> ListItem { get; set; }
+        DbSet<ShoppingList> ShoppingList { get; set; }
+        DbSet<Store> Store { get; set; }
+        DbSet<User> User { get; set; }
     }
 }

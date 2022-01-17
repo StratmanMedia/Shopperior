@@ -2,11 +2,15 @@
 
 namespace Shopperior.Domain.Entities
 {
-    public class Item : BaseEntity
+    public class Item
     {
+        public long Id { get; set; }
         public Guid Guid { get; set; }
         public string Name { get; set; }
         public string Brand { get; set; }
         public string Comment { get; set; }
+        public DateTime CreatedTime { get; set; }
+        public DateTime? LastModifiedTime { get; set; }
+        public DateTime? TrashedTime { get; set; }
     }
 }
