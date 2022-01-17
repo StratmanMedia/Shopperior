@@ -6,16 +6,18 @@ namespace Shopperior.Data.EFCore.Repositories;
 
 public class ShoppingListRepository : Repository<ShopperiorDbContext, ShoppingList>, IShoppingListRepository
 {
-    public ShoppingListRepository(ShopperiorDbContext context) : base(context)
+    private readonly IUserListRepository _userListRepository;
+
+    public ShoppingListRepository(ShopperiorDbContext context, IUserListRepository userListRepository) : base(context)
     {
+        _userListRepository = userListRepository;
     }
 
-    public Task<IEnumerable<ShoppingList>> GetManyByUserAsync(long userId, CancellationToken ct = new())
+    public async Task<IEnumerable<ShoppingList>> GetManyByUserAsync(long userId, CancellationToken ct = new())
     {
-        //Table.Include(t => t.UserListPermissions);
-        //var lists = Table.Where(l => l.UserListPermissions.Any(p => p.UserId == userId)).AsEnumerable();
-        var lists = Table.AsEnumerable();
+        var userPermissions = await _userListRepository.GetManyByUserAsync(userId, ct);
+        var lists = Table.Where(l => userPermissions.Select(p => p.ShoppingListId).Contains(l.Id));
 
-        return Task.FromResult(lists);
+        return lists.AsEnumerable();
     }
 }
