@@ -6,9 +6,9 @@
   </a>
 </mat-toolbar>
 <mat-nav-list>
-  <mat-list-item *ngFor="let shoppingList of shoppingLists">
+  <mat-list-item *ngFor="let shoppingList of shoppingLists | async">
     <a matLine routerLink="/app/lists/{{shoppingList.guid}}">{{ shoppingList.name }}</a>
-    <button mat-icon-button (click)="onDeleteListClick()">
+    <button mat-icon-button (click)="deleteList()">
       <mat-icon>delete</mat-icon>
     </button>
     <mat-divider></mat-divider>

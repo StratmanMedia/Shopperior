@@ -15,22 +15,16 @@ export class ShoppingListsViewComponent implements OnInit {
     minimumLogLevel: environment.minimumLogLevel,
     callerName: 'ShoppingListsViewComponent'
   });
-  private shoppingListsSubject = new BehaviorSubject<ShoppingListModel[]>([]);
+  shoppingLists: Observable<ShoppingListModel[]>;
 
   constructor(private shoppingListService: ShoppingListService) {
-    this.shoppingListService.getAll().subscribe(lists => {
-      this.shoppingListsSubject.next(lists);
-    });
+    this.shoppingLists = this.shoppingListService.getAll();
   }
 
   ngOnInit(): void {
   }
 
-  public get shoppingLists(): ShoppingListModel[] {
-    return this.shoppingListsSubject.value;
-  }
-
-  onDeleteListClick() {
+  deleteList() {
     this._logger.warn('delete list clicked');
   }
 }
