@@ -38,6 +38,14 @@ export class ShopperiorApiService {
         })
       );
     }
+
+    add(list: ShoppingListModel): Observable<void> {
+      return this._super.post('/api/v1/lists', list).pipe(
+        map((res: ApiResponseModel<void>) => {
+          return;
+        })
+      );
+    }
   }(this);
 
   private get<T>(path: string): Observable<T> {
@@ -59,7 +67,10 @@ export class ShopperiorApiService {
   private post(path: string, data: any): Observable<any> {
     const uri = `${this._url}${path}`;
     this._logger.debug(`POST:${uri} Started.`);
-    return this._http.post(`${uri}`, data).pipe(
+    return this.injectAuthHeader(new HttpHeaders()).pipe(
+      concatMap(headers => {
+        return this._http.post(`${uri}`, data, {headers});
+      }),
       map((res: ApiResponseModel<null>) => {
         this._logger.debug(`POST:${uri} Completed.`);
         if (!res) { throwError(`POST:${uri} There was no response from the endpoint.`); }

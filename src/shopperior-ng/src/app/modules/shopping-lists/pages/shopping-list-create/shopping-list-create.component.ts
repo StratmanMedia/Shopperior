@@ -4,7 +4,6 @@ import { Router } from '@angular/router';
 import { ShoppingListModel } from 'src/app/core/data/list/models/shopping-list-model';
 import { ShoppingListService } from 'src/app/core/data/list/shopping-list.service';
 import { LoggingService } from 'src/app/core/logging/logging.service';
-import { Guid } from 'src/app/shared/classes/guid';
 import { environment } from 'src/environments/environment';
 
 @Component({
@@ -26,23 +25,18 @@ export class ShoppingListCreateComponent implements OnInit {
   ngOnInit(): void {
   }
 
-  onSubmit(): void {
-    this._logger.warn(this.listForm.value);
-    const shoppingListModel: ShoppingListModel = {
-      guid: Guid.newGuid().toString(),
-      name: this.listForm.controls.name.value,
-      description: this.listForm.controls.description.value,
-      items: []
+  submitForm(): void {
+    const shoppingListModel = <ShoppingListModel>{
+      name: this.listForm.controls.name.value
     };
     this.shoppingListService.add(shoppingListModel).subscribe(() => {
-      this.router.navigateByUrl('/lists');
+      this.router.navigateByUrl('/app/lists');
     });
   }
 
   private buildListForm(): FormGroup {
     const form = new FormGroup({
-      name: new FormControl('', Validators.required),
-      description: new FormControl('')
+      name: new FormControl('', Validators.required)
     });
     return form;
   }
