@@ -42,17 +42,12 @@ namespace Shopperior.Data.EFCore.Migrations
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<long?>("StoreId")
-                        .HasColumnType("bigint");
-
                     b.Property<DateTime?>("TrashedTime")
                         .HasColumnType("datetime2");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("StoreId");
-
-                    b.ToTable("Categories");
+                    b.ToTable("Category");
                 });
 
             modelBuilder.Entity("Shopperior.Domain.Entities.Item", b =>
@@ -81,17 +76,12 @@ namespace Shopperior.Data.EFCore.Migrations
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<long?>("StoreId")
-                        .HasColumnType("bigint");
-
                     b.Property<DateTime?>("TrashedTime")
                         .HasColumnType("datetime2");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("StoreId");
-
-                    b.ToTable("Items");
+                    b.ToTable("Item");
                 });
 
             modelBuilder.Entity("Shopperior.Domain.Entities.ListItem", b =>
@@ -102,10 +92,7 @@ namespace Shopperior.Data.EFCore.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"), 1L, 1);
 
-                    b.Property<long>("AisleId")
-                        .HasColumnType("bigint");
-
-                    b.Property<long?>("CategoryId")
+                    b.Property<long>("CategoryId")
                         .HasColumnType("bigint");
 
                     b.Property<DateTime>("CreatedTime")
@@ -155,15 +142,7 @@ namespace Shopperior.Data.EFCore.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CategoryId");
-
-                    b.HasIndex("ItemId");
-
-                    b.HasIndex("ShoppingListId");
-
-                    b.HasIndex("StoreId");
-
-                    b.ToTable("ListItems");
+                    b.ToTable("ListItem");
                 });
 
             modelBuilder.Entity("Shopperior.Domain.Entities.ShoppingList", b =>
@@ -191,7 +170,7 @@ namespace Shopperior.Data.EFCore.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("ShoppingLists");
+                    b.ToTable("ShoppingList");
                 });
 
             modelBuilder.Entity("Shopperior.Domain.Entities.Store", b =>
@@ -211,12 +190,15 @@ namespace Shopperior.Data.EFCore.Migrations
                     b.Property<DateTime?>("LastModifiedTime")
                         .HasColumnType("datetime2");
 
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<DateTime?>("TrashedTime")
                         .HasColumnType("datetime2");
 
                     b.HasKey("Id");
 
-                    b.ToTable("Stores");
+                    b.ToTable("Store");
                 });
 
             modelBuilder.Entity("Shopperior.Domain.Entities.User", b =>
@@ -259,7 +241,7 @@ namespace Shopperior.Data.EFCore.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Users");
+                    b.ToTable("User");
                 });
 
             modelBuilder.Entity("Shopperior.Domain.Entities.UserListPermission", b =>
@@ -270,107 +252,30 @@ namespace Shopperior.Data.EFCore.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"), 1L, 1);
 
-                    b.Property<int>("Permission")
-                        .HasColumnType("int");
+                    b.Property<DateTime>("CreatedTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("Guid")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime?>("LastModifiedTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Permission")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<long>("ShoppingListId")
                         .HasColumnType("bigint");
+
+                    b.Property<DateTime?>("TrashedTime")
+                        .HasColumnType("datetime2");
 
                     b.Property<long>("UserId")
                         .HasColumnType("bigint");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ShoppingListId");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("UserListPermissions");
-                });
-
-            modelBuilder.Entity("Shopperior.Domain.Entities.Category", b =>
-                {
-                    b.HasOne("Shopperior.Domain.Entities.Store", null)
-                        .WithMany("Categories")
-                        .HasForeignKey("StoreId");
-                });
-
-            modelBuilder.Entity("Shopperior.Domain.Entities.Item", b =>
-                {
-                    b.HasOne("Shopperior.Domain.Entities.Store", null)
-                        .WithMany("Items")
-                        .HasForeignKey("StoreId");
-                });
-
-            modelBuilder.Entity("Shopperior.Domain.Entities.ListItem", b =>
-                {
-                    b.HasOne("Shopperior.Domain.Entities.Category", "Category")
-                        .WithMany()
-                        .HasForeignKey("CategoryId");
-
-                    b.HasOne("Shopperior.Domain.Entities.Item", "Item")
-                        .WithMany()
-                        .HasForeignKey("ItemId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Shopperior.Domain.Entities.ShoppingList", "ShoppingList")
-                        .WithMany("Items")
-                        .HasForeignKey("ShoppingListId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Shopperior.Domain.Entities.Store", "Store")
-                        .WithMany()
-                        .HasForeignKey("StoreId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Category");
-
-                    b.Navigation("Item");
-
-                    b.Navigation("ShoppingList");
-
-                    b.Navigation("Store");
-                });
-
-            modelBuilder.Entity("Shopperior.Domain.Entities.UserListPermission", b =>
-                {
-                    b.HasOne("Shopperior.Domain.Entities.ShoppingList", "ShoppingList")
-                        .WithMany("UserListPermissions")
-                        .HasForeignKey("ShoppingListId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Shopperior.Domain.Entities.User", "User")
-                        .WithMany("UserListPermissions")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("ShoppingList");
-
-                    b.Navigation("User");
-                });
-
-            modelBuilder.Entity("Shopperior.Domain.Entities.ShoppingList", b =>
-                {
-                    b.Navigation("Items");
-
-                    b.Navigation("UserListPermissions");
-                });
-
-            modelBuilder.Entity("Shopperior.Domain.Entities.Store", b =>
-                {
-                    b.Navigation("Categories");
-
-                    b.Navigation("Items");
-                });
-
-            modelBuilder.Entity("Shopperior.Domain.Entities.User", b =>
-                {
-                    b.Navigation("UserListPermissions");
+                    b.ToTable("UserListPermission");
                 });
 #pragma warning restore 612, 618
         }

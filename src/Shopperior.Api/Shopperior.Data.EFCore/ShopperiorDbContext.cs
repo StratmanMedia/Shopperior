@@ -9,12 +9,16 @@ namespace Shopperior.Data.EFCore
         {
         }
 
-        public DbSet<Category> Categories { get; set; }
-        public DbSet<Item> Items { get; set; }
-        public DbSet<ListItem> ListItems { get; set; }
-        public DbSet<ShoppingList> ShoppingLists { get; set; }
-        public DbSet<Store> Stores { get; set; }
-        public DbSet<User> Users { get; set; }
-        public DbSet<UserListPermission> UserListPermissions { get; set; }
+        public DbSet<Category> Category { get; set; }
+        public DbSet<Item> Item { get; set; }
+        public DbSet<ListItem> ListItem { get; set; }
+        public DbSet<ShoppingList> ShoppingList { get; set; }
+        public DbSet<Store> Store { get; set; }
+        public DbSet<User> User { get; set; }
+        public DbSet<UserListPermission> UserListPermission { get; set; }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+        }
     }
 }

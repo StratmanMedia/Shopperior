@@ -7,26 +7,30 @@ using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Shopperior.Data.EFCore;
 
+#nullable disable
+
 namespace Shopperior.Data.EFCore.Migrations
 {
     [DbContext(typeof(ShopperiorDbContext))]
-    [Migration("20210928023309_init")]
-    partial class init
+    [Migration("20220117000317_UserListPermission")]
+    partial class UserListPermission
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("Relational:MaxIdentifierLength", 128)
-                .HasAnnotation("ProductVersion", "5.0.10")
-                .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                .HasAnnotation("ProductVersion", "6.0.1")
+                .HasAnnotation("Relational:MaxIdentifierLength", 128);
+
+            SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
 
             modelBuilder.Entity("Shopperior.Domain.Entities.Category", b =>
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnType("bigint");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"), 1L, 1);
 
                     b.Property<DateTime>("CreatedTime")
                         .HasColumnType("datetime2");
@@ -40,25 +44,21 @@ namespace Shopperior.Data.EFCore.Migrations
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<long?>("StoreId")
-                        .HasColumnType("bigint");
-
                     b.Property<DateTime?>("TrashedTime")
                         .HasColumnType("datetime2");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("StoreId");
-
-                    b.ToTable("Categories");
+                    b.ToTable("Category");
                 });
 
             modelBuilder.Entity("Shopperior.Domain.Entities.Item", b =>
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnType("bigint");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"), 1L, 1);
 
                     b.Property<string>("Brand")
                         .HasColumnType("nvarchar(max)");
@@ -78,30 +78,23 @@ namespace Shopperior.Data.EFCore.Migrations
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<long?>("StoreId")
-                        .HasColumnType("bigint");
-
                     b.Property<DateTime?>("TrashedTime")
                         .HasColumnType("datetime2");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("StoreId");
-
-                    b.ToTable("Items");
+                    b.ToTable("Item");
                 });
 
             modelBuilder.Entity("Shopperior.Domain.Entities.ListItem", b =>
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<long>("AisleId")
                         .HasColumnType("bigint");
 
-                    b.Property<long?>("CategoryId")
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"), 1L, 1);
+
+                    b.Property<long>("CategoryId")
                         .HasColumnType("bigint");
 
                     b.Property<DateTime>("CreatedTime")
@@ -151,23 +144,16 @@ namespace Shopperior.Data.EFCore.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CategoryId");
-
-                    b.HasIndex("ItemId");
-
-                    b.HasIndex("ShoppingListId");
-
-                    b.HasIndex("StoreId");
-
-                    b.ToTable("ListItems");
+                    b.ToTable("ListItem");
                 });
 
             modelBuilder.Entity("Shopperior.Domain.Entities.ShoppingList", b =>
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnType("bigint");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"), 1L, 1);
 
                     b.Property<DateTime>("CreatedTime")
                         .HasColumnType("datetime2");
@@ -186,15 +172,16 @@ namespace Shopperior.Data.EFCore.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("ShoppingLists");
+                    b.ToTable("ShoppingList");
                 });
 
             modelBuilder.Entity("Shopperior.Domain.Entities.Store", b =>
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnType("bigint");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"), 1L, 1);
 
                     b.Property<DateTime>("CreatedTime")
                         .HasColumnType("datetime2");
@@ -205,20 +192,24 @@ namespace Shopperior.Data.EFCore.Migrations
                     b.Property<DateTime?>("LastModifiedTime")
                         .HasColumnType("datetime2");
 
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<DateTime?>("TrashedTime")
                         .HasColumnType("datetime2");
 
                     b.HasKey("Id");
 
-                    b.ToTable("Stores");
+                    b.ToTable("Store");
                 });
 
             modelBuilder.Entity("Shopperior.Domain.Entities.User", b =>
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnType("bigint");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"), 1L, 1);
 
                     b.Property<DateTime>("CreatedTime")
                         .HasColumnType("datetime2");
@@ -232,8 +223,11 @@ namespace Shopperior.Data.EFCore.Migrations
                     b.Property<Guid>("Guid")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<bool>("IsActive")
-                        .HasColumnType("bit");
+                    b.Property<string>("Idp")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("IdpSubject")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime?>("LastModifiedTime")
                         .HasColumnType("datetime2");
@@ -249,96 +243,41 @@ namespace Shopperior.Data.EFCore.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Users");
+                    b.ToTable("User");
                 });
 
-            modelBuilder.Entity("ShoppingListUser", b =>
+            modelBuilder.Entity("Shopperior.Domain.Entities.UserListPermission", b =>
                 {
-                    b.Property<long>("CollaboratorsId")
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("bigint");
 
-                    b.Property<long>("ShoppingListsId")
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"), 1L, 1);
+
+                    b.Property<DateTime>("CreatedTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("Guid")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime?>("LastModifiedTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Permission")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<long>("ShoppingListId")
                         .HasColumnType("bigint");
 
-                    b.HasKey("CollaboratorsId", "ShoppingListsId");
+                    b.Property<DateTime?>("TrashedTime")
+                        .HasColumnType("datetime2");
 
-                    b.HasIndex("ShoppingListsId");
+                    b.Property<long>("UserId")
+                        .HasColumnType("bigint");
 
-                    b.ToTable("ShoppingListUser");
-                });
+                    b.HasKey("Id");
 
-            modelBuilder.Entity("Shopperior.Domain.Entities.Category", b =>
-                {
-                    b.HasOne("Shopperior.Domain.Entities.Store", null)
-                        .WithMany("Categories")
-                        .HasForeignKey("StoreId");
-                });
-
-            modelBuilder.Entity("Shopperior.Domain.Entities.Item", b =>
-                {
-                    b.HasOne("Shopperior.Domain.Entities.Store", null)
-                        .WithMany("Items")
-                        .HasForeignKey("StoreId");
-                });
-
-            modelBuilder.Entity("Shopperior.Domain.Entities.ListItem", b =>
-                {
-                    b.HasOne("Shopperior.Domain.Entities.Category", "Category")
-                        .WithMany()
-                        .HasForeignKey("CategoryId");
-
-                    b.HasOne("Shopperior.Domain.Entities.Item", "Item")
-                        .WithMany()
-                        .HasForeignKey("ItemId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Shopperior.Domain.Entities.ShoppingList", "ShoppingList")
-                        .WithMany("Items")
-                        .HasForeignKey("ShoppingListId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Shopperior.Domain.Entities.Store", "Store")
-                        .WithMany()
-                        .HasForeignKey("StoreId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Category");
-
-                    b.Navigation("Item");
-
-                    b.Navigation("ShoppingList");
-
-                    b.Navigation("Store");
-                });
-
-            modelBuilder.Entity("ShoppingListUser", b =>
-                {
-                    b.HasOne("Shopperior.Domain.Entities.User", null)
-                        .WithMany()
-                        .HasForeignKey("CollaboratorsId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Shopperior.Domain.Entities.ShoppingList", null)
-                        .WithMany()
-                        .HasForeignKey("ShoppingListsId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("Shopperior.Domain.Entities.ShoppingList", b =>
-                {
-                    b.Navigation("Items");
-                });
-
-            modelBuilder.Entity("Shopperior.Domain.Entities.Store", b =>
-                {
-                    b.Navigation("Categories");
-
-                    b.Navigation("Items");
+                    b.ToTable("UserListPermission");
                 });
 #pragma warning restore 612, 618
         }

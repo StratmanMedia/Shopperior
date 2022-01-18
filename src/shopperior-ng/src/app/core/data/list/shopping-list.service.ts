@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Observable, ReplaySubject } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { map, take } from 'rxjs/operators';
 import { constants } from 'src/app/shared/classes/constants';
 import { environment } from 'src/environments/environment';
 import { LoggingService } from '../../logging/logging.service';
@@ -35,6 +35,7 @@ export class ShoppingListService {
 
   public getOne(guid: string): Observable<ShoppingListModel> {
     return this._listSubject.pipe(
+      take(1),
       map(lists => {
         const list = lists.find(l => l.guid === guid);
         return list;
@@ -44,9 +45,23 @@ export class ShoppingListService {
 
   public add(shoppingList: ShoppingListModel): Observable<void> {
     return this._listSubject.pipe(
+      take(1),
       map(lists => {
         lists.push(shoppingList);
         this._listSubject.next(lists);
+        this._api.ShoppingLists.add(shoppingList).subscribe();
+      })
+    );
+  }
+
+  public delete(guid: string): Observable<void> {
+    return this._listSubject.pipe(
+      take(1),
+      map(lists => {
+        const index = lists.findIndex(a => a.guid === guid);
+        lists.splice(index, 1);
+        this._listSubject.next(lists);
+        this._api.ShoppingLists.delete(guid).pipe(take(1)).subscribe();
       })
     );
   }
@@ -56,7 +71,6 @@ export class ShoppingListService {
       this.getAll().subscribe(savedLists => {
         let foundList = savedLists.find(l => l.guid === shoppingList.guid);
         foundList.name = shoppingList.name;
-        foundList.description = shoppingList.description;
         foundList.items = shoppingList.items;
         this._local.set(constants.storageKeys.shoppingLists, savedLists);
         observer.next();

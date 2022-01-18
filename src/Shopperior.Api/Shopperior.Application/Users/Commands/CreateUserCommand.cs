@@ -23,7 +23,7 @@ namespace Shopperior.Application.Users.Commands
             _logger = Guard.Against.Null(logger, nameof(logger));
         }
 
-        public async Task<Response<User>> ExecuteAsync(User request, CancellationToken cancellationToken = new())
+        public async Task<Response<User>> ExecuteAsync(User request, CancellationToken ct = new())
         {
             try
             {
@@ -41,7 +41,7 @@ namespace Shopperior.Application.Users.Commands
                     IdpSubject = request.IdpSubject,
                     CreatedTime = DateTime.UtcNow
                 };
-                await _userRepository.CreateAsync(entity);
+                await _userRepository.CreateAsync(entity, ct);
 
                 return new Response<User>(entity);
             }

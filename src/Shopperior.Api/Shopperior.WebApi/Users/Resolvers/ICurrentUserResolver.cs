@@ -1,9 +1,10 @@
 ﻿using System.Security.Claims;
+using Shopperior.Domain.Entities;
 using Shopperior.WebApi.Users.Models;
 
 namespace Shopperior.WebApi.Users.Resolvers;
 
 public interface ICurrentUserResolver
 {
-    Task<CurrentUser?> Resolve(ClaimsPrincipal principal, string authorizationHeaderValue, CancellationToken cancellationToken);
+    Task<CurrentUser> Resolve(ClaimsPrincipal principal, string authorizationHeaderValue, CancellationToken cancellationToken);
 }

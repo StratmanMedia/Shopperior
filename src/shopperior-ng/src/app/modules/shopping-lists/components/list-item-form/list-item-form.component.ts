@@ -63,7 +63,6 @@ export class ListItemFormComponent implements OnInit {
       const shoppingListModel: ShoppingListModel = {
         guid: this.shoppingList.guid,
         name: this.shoppingList.name,
-        description: this.shoppingList.description,
         items: items
       };
       this.shoppingListService.update(shoppingListModel).subscribe(() => {

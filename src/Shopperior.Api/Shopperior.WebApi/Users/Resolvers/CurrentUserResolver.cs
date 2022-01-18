@@ -28,7 +28,7 @@ public class CurrentUserResolver : ICurrentUserResolver
         _createUserCommand = createUserCommand;
     }
 
-    public async Task<CurrentUser?> Resolve(ClaimsPrincipal principal, string authorizationHeaderValue, CancellationToken cancellationToken = new())
+    public async Task<CurrentUser> Resolve(ClaimsPrincipal principal, string authorizationHeaderValue, CancellationToken cancellationToken = new())
     {
         if (principal.Identity == null) return null;
 
