@@ -50,6 +50,22 @@ public class Repository<TContext, TEntity> : IRepository<TEntity>
         await Context.SaveChangesAsync(ct);
     }
 
+    public virtual void DeleteRange(IEnumerable<TEntity> entities)
+    {
+        if (entities == null) throw new ArgumentNullException(nameof(entities));
+        Table.AttachRange(entities);
+        Table.RemoveRange(entities);
+        Context.SaveChanges();
+    }
+
+    public virtual async Task DeleteRangeAsync(IEnumerable<TEntity> entities, CancellationToken ct = new())
+    {
+        if (entities == null) throw new ArgumentNullException(nameof(entities));
+        Table.AttachRange(entities);
+        Table.RemoveRange(entities);
+        await Context.SaveChangesAsync(ct);
+    }
+
     public virtual IEnumerable<TEntity> GetAll()
     {
         return Table.ToArray();

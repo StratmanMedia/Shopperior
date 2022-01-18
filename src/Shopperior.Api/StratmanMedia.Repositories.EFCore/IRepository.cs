@@ -6,6 +6,8 @@ public interface IRepository<TEntity> where TEntity : class
     Task CreateAsync(TEntity entity, CancellationToken ct = new());
     void Delete(TEntity entity);
     Task DeleteAsync(TEntity entity, CancellationToken ct = new());
+    void DeleteRange(IEnumerable<TEntity> entities);
+    Task DeleteRangeAsync(IEnumerable<TEntity> entities, CancellationToken ct = new());
     IEnumerable<TEntity> GetAll();
     Task<IEnumerable<TEntity>> GetAllAsync(CancellationToken ct = new());
 }

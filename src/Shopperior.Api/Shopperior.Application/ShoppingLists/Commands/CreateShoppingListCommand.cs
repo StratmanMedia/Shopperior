@@ -13,7 +13,7 @@ namespace Shopperior.Application.ShoppingLists.Commands;
 
 public class CreateShoppingListCommand : ICreateShoppingListCommand
 {
-    private readonly IUserListRepository _userListRepository;
+    private readonly IUserListPermissionRepository _userListRepository;
     private readonly ILogger<CreateShoppingListCommand> _logger;
     private readonly IGetOneUserQuery _getOneUserQuery;
     private readonly IShoppingListRepository _shoppingListRepository;
@@ -22,7 +22,7 @@ public class CreateShoppingListCommand : ICreateShoppingListCommand
         ILogger<CreateShoppingListCommand> logger,
         IGetOneUserQuery getOneUserQuery,
         IShoppingListRepository shoppingListRepository,
-        IUserListRepository userListRepository)
+        IUserListPermissionRepository userListRepository)
     {
         _logger = Guard.Against.Null(logger, nameof(logger));
         _getOneUserQuery = Guard.Against.Null(getOneUserQuery, nameof(getOneUserQuery));

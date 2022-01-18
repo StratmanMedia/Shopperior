@@ -17,5 +17,7 @@ internal static class ServiceRegistrar
         services.AddScoped<IGetOneUserQuery, GetOneUserQuery>();
         services.AddScoped<IGetAllShoppingListsQuery, GetAllShoppingListsQuery>();
         services.AddScoped<ICreateShoppingListCommand, CreateShoppingListCommand>();
+        services.AddScoped<IDeleteShoppingListCommand, DeleteShoppingListCommand>();
+        services.AddScoped<IValidateShoppingListPermissionQuery, ValidateShoppingListPermissionQuery>();
     }
 }

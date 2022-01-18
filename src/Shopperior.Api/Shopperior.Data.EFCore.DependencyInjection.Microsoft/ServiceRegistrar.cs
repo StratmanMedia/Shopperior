@@ -25,6 +25,6 @@ internal static class ServiceRegistrar
         services.AddScoped<IShoppingListRepository, ShoppingListRepository>();
         services.AddScoped<IStoreRepository, StoreRepository>();
         services.AddScoped<IUserRepository, UserRepository>();
-        services.AddScoped<IUserListRepository, UserListRepository>();
+        services.AddScoped<IUserListPermissionRepository, UserListPermissionRepository>();
     }
 }
