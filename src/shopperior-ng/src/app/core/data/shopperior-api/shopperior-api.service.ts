@@ -2,7 +2,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { AuthService } from '@auth0/auth0-angular';
 import { Observable, of, throwError } from 'rxjs';
-import { concatMap, map } from 'rxjs/operators';
+import { concatMap, map, take } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
 import { LoggingService } from '../../logging/logging.service';
 import { ShoppingListModel } from '../list/models/shopping-list-model';
@@ -46,6 +46,14 @@ export class ShopperiorApiService {
         })
       );
     }
+
+    delete(guid: string): Observable<void> {
+      return this._super.delete(`/api/v1/lists/${guid}`).pipe(
+        map((res: ApiResponseModel<null>) => {
+          return;
+        })
+      );
+    }
   }(this);
 
   private get<T>(path: string): Observable<T> {
@@ -85,7 +93,20 @@ export class ShopperiorApiService {
   }
 
   private delete(path: string): Observable<any> {
-    return this._http.delete(`${this._url}${path}`);
+    const uri = `${this._url}${path}`;
+    this._logger.debug(`DELETE:${uri} Started.`);
+    return this.injectAuthHeader(new HttpHeaders()).pipe(
+      concatMap(headers => {
+        return this._http.delete(`${this._url}${path}`, {headers});
+      }),
+      take(1),
+      map((res: ApiResponseModel<null>) => {
+        this._logger.debug(`DELETE:${uri} Completed.`);
+        if (!res) { throwError(`DELETE:${uri} There was no response from the endpoint.`); }
+        if (!res.isSuccess) { throwError(res.messages.join()); }
+        return res.data;
+      })
+    );
   }
 
   private handleError<T>(operation: string, result?: T) {

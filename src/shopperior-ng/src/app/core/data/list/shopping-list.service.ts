@@ -54,6 +54,18 @@ export class ShoppingListService {
     );
   }
 
+  public delete(guid: string): Observable<void> {
+    return this._listSubject.pipe(
+      take(1),
+      map(lists => {
+        const index = lists.findIndex(a => a.guid === guid);
+        lists.splice(index, 1);
+        this._listSubject.next(lists);
+        this._api.ShoppingLists.delete(guid).pipe(take(1)).subscribe();
+      })
+    );
+  }
+
   public update(shoppingList: ShoppingListModel): Observable<void> {
     return new Observable(observer => {
       this.getAll().subscribe(savedLists => {

@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { Observable } from 'rxjs';
+import { take } from 'rxjs/operators';
 import { ShoppingListModel } from 'src/app/core/data/list/models/shopping-list-model';
 import { ShoppingListService } from 'src/app/core/data/list/shopping-list.service';
 import { LoggingService } from 'src/app/core/logging/logging.service';
@@ -17,14 +18,14 @@ export class ShoppingListsViewComponent implements OnInit {
   });
   shoppingLists: Observable<ShoppingListModel[]>;
 
-  constructor(private shoppingListService: ShoppingListService) {
-    this.shoppingLists = this.shoppingListService.getAll();
+  constructor(private _shoppingListService: ShoppingListService) {
+    this.shoppingLists = this._shoppingListService.getAll();
   }
 
   ngOnInit(): void {
   }
 
-  deleteList() {
-    this._logger.warn('delete list clicked');
+  deleteList(guid: string) {
+    this._shoppingListService.delete(guid).pipe(take(1)).subscribe();
   }
 }
