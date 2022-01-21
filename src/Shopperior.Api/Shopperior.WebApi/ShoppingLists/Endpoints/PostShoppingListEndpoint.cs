@@ -5,8 +5,8 @@ using Shopperior.Application.ShoppingLists.Models;
 using Shopperior.Domain.Contracts.ShoppingLists.Commands;
 using Shopperior.Domain.Entities;
 using Shopperior.WebApi.Shared.Endpoints;
+using Shopperior.WebApi.Shared.Interfaces;
 using Shopperior.WebApi.ShoppingLists.Models;
-using Shopperior.WebApi.Users.Resolvers;
 using StratmanMedia.Exceptions.Extensions;
 using StratmanMedia.ResponseObjects;
 
@@ -14,17 +14,17 @@ namespace Shopperior.WebApi.ShoppingLists.Endpoints;
 
 public class PostShoppingListEndpoint : BaseEndpoint
 {
+    private readonly ICurrentUserService _currentUserService;
     private readonly ILogger<PostShoppingListEndpoint> _logger;
-    private readonly ICurrentUserResolver _currentUserResolver;
     private readonly ICreateShoppingListCommand _createShoppingListCommand;
 
     public PostShoppingListEndpoint(
         ILogger<PostShoppingListEndpoint> logger,
-        ICurrentUserResolver currentUserResolver,
+        ICurrentUserService currentUserService,
         ICreateShoppingListCommand createShoppingListCommand)
     {
+        _currentUserService = currentUserService;
         _logger = Guard.Against.Null(logger, nameof(logger));
-        _currentUserResolver = Guard.Against.Null(currentUserResolver, nameof(currentUserResolver));
         _createShoppingListCommand = Guard.Against.Null(createShoppingListCommand, nameof(createShoppingListCommand));
     }
 
@@ -37,7 +37,7 @@ public class PostShoppingListEndpoint : BaseEndpoint
             var validation = await ValidateRequest(dto);
             if (!validation.IsSuccess) return BadRequest(validation.Messages);
 
-            var currentUser = await _currentUserResolver.Resolve(User, GetAuthorizationHeaderValue(), cancellationToken);
+            var currentUser = _currentUserService.CurrentUser;
             if (currentUser == null) return Unauthorized();
 
             var shoppingList = new ShoppingList

@@ -50,7 +50,6 @@ public class CreateShoppingListCommand : ICreateShoppingListCommand
 
             var ownerPermission = new UserListPermission
             {
-                Guid = Guid.NewGuid(),
                 UserId = user.Id,
                 ShoppingListId = entity.Id,
                 Permission = ShoppingListPermission.Owner.ToString(),

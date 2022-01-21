@@ -1,6 +1,9 @@
 using Shopperior.Application.DependencyInjection.Microsoft;
 using Shopperior.Data.EFCore.DependencyInjection.Microsoft;
-using Shopperior.WebApi.Users.Resolvers;
+using Shopperior.WebApi.Shared;
+using Shopperior.WebApi.Shared.Interfaces;
+using Shopperior.WebApi.Shared.Middleware;
+using Shopperior.WebApi.Shared.Services;
 using StratmanMedia.Auth;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -30,6 +33,7 @@ var config = builder.Configuration;
         options.Scopes = config.GetSection("OIDC:Scopes").GetChildren().Select(c => c.Value).ToArray();
     });
     builder.Services.AddScoped<ICurrentUserResolver, CurrentUserResolver>();
+    builder.Services.AddScoped<ICurrentUserService, CurrentUserService>();
     builder.Services.AddControllers();
     // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
     builder.Services.AddEndpointsApiExplorer();
@@ -57,6 +61,7 @@ var app = builder.Build();
     app.UseCors();
     app.UseAuthentication();
     app.UseAuthorization();
+    app.UseCurrentUser();
     app.MapControllers();
 }
 

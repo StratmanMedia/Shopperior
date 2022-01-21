@@ -1,10 +1,11 @@
 ﻿using System.Security.Claims;
 using Shopperior.Domain.Contracts.Users;
 using Shopperior.Domain.Entities;
+using Shopperior.WebApi.Shared.Interfaces;
 using Shopperior.WebApi.Users.Models;
 using StratmanMedia.Auth.UserInfo;
 
-namespace Shopperior.WebApi.Users.Resolvers;
+namespace Shopperior.WebApi.Shared.Services;
 
 public class CurrentUserResolver : ICurrentUserResolver
 {

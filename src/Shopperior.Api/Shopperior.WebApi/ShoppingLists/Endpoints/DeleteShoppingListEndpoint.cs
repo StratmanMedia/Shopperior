@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Shopperior.Application.ShoppingLists.Models;
 using Shopperior.Domain.Contracts.ShoppingLists.Commands;
 using Shopperior.WebApi.Shared.Endpoints;
-using Shopperior.WebApi.Users.Resolvers;
+using Shopperior.WebApi.Shared.Interfaces;
 using StratmanMedia.Exceptions.Extensions;
 using StratmanMedia.ResponseObjects;
 
@@ -12,20 +12,20 @@ namespace Shopperior.WebApi.ShoppingLists.Endpoints;
 public class DeleteShoppingListEndpoint : BaseEndpoint
 {
     private readonly ILogger<DeleteShoppingListEndpoint> _logger;
-    private readonly ICurrentUserResolver _currentUserResolver;
+    private readonly ICurrentUserService _currentUserService;
     private readonly IDeleteShoppingListCommand _deleteShoppingListCommand;
 
     public DeleteShoppingListEndpoint(
         ILogger<DeleteShoppingListEndpoint> logger,
-        ICurrentUserResolver currentUserResolver,
+        ICurrentUserService currentUserService,
         IDeleteShoppingListCommand deleteShoppingListCommand)
     {
         _logger = logger;
-        _currentUserResolver = currentUserResolver;
+        _currentUserService = currentUserService;
         _deleteShoppingListCommand = deleteShoppingListCommand;
     }
 
-    [Authorize]
+    [Authorize("shop.api.access")]
     [HttpDelete("/api/v1/lists/{guid}")]
     public async Task<ActionResult<Response>> DeleteShoppingList(Guid guid, CancellationToken ct = new())
     {
@@ -34,7 +34,7 @@ public class DeleteShoppingListEndpoint : BaseEndpoint
             var validation = await ValidateRequest(guid);
             if (!validation.IsSuccess) return BadRequest(validation.Messages);
 
-            var currentUser = await _currentUserResolver.Resolve(User, GetAuthorizationHeaderValue(), ct);
+            var currentUser = _currentUserService.CurrentUser;
             if (currentUser == null) return Unauthorized();
 
             var result = await _deleteShoppingListCommand.ExecuteAsync(new DeleteShoppingListRequest
