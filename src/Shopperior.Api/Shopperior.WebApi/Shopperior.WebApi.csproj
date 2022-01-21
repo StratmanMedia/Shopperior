@@ -29,7 +29,8 @@
 
   <ItemGroup>
     <Folder Include="Shared\Endpoints\" />
-    <Folder Include="Shared\Interfaces\" />
+    <Folder Include="Shared\Extensions\" />
+    <Folder Include="Shared\Middleware\" />
     <Folder Include="ShoppingLists\Models\" />
     <Folder Include="ShoppingLists\Endpoints\" />
   </ItemGroup>

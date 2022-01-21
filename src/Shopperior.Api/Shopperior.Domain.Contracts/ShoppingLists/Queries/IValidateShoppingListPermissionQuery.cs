@@ -9,4 +9,5 @@ public interface IValidateShoppingListPermissionQuery : IBaseQuery<IValidateShop
 {
     Task<Response> ExecuteAsync(User user, Guid shoppingListGuid, string permission, CancellationToken ct = new());
     Task<Response> ExecuteAsync(Guid userGuid, ShoppingList shoppingList, string permission, CancellationToken ct = new());
+    Task<Response> ExecuteAsync(Guid userGuid, Guid shoppingListGuid, string permission, CancellationToken ct = new());
 }

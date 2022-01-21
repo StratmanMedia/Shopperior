@@ -84,4 +84,20 @@ public class ValidateShoppingListPermissionQuery : IValidateShoppingListPermissi
             Permission = permission
         }, ct);
     }
+
+    public async Task<Response> ExecuteAsync(Guid userGuid, Guid shoppingListGuid, string permission, CancellationToken ct = new())
+    {
+        var user = await _userRepository.GetAsync(userGuid);
+        if (user == null) return new Response("No user matches the provided GUID.");
+
+        var shoppingList = await _shoppingListRepository.GetOneAsync(shoppingListGuid, ct);
+        if (shoppingList == null) return new Response("No shopping list matches the provided GUID.");
+
+        return await ExecuteAsync(new ValidateShoppingListPermissionRequest
+        {
+            User = user,
+            ShoppingList = shoppingList,
+            Permission = permission
+        }, ct);
+    }
 }

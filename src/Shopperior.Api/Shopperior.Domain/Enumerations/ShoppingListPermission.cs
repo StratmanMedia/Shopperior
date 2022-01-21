@@ -4,14 +4,16 @@ namespace Shopperior.Domain.Enumerations
 {
     public class ShoppingListPermission : SmartEnum<ShoppingListPermission>
     {
-        public static readonly ShoppingListPermission Viewer = new("Viewer", 0);
-        public static readonly ShoppingListPermission Contributor = new("Contributor", 1);
-        public static readonly ShoppingListPermission Administrator = new("Administrator", 2);
-        public static readonly ShoppingListPermission Owner = new("Owner", 3);
+        public static readonly ShoppingListPermission Viewer = new("VIEWER", 0);
+        public static readonly ShoppingListPermission Contributor = new("CONTRIBUTOR", 1);
+        public static readonly ShoppingListPermission Administrator = new("ADMINISTRATOR", 2);
+        public static readonly ShoppingListPermission Owner = new("OWNER", 3);
 
         private ShoppingListPermission(string name, int value) : base(name, value)
         {
 
         }
+
+        
     }
 }

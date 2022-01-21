@@ -34,6 +34,22 @@ public class Repository<TContext, TEntity> : IRepository<TEntity>
         if (result == 0) throw new InvalidOperationException("No new rows were created in the database.");
     }
 
+    public void Update(TEntity entity)
+    {
+        if (entity == null) throw new ArgumentNullException(nameof(entity));
+        Table.Attach(entity);
+        Table.Update(entity);
+        Context.SaveChanges();
+    }
+
+    public async Task UpdateAsync(TEntity entity, CancellationToken ct = new())
+    {
+        if (entity == null) throw new ArgumentNullException(nameof(entity));
+        Table.Attach(entity);
+        Table.Update(entity);
+        await Context.SaveChangesAsync(ct);
+    }
+
     public virtual void Delete(TEntity entity)
     {
         if (entity == null) throw new ArgumentNullException(nameof(entity));

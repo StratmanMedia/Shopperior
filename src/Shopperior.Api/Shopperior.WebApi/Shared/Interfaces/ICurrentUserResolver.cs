@@ -1,8 +1,7 @@
 ﻿using System.Security.Claims;
-using Shopperior.Domain.Entities;
 using Shopperior.WebApi.Users.Models;
 
-namespace Shopperior.WebApi.Users.Resolvers;
+namespace Shopperior.WebApi.Shared.Interfaces;
 
 public interface ICurrentUserResolver
 {
