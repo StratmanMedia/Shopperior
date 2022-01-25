@@ -19,9 +19,9 @@ public class GetOneShoppingListQuery : IGetOneShoppingListQuery
         throw new NotImplementedException();
     }
 
-    public async Task<ShoppingList> ExecuteAsync(Guid request, CancellationToken ct = new())
+    public async Task<ShoppingList> ExecuteAsync(Guid guid, CancellationToken ct = new())
     {
-        var shoppingList = await _shoppingListRepository.GetOneAsync(request, ct);
+        var shoppingList = await _shoppingListRepository.GetOneAsync(guid, ct);
 
         return shoppingList;
     }

@@ -1,8 +1,10 @@
-﻿namespace Shopperior.WebApi.ShoppingLists.Models;
+﻿using Shopperior.WebApi.Users.Models;
+
+namespace Shopperior.WebApi.ShoppingLists.Models;
 
 public class UserListPermissionDto
 {
-    public Guid UserGuid { get; set; }
+    public UserDto User { get; set; }
     public Guid ShoppingListGuid { get; set; }
     public string Permission { get; set; }
 }

@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Shopperior.Application.ShoppingLists.Models;
 using Shopperior.Domain.Contracts.ShoppingLists.Commands;
 using Shopperior.Domain.Contracts.ShoppingLists.Queries;
+using Shopperior.Domain.Contracts.Users;
 using Shopperior.Domain.Enumerations;
 using Shopperior.WebApi.Shared.Endpoints;
 using Shopperior.WebApi.Shared.Interfaces;
@@ -18,17 +19,20 @@ public class PutShoppingListEndpoint : BaseEndpoint
     private readonly ICurrentUserService _currentUserService;
     private readonly IUpdateShoppingListCommand _updateShoppingListCommand;
     private readonly IValidateShoppingListPermissionQuery _validateShoppingListPermissionQuery;
+    private readonly IGetOneUserQuery _getOneUserQuery;
 
     public PutShoppingListEndpoint(
         ILogger<PutShoppingListEndpoint> logger,
         ICurrentUserService currentUserService,
         IValidateShoppingListPermissionQuery validateShoppingListPermissionQuery,
+        IGetOneUserQuery getOneUserQuery,
         IUpdateShoppingListCommand updateShoppingListCommand)
     {
         _logger = logger;
         _currentUserService = currentUserService;
         _updateShoppingListCommand = updateShoppingListCommand;
         _validateShoppingListPermissionQuery = validateShoppingListPermissionQuery;
+        _getOneUserQuery = getOneUserQuery;
     }
 
     [Authorize("shop.api.access")]
@@ -50,11 +54,14 @@ public class PutShoppingListEndpoint : BaseEndpoint
                 ct);
             if (!permission.IsSuccess) return Forbid();
 
-            var userListPermissions = shoppingListDto.Permissions.Select(p => new UserListPermissionModel
+            var userListPermissions = shoppingListDto.Permissions.Select(p =>
             {
-                UserGuid = p.UserGuid,
-                ShoppingListGuid = p.ShoppingListGuid,
-                Permission = p.Permission
+                var user = _getOneUserQuery.ExecuteAsync(p.User.Guid, ct).GetAwaiter().GetResult();
+                return new UserListPermissionModel
+                {
+                    User = user,
+                    Permission = p.Permission
+                };
             });
             var shoppingListModel = new ShoppingListModel
             {

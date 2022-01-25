@@ -1,7 +1,4 @@
-﻿using System;
-using System.Threading;
-using System.Threading.Tasks;
-using Ardalis.GuardClauses;
+﻿using Ardalis.GuardClauses;
 using Microsoft.Extensions.Logging;
 using Shopperior.Domain.Contracts.Users;
 using Shopperior.Domain.Contracts.Users.Repositories;
@@ -48,6 +45,21 @@ namespace Shopperior.Application.Users.Queries
             catch (Exception ex)
             {
                 _logger.LogError(ex, $"Exception occurred in {nameof(GetOneUserQuery)} (username).");
+                throw;
+            }
+        }
+
+        public async Task<User> ExecuteAsync(long userId, CancellationToken ct = new())
+        {
+            try
+            {
+                var user = await _userRepository.GetAsync(userId);
+
+                return user;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, $"Exception occurred in {nameof(GetOneUserQuery)} (userId).");
                 throw;
             }
         }
