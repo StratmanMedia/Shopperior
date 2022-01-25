@@ -3,6 +3,7 @@ using Microsoft.Extensions.Logging;
 using Shopperior.Domain.Contracts.Users;
 using Shopperior.Domain.Contracts.Users.Repositories;
 using Shopperior.Domain.Entities;
+using Shopperior.Domain.ValueObjects;
 
 namespace Shopperior.Application.Users.Queries
 {
@@ -60,6 +61,21 @@ namespace Shopperior.Application.Users.Queries
             catch (Exception ex)
             {
                 _logger.LogError(ex, $"Exception occurred in {nameof(GetOneUserQuery)} (userId).");
+                throw;
+            }
+        }
+
+        public async Task<User> ExecuteAsync(EmailAddress emailAddress, CancellationToken ct = new CancellationToken())
+        {
+            try
+            {
+                var user = await _userRepository.GetByEmailAddressAsync(emailAddress.Value);
+
+                return user;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, $"Exception occurred in {nameof(GetOneUserQuery)} (emailAddress).");
                 throw;
             }
         }

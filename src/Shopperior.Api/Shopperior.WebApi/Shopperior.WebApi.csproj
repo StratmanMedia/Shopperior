@@ -33,6 +33,7 @@
     <Folder Include="Shared\Middleware\" />
     <Folder Include="ShoppingLists\Models\" />
     <Folder Include="ShoppingLists\Endpoints\" />
+    <Folder Include="Users\Endpoints\" />
   </ItemGroup>
 
 </Project>
