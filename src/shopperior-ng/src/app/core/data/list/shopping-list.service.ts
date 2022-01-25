@@ -67,16 +67,17 @@ export class ShoppingListService {
   }
 
   public update(shoppingList: ShoppingListModel): Observable<void> {
-    return new Observable(observer => {
-      this.getAll().subscribe(savedLists => {
-        let foundList = savedLists.find(l => l.guid === shoppingList.guid);
+    return this._listSubject.pipe(
+      take(1),
+      map(lists => {
+        let foundList = lists.find(l => l.guid === shoppingList.guid);
         foundList.name = shoppingList.name;
+        foundList.permissions = shoppingList.permissions;
         foundList.items = shoppingList.items;
-        this._local.set(constants.storageKeys.shoppingLists, savedLists);
-        observer.next();
-        observer.complete();
-      });
-    });
+        this._listSubject.next(lists);
+        this._api.ShoppingLists.update(shoppingList).subscribe();
+      })
+    );
   }
 
   private loadLists(): void {

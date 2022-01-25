@@ -60,7 +60,7 @@ export class ListItemFormComponent implements OnInit {
         subtotal: this.itemForm.controls.subtotal.value
       };
       items.push(listItem);
-      const shoppingListModel: ShoppingListModel = {
+      const shoppingListModel = <ShoppingListModel>{
         guid: this.shoppingList.guid,
         name: this.shoppingList.name,
         items: items

@@ -1,9 +1,9 @@
 <mat-toolbar>
-  <a mat-icon-button routerLink="/lists"><mat-icon>arrow_back</mat-icon></a>
-  <p>{{shoppingList.name}}</p>
+  <a mat-icon-button routerLink="/app/lists"><mat-icon>arrow_back</mat-icon></a>
+  <span>{{(shoppingList | async)?.name}}</span>
   <span class="toolbar-spacer"></span>
-  <a mat-icon-button routerLink="/lists/{{guid}}/items/add" aria-label="Button with a plus icon">
-    <mat-icon>add</mat-icon>
+  <a mat-icon-button routerLink="/app/lists/{{guid}}/settings" aria-label="Settings button">
+    <mat-icon>settings</mat-icon>
   </a>
 </mat-toolbar>
 <div class="form-container">
@@ -16,7 +16,7 @@
   </mat-form-field>
 </div>
 <mat-nav-list>
-  <mat-list-item *ngFor="let item of shoppingList.items">
+  <mat-list-item *ngFor="let item of (shoppingList | async)?.items">
     <div mat-line>{{ item.item.name }}</div>
     <div mat-line>{{ item.item.details }}</div>
     <mat-divider></mat-divider>
