@@ -9,5 +9,25 @@ namespace Shopperior.Data.EFCore.Repositories
         public ListItemRepository(ShopperiorDbContext context) : base(context)
         {
         }
+
+        public async Task<ListItem> GetOne(long id)
+        {
+            return await Task.Run(() =>
+            {
+                var listItem = Table.FirstOrDefault(i => i.Id == id);
+
+                return listItem;
+            });
+        }
+
+        public async Task<ListItem> GetOne(Guid guid)
+        {
+            return await Task.Run(() =>
+            {
+                var listItem = Table.FirstOrDefault(i => i.Guid == guid);
+
+                return listItem;
+            });
+        }
     }
 }

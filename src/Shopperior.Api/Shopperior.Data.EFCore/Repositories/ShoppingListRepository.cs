@@ -15,6 +15,13 @@ public class ShoppingListRepository : Repository<ShopperiorDbContext, ShoppingLi
         _userListRepository = userListRepository;
     }
 
+    public Task<ShoppingList> GetOneAsync(long id, CancellationToken ct = new CancellationToken())
+    {
+        var shoppingList = Table.FirstOrDefault(l => l.Id == id);
+
+        return Task.FromResult(shoppingList);
+    }
+
     public Task<ShoppingList> GetOneAsync(Guid guid, CancellationToken ct = new())
     {
         var shoppingList = Table.FirstOrDefault(l => l.Guid == guid);

@@ -40,7 +40,7 @@ public class UpdateShoppingListCommand : IUpdateShoppingListCommand
             var validation = await ValidateRequest(request, ct);
             if (!validation.IsSuccess) return new Response(validation.Messages);
 
-            var shoppingList = await _getOneShoppingListQuery.ExecuteAsync(request.Guid, ct);
+            var shoppingList = await _shoppingListRepository.GetOneAsync(request.Guid, ct);
             if (shoppingList == null)
                 return new Response($"Shopping List with {nameof(request.Guid)} of {request.Guid} was not found.");
 
