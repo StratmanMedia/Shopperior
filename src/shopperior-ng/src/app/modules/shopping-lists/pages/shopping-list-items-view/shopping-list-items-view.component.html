@@ -6,19 +6,24 @@
     <mat-icon>settings</mat-icon>
   </a>
 </mat-toolbar>
-<div class="form-container">
-  <mat-form-field appearance="fill" class="width-100">
+<div class="mt-1 mx-2">
+  <mat-form-field appearance="outline" class="width-100">
     <mat-label>Store</mat-label>
     <mat-select>
       <mat-option value="one">First option</mat-option>
       <mat-option value="two">Second option</mat-option>
     </mat-select>
   </mat-form-field>
+  <mat-nav-list>
+    <mat-list-item *ngFor="let item of (shoppingList | async)?.items">
+      <div mat-line>{{item.name}}</div>
+      <div mat-line>{{item.brand}}</div>
+      <mat-divider></mat-divider>
+    </mat-list-item>
+  </mat-nav-list>
 </div>
-<mat-nav-list>
-  <mat-list-item *ngFor="let item of (shoppingList | async)?.items">
-    <div mat-line>{{ item.item.name }}</div>
-    <div mat-line>{{ item.item.details }}</div>
-    <mat-divider></mat-divider>
-  </mat-list-item>
-</mat-nav-list>
+<div class="fab-placement">
+  <a routerLink="/app/lists/{{guid}}/items/add" mat-fab color="primary" aria-label="Button to add an item">
+    <mat-icon>add</mat-icon>
+  </a>
+</div>
