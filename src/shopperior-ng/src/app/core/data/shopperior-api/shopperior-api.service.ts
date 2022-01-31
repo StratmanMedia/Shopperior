@@ -5,10 +5,12 @@ import { Observable, of, throwError } from 'rxjs';
 import { concatMap, map, take, tap } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
 import { LoggingService } from '../../logging/logging.service';
+import { ListItemModel } from '../list/models/list-tem-model';
 import { ShoppingListModel } from '../list/models/shopping-list-model';
 import { UserListPermissionModel } from '../list/models/user-list-permission-model';
 import { UserModel } from '../user/models/user-model';
 import { ApiResponseModel } from './models/api-response-model';
+import { ListItemDto } from './models/list-item-dto';
 import { ShoppingListDto } from './models/shopping-list-dto';
 import { UserDto } from './models/user-dto';
 import { UserListPermissionDto } from './models/user-list-permission-dto';
@@ -40,12 +42,30 @@ export class ShopperiorApiService {
                 userEmail: p.user.emailAddress,
                 shoppingListGuid: p.shoppingListGuid,
                 permission: p.permission
-              }
+              };
+            });
+            const items = dto.items.map(i => {
+              return <ListItemModel>{
+                guid: i.guid,
+                shoppingListGuid: i.shoppingListGuid,
+                name: i.name,
+                brand: i.brand,
+                comment: i.comment,
+                quantity: i.quantity,
+                measurement: i.measurement,
+                unitPrice: i.unitPrice,
+                totalPrice: i.totalPrice,
+                isInCart: i.isInCart,
+                enteredCartTime: i.enteredCartTime,
+                hasPurchased: i.hasPurchased,
+                purchasedTime: i.purchasedTime
+              };
             });
             return <ShoppingListModel>{
               guid: dto.guid,
               name: dto.name,
-              permissions: permissions
+              permissions: permissions,
+              items: items
             };
           });
         })

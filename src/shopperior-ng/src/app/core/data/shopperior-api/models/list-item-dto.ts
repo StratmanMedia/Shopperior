@@ -1,4 +1,4 @@
-export class ListItemModel {
+export interface ListItemDto {
   guid: string;
   shoppingListGuid: string;
   name: string;
