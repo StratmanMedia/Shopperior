@@ -30,6 +30,9 @@ public class ListItemModelResolver : IListItemModelResolver
         {
             Guid = entity.Guid,
             ShoppingListGuid = shoppingList.Guid,
+            Name = entity.Name,
+            Brand = entity.Brand,
+            Comment = entity.Comment,
             Quantity = entity.Quantity,
             Measurement = Measurement.FromName(entity.Measurement),
             UnitPrice = entity.UnitPrice,
