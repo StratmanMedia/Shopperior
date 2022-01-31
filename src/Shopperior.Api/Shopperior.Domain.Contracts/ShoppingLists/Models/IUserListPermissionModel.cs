@@ -5,6 +5,6 @@ namespace Shopperior.Domain.Contracts.ShoppingLists.Models;
 public interface IUserListPermissionModel
 {
     User User { get; set; }
-    IShoppingListModel ShoppingList { get; set; }
+    Guid ShoppingListGuid { get; set; }
     string Permission { get; set; }
 }

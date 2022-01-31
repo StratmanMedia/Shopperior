@@ -17,19 +17,37 @@ public class ListItemDtoResolver : IListItemDtoResolver
     }
     public Task<ListItemDto> ResolveAsync(IListItemModel model)
     {
-        throw new NotImplementedException();
+        if (model == null) return null;
+
+        var dto = new ListItemDto
+        {
+            Guid = model.Guid,
+            ShoppingListGuid = model.ShoppingListGuid,
+            Name = model.Name,
+            Brand = model.Brand,
+            Comment = model.Comment,
+            Quantity = model.Quantity,
+            Measurement = model.Measurement.ToString(),
+            UnitPrice = model.UnitPrice,
+            TotalPrice = model.TotalPrice,
+            IsInCart = model.IsInCart,
+            EnteredCartTime = model.EnteredCartTime,
+            HasPurchased = model.HasPurchased,
+            PurchasedTime = model.PurchasedTime
+        };
+
+        return Task.FromResult(dto);
     }
 
-    public async Task<IListItemModel> ResolveAsync(ListItemDto dto)
+    public Task<IListItemModel> ResolveAsync(ListItemDto dto)
     {
         if (dto == null) return null;
 
-        var shoppingList = await _getOneShoppingListQuery.ExecuteAsync(dto.ShoppingListGuid);
         var measurement = Measurement.FromName(dto.Measurement);
         var model = new ListItemModel
         {
             Guid = dto.Guid,
-            ShoppingList = shoppingList,
+            ShoppingListGuid = dto.ShoppingListGuid,
             Name = dto.Name,
             Brand = dto.Brand,
             Comment = dto.Comment,
@@ -43,6 +61,6 @@ public class ListItemDtoResolver : IListItemDtoResolver
             PurchasedTime = dto.PurchasedTime
         };
 
-        return model;
+        return Task.FromResult((IListItemModel)model);
     }
 }

@@ -2,7 +2,7 @@
 using Shopperior.Domain.Contracts.ListItems.Commands;
 using Shopperior.Domain.Contracts.ListItems.Models;
 using Shopperior.Domain.Contracts.ListItems.Repositories;
-using Shopperior.Domain.Contracts.ListItems.Resolvers;
+using Shopperior.Domain.Contracts.ShoppingLists.Resolvers;
 using StratmanMedia.Exceptions.Extensions;
 
 namespace Shopperior.Application.ListItems.Commands;
@@ -42,11 +42,8 @@ public class CreateListItemCommand : ICreateListItemCommand
             if (request == null)
                 throw new ArgumentNullException(nameof(request));
 
-            if (request.ShoppingList == null)
-                throw new ArgumentNullException(nameof(request.ShoppingList));
-
-            if (request.ShoppingList.Guid == Guid.Empty)
-                throw new ArgumentException(nameof(request.ShoppingList.Guid));
+            if (request.ShoppingListGuid == Guid.Empty)
+                throw new ArgumentException(nameof(request.ShoppingListGuid));
 
             if (request.Quantity <= 0)
                 throw new ArgumentException(nameof(request.Quantity));

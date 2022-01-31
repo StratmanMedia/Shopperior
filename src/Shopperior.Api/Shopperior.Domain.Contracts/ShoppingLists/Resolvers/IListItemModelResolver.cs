@@ -1,7 +1,7 @@
 ﻿using Shopperior.Domain.Contracts.ListItems.Models;
 using Shopperior.Domain.Entities;
 
-namespace Shopperior.Domain.Contracts.ListItems.Resolvers;
+namespace Shopperior.Domain.Contracts.ShoppingLists.Resolvers;
 
 public interface IListItemModelResolver
 {

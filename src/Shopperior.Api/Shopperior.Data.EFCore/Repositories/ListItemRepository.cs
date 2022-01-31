@@ -29,5 +29,15 @@ namespace Shopperior.Data.EFCore.Repositories
                 return listItem;
             });
         }
+
+        public async Task<IEnumerable<ListItem>> GetManyByListAsync(long shoppingListId)
+        {
+            return await Task.Run(() =>
+            {
+                var listItems = Table.Where(i => i.ShoppingListId == shoppingListId);
+
+                return listItems;
+            });
+        }
     }
 }

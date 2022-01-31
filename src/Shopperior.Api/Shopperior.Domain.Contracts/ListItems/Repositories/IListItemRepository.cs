@@ -7,5 +7,6 @@ namespace Shopperior.Domain.Contracts.ListItems.Repositories
     {
         Task<ListItem> GetOne(long id);
         Task<ListItem> GetOne(Guid guid);
+        Task<IEnumerable<ListItem>> GetManyByListAsync(long shoppingListId);
     }
 }

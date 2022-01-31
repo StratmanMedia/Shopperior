@@ -4,6 +4,7 @@ using Shopperior.Domain.Contracts.ShoppingLists.Queries;
 using Shopperior.WebApi.Shared.Endpoints;
 using Shopperior.WebApi.Shared.Interfaces;
 using Shopperior.WebApi.ShoppingLists.Models;
+using Shopperior.WebApi.ShoppingLists.Resolvers;
 using Shopperior.WebApi.Users.Models;
 using StratmanMedia.Exceptions.Extensions;
 using StratmanMedia.ResponseObjects;
@@ -15,29 +16,33 @@ public class GetAllShoppingListsEndpoint : BaseEndpoint
     private readonly ILogger<GetAllShoppingListsEndpoint> _logger;
     private readonly ICurrentUserService _currentUserService;
     private readonly IGetAllShoppingListsQuery _getAllShoppingListsQuery;
+    private readonly IListItemDtoResolver _listItemDtoResolver;
 
     public GetAllShoppingListsEndpoint(
         ILogger<GetAllShoppingListsEndpoint> logger,
         ICurrentUserService currentUserService,
-        IGetAllShoppingListsQuery getAllShoppingListsQuery)
+        IGetAllShoppingListsQuery getAllShoppingListsQuery,
+        IListItemDtoResolver listItemDtoResolver)
     {
         _logger = logger;
         _currentUserService = currentUserService;
         _getAllShoppingListsQuery = getAllShoppingListsQuery;
+        _listItemDtoResolver = listItemDtoResolver;
     }
 
     [Authorize("shop.api.access")]
     [HttpGet("api/v1/lists")]
-    public async Task<ActionResult<Response<ShoppingListDto[]>>> HandleAsync(CancellationToken cancellationToken = new())
+    public async Task<ActionResult<Response<ShoppingListDto[]>>> HandleAsync(CancellationToken ct = new CancellationToken())
     {
         try
         {
             var currentUser = _currentUserService.CurrentUser;
             if (currentUser == null) return Unauthorized();
 
-            var lists = await _getAllShoppingListsQuery.ExecuteAsync(currentUser.Username, cancellationToken);
-            
-            var models = lists.Select(l =>
+            var lists = await _getAllShoppingListsQuery.ExecuteAsync(currentUser.Username, ct);
+
+            var models = new List<ShoppingListDto>();
+            foreach(var l in lists)
             {
                 var permissions = l.Permissions.Select(p =>
                 {
@@ -52,17 +57,25 @@ public class GetAllShoppingListsEndpoint : BaseEndpoint
                     return new UserListPermissionDto
                     {
                         User = userDto,
-                        ShoppingListGuid = p.ShoppingList.Guid,
+                        ShoppingListGuid = p.ShoppingListGuid,
                         Permission = p.Permission
                     };
                 });
-                return new ShoppingListDto
+                var items = new List<ListItemDto>();
+                foreach (var i in l.Items)
+                {
+                    var item = await _listItemDtoResolver.ResolveAsync(i);
+                    items.Add(item);
+                }
+                var list = new ShoppingListDto
                 {
                     Guid = l.Guid,
                     Name = l.Name,
-                    Permissions = permissions
+                    Permissions = permissions,
+                    Items = items
                 };
-            });
+                models.Add(list);
+            }
 
             return Ok(new Response<ShoppingListDto[]>(models.ToArray()));
         }

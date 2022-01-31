@@ -1,13 +1,12 @@
 ﻿using Shopperior.Application.ListItems.Models;
-using Shopperior.Application.ShoppingLists.Models;
 using Shopperior.Domain.Contracts.ListItems.Models;
 using Shopperior.Domain.Contracts.ListItems.Repositories;
-using Shopperior.Domain.Contracts.ListItems.Resolvers;
 using Shopperior.Domain.Contracts.ShoppingLists.Repositories;
+using Shopperior.Domain.Contracts.ShoppingLists.Resolvers;
 using Shopperior.Domain.Entities;
 using Shopperior.Domain.Enumerations;
 
-namespace Shopperior.Application.ListItems.Resolvers;
+namespace Shopperior.Application.ShoppingLists.Resolvers;
 
 public class ListItemModelResolver : IListItemModelResolver
 {
@@ -27,17 +26,10 @@ public class ListItemModelResolver : IListItemModelResolver
         if (entity == null) return null;
 
         var shoppingList = await _shoppingListRepository.GetOneAsync(entity.ShoppingListId);
-        var shoppingListModel = (shoppingList != null)
-            ? new ShoppingListModel
-            {
-                Guid = shoppingList.Guid,
-                Name = shoppingList.Name
-            }
-            : null;
         var model = new ListItemModel
         {
             Guid = entity.Guid,
-            ShoppingList = shoppingListModel,
+            ShoppingListGuid = shoppingList.Guid,
             Quantity = entity.Quantity,
             Measurement = Measurement.FromName(entity.Measurement),
             UnitPrice = entity.UnitPrice,
@@ -56,7 +48,7 @@ public class ListItemModelResolver : IListItemModelResolver
         if (model == null) return null;
 
         var existing = await _listItemRepository.GetOne(model.Guid);
-        var shoppingList = await _shoppingListRepository.GetOneAsync(model.ShoppingList.Guid);
+        var shoppingList = await _shoppingListRepository.GetOneAsync(model.ShoppingListGuid);
         var entity = new ListItem
         {
             Id = existing?.Id ?? 0,
