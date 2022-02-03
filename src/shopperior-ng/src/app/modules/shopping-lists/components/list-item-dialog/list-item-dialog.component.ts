@@ -1,8 +1,6 @@
 import { Component, Inject, OnInit } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { ListItemModel } from 'src/app/core/data/list/models/list-tem-model';
-import { ShoppingListService } from 'src/app/core/data/list/shopping-list.service';
 import { LoggingService } from 'src/app/core/logging/logging.service';
 import { environment } from 'src/environments/environment';
 
@@ -19,8 +17,7 @@ export class ListItemDialogComponent implements OnInit {
   
   constructor(
     public dialogRef: MatDialogRef<ListItemDialogComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: ListItemModel,
-    private _shoppingListService: ShoppingListService) { }
+    @Inject(MAT_DIALOG_DATA) public data: ListItemModel) { }
 
   ngOnInit(): void {
   }
@@ -40,15 +37,7 @@ export class ListItemDialogComponent implements OnInit {
   }
 
   saveItem(): void {
-    this._logger.debug(`Saving item. ${JSON.stringify(this.data)}`);
-    this._shoppingListService.addItem(this.data).subscribe(
-      () => {
-        this._logger.debug(`Item saved.`);
-        this.dialogRef.close();
-      },
-      err => {
-      }
-    )
+    this.dialogRef.close(this.data);
   }
 
   cancel(): void {
