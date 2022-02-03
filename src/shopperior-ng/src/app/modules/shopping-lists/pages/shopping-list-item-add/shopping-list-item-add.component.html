@@ -1,5 +1,5 @@
 <mat-toolbar>
-  <button mat-icon-button (click)="goBack()"><mat-icon>arrow_back</mat-icon></button>
-  <p>{{shoppingList.name}}</p>
+  <a mat-icon-button routerLink="/app/lists/{{listGuid}}"><mat-icon>arrow_back</mat-icon></a>
+  <span>{{(shoppingList | async)?.name}}</span>
 </mat-toolbar>
 <app-list-item-form></app-list-item-form>

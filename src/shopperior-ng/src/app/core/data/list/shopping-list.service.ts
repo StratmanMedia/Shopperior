@@ -6,6 +6,7 @@ import { environment } from 'src/environments/environment';
 import { LoggingService } from '../../logging/logging.service';
 import { LocalDataService } from '../local/local-data.service';
 import { ShopperiorApiService } from '../shopperior-api/shopperior-api.service';
+import { ListItemModel } from './models/list-tem-model';
 import { ShoppingListModel } from './models/shopping-list-model';
 
 @Injectable({
@@ -27,7 +28,7 @@ export class ShoppingListService {
           this._local.set(constants.storageKeys.shoppingLists, lists);
         }
       );
-    }
+  }
 
   public getAll(): Observable<ShoppingListModel[]> {
     return this._listSubject.asObservable();
@@ -76,6 +77,20 @@ export class ShoppingListService {
         foundList.items = shoppingList.items;
         this._listSubject.next(lists);
         this._api.ShoppingLists.update(shoppingList).subscribe();
+      })
+    );
+  }
+
+  public addItem(item: ListItemModel): Observable<void> {
+    this._logger.debug(`Adding item. ${JSON.stringify(item)}`);
+    return this._listSubject.pipe(
+      take(1),
+      map(lists => {
+        let foundList = lists.find(l => l.guid === item.shoppingListGuid);
+        this._logger.debug(`Found list ${foundList.guid}`);
+        foundList.items.push(item);
+        this._listSubject.next(lists);
+        this._api.ShoppingLists.addItem(item).subscribe();
       })
     );
   }

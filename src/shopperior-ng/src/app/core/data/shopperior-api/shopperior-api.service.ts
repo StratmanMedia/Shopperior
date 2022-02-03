@@ -115,6 +115,26 @@ export class ShopperiorApiService {
         })
       );
     }
+
+    addItem(item: ListItemModel) {
+      this._super._logger.debug(`Posting item.`);
+      const dto = <ListItemDto>{
+        shoppingListGuid: item.shoppingListGuid,
+        name: item.name,
+        brand: item.brand,
+        comment: item.comment,
+        quantity: item.quantity,
+        measurement: item.measurement,
+        unitPrice: item.unitPrice,
+        totalPrice: item.totalPrice,
+        isInCart: item.isInCart
+      };
+      return this._super.post(`/api/v1/lists/${item.shoppingListGuid}/items`, dto).pipe(
+        map((res: void) => {
+          return;
+        })
+      );
+    }
   }(this);
 
   Users = new class {

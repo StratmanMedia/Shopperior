@@ -10,6 +10,7 @@ import { ShoppingListItemAddComponent } from './pages/shopping-list-item-add/sho
 import { ListItemFormComponent } from './components/list-item-form/list-item-form.component';
 import { ShoppingListSettingsComponent } from './pages/shopping-list-settings/shopping-list-settings.component';
 import { UserListPermissionDialogComponent } from './components/user-list-permission-dialog/user-list-permission-dialog.component';
+import { ListItemDialogComponent } from './components/list-item-dialog/list-item-dialog.component';
 
 @NgModule({
   declarations: [
@@ -19,7 +20,8 @@ import { UserListPermissionDialogComponent } from './components/user-list-permis
     ShoppingListItemAddComponent,
     ListItemFormComponent,
     ShoppingListSettingsComponent,
-    UserListPermissionDialogComponent
+    UserListPermissionDialogComponent,
+    ListItemDialogComponent
   ],
   imports: [
     CommonModule,

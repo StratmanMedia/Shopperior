@@ -23,7 +23,7 @@
   </mat-nav-list>
 </div>
 <div class="fab-placement">
-  <a routerLink="/app/lists/{{guid}}/items/add" mat-fab color="primary" aria-label="Button to add an item">
+  <button mat-fab color="primary" aria-label="Button to add an item" (click)="openItemDialog()">
     <mat-icon>add</mat-icon>
-  </a>
+  </button>
 </div>
