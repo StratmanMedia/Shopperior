@@ -12,7 +12,5 @@ public class ListItemDto
     public decimal UnitPrice { get; set; }
     public decimal TotalPrice { get; set; }
     public bool IsInCart { get; set; }
-    public DateTime? EnteredCartTime { get; set; }
     public bool HasPurchased { get; set; }
-    public DateTime? PurchasedTime { get; set; }
 }
