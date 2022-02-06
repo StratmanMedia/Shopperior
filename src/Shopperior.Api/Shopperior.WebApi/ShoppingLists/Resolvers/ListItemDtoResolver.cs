@@ -31,9 +31,7 @@ public class ListItemDtoResolver : IListItemDtoResolver
             UnitPrice = model.UnitPrice,
             TotalPrice = model.TotalPrice,
             IsInCart = model.IsInCart,
-            EnteredCartTime = model.EnteredCartTime,
             HasPurchased = model.HasPurchased,
-            PurchasedTime = model.PurchasedTime
         };
 
         return Task.FromResult(dto);
@@ -56,9 +54,7 @@ public class ListItemDtoResolver : IListItemDtoResolver
             UnitPrice = dto.UnitPrice,
             TotalPrice = dto.TotalPrice,
             IsInCart = dto.IsInCart,
-            EnteredCartTime = dto.EnteredCartTime,
             HasPurchased = dto.HasPurchased,
-            PurchasedTime = dto.PurchasedTime
         };
 
         return Task.FromResult((IListItemModel)model);
