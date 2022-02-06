@@ -8,7 +8,7 @@ using StratmanMedia.ResponseObjects;
 
 namespace Shopperior.WebApi.ShoppingLists.Endpoints;
 
-public class PutListItemEndpoint : BaseEndpoint
+public class PutListItemEndpoint : BaseEndpoint<PutListItemEndpoint>
 {
     private readonly ILogger<PutListItemEndpoint> _logger;
     private readonly IListItemDtoResolver _listItemDtoResolver;

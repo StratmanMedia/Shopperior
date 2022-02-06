@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Shopperior.Domain.Contracts.Users;
+using Shopperior.Domain.Exceptions;
 using Shopperior.Domain.ValueObjects;
 using Shopperior.WebApi.Shared.Endpoints;
 using Shopperior.WebApi.Users.Models;
@@ -8,13 +9,17 @@ using StratmanMedia.ResponseObjects;
 
 namespace Shopperior.WebApi.Users.Endpoints;
 
-public class GetOneUserEndpoint : BaseEndpoint
+public class GetOneUserEndpoint : BaseEndpoint<GetOneUserEndpoint>
 {
+    private readonly ILogger<GetOneUserEndpoint> _logger;
     private readonly IGetOneUserQuery _getOneUserQuery;
 
     public GetOneUserEndpoint(
+        ILogger<GetOneUserEndpoint> logger,
         IGetOneUserQuery getOneUserQuery)
+    :base(logger)
     {
+        _logger = logger;
         _getOneUserQuery = getOneUserQuery;
     }
 
@@ -22,30 +27,34 @@ public class GetOneUserEndpoint : BaseEndpoint
     [HttpGet("/api/v1/users")]
     public async Task<ActionResult<Response<UserDto>>> HandleAsync(GetOneUserRequest request, CancellationToken ct = new CancellationToken())
     {
-        try
+        return await TryActionAsync<UserDto>(() => EndpointAction(request, ct));
+    }
+
+    private async Task<UserDto> EndpointAction(GetOneUserRequest request, CancellationToken ct = new CancellationToken())
+    {
+        await ValidateRequest(request);
+
+        var user = await _getOneUserQuery.ExecuteAsync(new EmailAddress(request.EmailAddress), ct);
+        if (user == null)
+            throw new ResourceNotFoundException($"User with Email Address ({request.EmailAddress}) was not found.");
+
+        var userDto = new UserDto
         {
-            if (!string.IsNullOrWhiteSpace(request.EmailAddress))
-            {
-                var user = await _getOneUserQuery.ExecuteAsync(new EmailAddress(request.EmailAddress), ct);
-                if (user == null) return NotFound();
+            Guid = user.Guid,
+            Username = user.Username,
+            FirstName = user.FirstName,
+            LastName = user.LastName,
+            EmailAddress = user.EmailAddress
+        };
 
-                var userDto = new UserDto
-                {
-                    Guid = user.Guid,
-                    Username = user.Username,
-                    FirstName = user.FirstName,
-                    LastName = user.LastName,
-                    EmailAddress = user.EmailAddress
-                };
+        return userDto;
+    }
 
-                return Ok(new Response<UserDto>(userDto));
-            }
+    private Task ValidateRequest(GetOneUserRequest request)
+    {
+        if (request == null || string.IsNullOrWhiteSpace(request.EmailAddress))
+            throw new BadHttpRequestException("Email Address was not found in request.");
 
-            return BadRequest();
-        }
-        catch (Exception ex)
-        {
-            return InternalServerError();
-        }
+        return Task.CompletedTask;
     }
 }

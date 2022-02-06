@@ -33,7 +33,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{FF0AD4D8
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StratmanMedia.Exceptions", "StratmanMedia.Exceptions\StratmanMedia.Exceptions.csproj", "{21CBD4FF-BF6D-4047-A86E-40D09997417C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StratmanMedia.Auth", "StratmanMedia.Auth\StratmanMedia.Auth.csproj", "{E89B414E-E931-4299-9BD0-33CD388E9893}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StratmanMedia.Auth", "StratmanMedia.Auth\StratmanMedia.Auth.csproj", "{E89B414E-E931-4299-9BD0-33CD388E9893}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shopperior.Tests", "Shopperior.Tests\Shopperior.Tests.csproj", "{D91ED6C6-4830-4BE0-B4B1-CEE27092602D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shopperior.WebApi.Tests", "Shopperior.WebApi.Tests\Shopperior.WebApi.Tests.csproj", "{BD4B5F25-D38B-4BEA-9DA1-B4AAC0F0559C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -85,6 +89,14 @@ Global
 		{E89B414E-E931-4299-9BD0-33CD388E9893}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E89B414E-E931-4299-9BD0-33CD388E9893}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E89B414E-E931-4299-9BD0-33CD388E9893}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D91ED6C6-4830-4BE0-B4B1-CEE27092602D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D91ED6C6-4830-4BE0-B4B1-CEE27092602D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D91ED6C6-4830-4BE0-B4B1-CEE27092602D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D91ED6C6-4830-4BE0-B4B1-CEE27092602D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BD4B5F25-D38B-4BEA-9DA1-B4AAC0F0559C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BD4B5F25-D38B-4BEA-9DA1-B4AAC0F0559C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BD4B5F25-D38B-4BEA-9DA1-B4AAC0F0559C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BD4B5F25-D38B-4BEA-9DA1-B4AAC0F0559C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -100,6 +112,8 @@ Global
 		{765CC8E8-BA5C-43B0-BBDB-3641464C56CA} = {30E4A76E-2772-44E0-9BFA-95CE5B7B745D}
 		{21CBD4FF-BF6D-4047-A86E-40D09997417C} = {BD0B4F23-0A3D-4FF6-97C7-4BC64A21BA98}
 		{E89B414E-E931-4299-9BD0-33CD388E9893} = {BD0B4F23-0A3D-4FF6-97C7-4BC64A21BA98}
+		{D91ED6C6-4830-4BE0-B4B1-CEE27092602D} = {FF0AD4D8-544E-4EB1-9A91-0E8F67713B67}
+		{BD4B5F25-D38B-4BEA-9DA1-B4AAC0F0559C} = {FF0AD4D8-544E-4EB1-9A91-0E8F67713B67}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {EA4139DD-80F5-4055-9A37-B2548D832C54}
