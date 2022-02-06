@@ -52,30 +52,42 @@ public class ListItemModelResolver : IListItemModelResolver
 
         var existing = await _listItemRepository.GetOne(model.Guid);
         var shoppingList = await _shoppingListRepository.GetOneAsync(model.ShoppingListGuid);
-        var entity = new ListItem
+        if (existing == null)
         {
-            Id = existing?.Id ?? 0,
-            Guid = model.Guid,
-            ShoppingListId = shoppingList?.Id ?? 0,
-            ItemId = 0,
-            Name = model.Name,
-            Brand = model.Brand,
-            Comment = model.Comment,
-            StoreId = 0,
-            CategoryId = 0,
-            Quantity = model.Quantity,
-            Measurement = model.Measurement.ToString(),
-            UnitPrice = model.UnitPrice,
-            TotalPrice = model.TotalPrice,
-            IsInCart = model.IsInCart,
-            EnteredCartTime = model.EnteredCartTime,
-            HasPurchased = model.HasPurchased,
-            PurchasedTime = model.PurchasedTime,
-            CreatedTime = existing?.CreatedTime ?? default,
-            LastModifiedTime = existing?.LastModifiedTime ?? default,
-            TrashedTime = existing?.TrashedTime ?? default
-        };
+            var entity = new ListItem
+            {
+                Id = default,
+                Guid = model.Guid,
+                ShoppingListId = shoppingList?.Id ?? 0,
+                ItemId = 0,
+                Name = model.Name,
+                Brand = model.Brand,
+                Comment = model.Comment,
+                StoreId = 0,
+                CategoryId = 0,
+                Quantity = model.Quantity,
+                Measurement = model.Measurement.ToString(),
+                UnitPrice = model.UnitPrice,
+                TotalPrice = model.TotalPrice,
+                IsInCart = model.IsInCart,
+                EnteredCartTime = model.EnteredCartTime,
+                HasPurchased = model.HasPurchased,
+                PurchasedTime = model.PurchasedTime
+            };
 
-        return entity;
+            return entity;
+        }
+
+        existing.Name = model.Name;
+        existing.Brand = model.Brand;
+        existing.Comment = model.Comment;
+        existing.Quantity = model.Quantity;
+        existing.Measurement = model.Measurement.ToString();
+        existing.UnitPrice = model.UnitPrice;
+        existing.TotalPrice = model.TotalPrice;
+        existing.IsInCart = model.IsInCart;
+        existing.HasPurchased = model.HasPurchased;
+
+        return existing;
     }
 }

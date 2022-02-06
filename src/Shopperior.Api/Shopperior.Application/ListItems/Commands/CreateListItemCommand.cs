@@ -43,10 +43,10 @@ public class CreateListItemCommand : ICreateListItemCommand
                 throw new ArgumentNullException(nameof(request));
 
             if (request.ShoppingListGuid == Guid.Empty)
-                throw new ArgumentException(nameof(request.ShoppingListGuid));
+                throw new ArgumentOutOfRangeException(nameof(request.ShoppingListGuid));
 
             if (request.Quantity <= 0)
-                throw new ArgumentException(nameof(request.Quantity));
+                throw new ArgumentOutOfRangeException(nameof(request.Quantity));
         });
     }
 }

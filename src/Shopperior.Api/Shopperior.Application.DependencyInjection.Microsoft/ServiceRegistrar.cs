@@ -26,6 +26,7 @@ internal static class ServiceRegistrar
         services.AddScoped<IUpdateShoppingListCommand, UpdateShoppingListCommand>();
         services.AddScoped<IValidateShoppingListPermissionQuery, ValidateShoppingListPermissionQuery>();
         services.AddScoped<ICreateListItemCommand, CreateListItemCommand>();
+        services.AddScoped<IUpdateListItemCommand, UpdateListItemCommand>();
         services.AddScoped<IShoppingListModelResolver, ShoppingListModelResolver>();
         services.AddScoped<IListPermissionModelResolver, ListPermissionModelResolver>();
         services.AddScoped<IListItemModelResolver, ListItemModelResolver>();

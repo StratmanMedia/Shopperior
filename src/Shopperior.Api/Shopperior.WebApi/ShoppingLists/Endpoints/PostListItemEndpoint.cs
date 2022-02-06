@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Newtonsoft.Json;
 using Shopperior.Domain.Contracts.ListItems.Commands;
 using Shopperior.WebApi.Shared.Endpoints;
 using Shopperior.WebApi.ShoppingLists.Models;
