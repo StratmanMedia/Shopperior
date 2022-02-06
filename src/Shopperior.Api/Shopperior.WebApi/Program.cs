@@ -1,9 +1,9 @@
 using Shopperior.Application.DependencyInjection.Microsoft;
 using Shopperior.Data.EFCore.DependencyInjection.Microsoft;
-using Shopperior.WebApi.Shared;
 using Shopperior.WebApi.Shared.Interfaces;
 using Shopperior.WebApi.Shared.Middleware;
 using Shopperior.WebApi.Shared.Services;
+using Shopperior.WebApi.ShoppingLists.Resolvers;
 using StratmanMedia.Auth;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -34,6 +34,7 @@ var config = builder.Configuration;
     });
     builder.Services.AddScoped<ICurrentUserResolver, CurrentUserResolver>();
     builder.Services.AddScoped<ICurrentUserService, CurrentUserService>();
+    builder.Services.AddScoped<IListItemDtoResolver, ListItemDtoResolver>();
     builder.Services.AddControllers();
     // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
     builder.Services.AddEndpointsApiExplorer();

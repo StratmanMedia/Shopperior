@@ -13,7 +13,11 @@
 
   <ItemGroup>
     <Folder Include="Items\" />
-    <Folder Include="ListItems\" />
+    <Folder Include="ListItems\Commands\" />
+    <Folder Include="ListItems\Models\" />
+    <Folder Include="ListItems\Queries\" />
+    <Folder Include="ListItems\Resolvers\" />
+    <Folder Include="Shared\Models\" />
     <Folder Include="ShoppingLists\Commands\" />
     <Folder Include="ShoppingLists\Models\" />
     <Folder Include="ShoppingLists\Queries\" />

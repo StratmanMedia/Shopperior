@@ -52,15 +52,9 @@ export class ListItemFormComponent implements OnInit {
     this.itemService.getOrAdd(formItem).subscribe(item => {
       let items = (this.shoppingList.items !== null) ? this.shoppingList.items : [];
       const listItem = <ListItemModel>{
-        item: item,
-        location: this.itemForm.controls.location.value,
-        quantity: this.itemForm.controls.quantity.value,
-        units: this.itemForm.controls.units.value,
-        unitPrice: this.itemForm.controls.unitPrice.value,
-        subtotal: this.itemForm.controls.subtotal.value
       };
       items.push(listItem);
-      const shoppingListModel: ShoppingListModel = {
+      const shoppingListModel = <ShoppingListModel>{
         guid: this.shoppingList.guid,
         name: this.shoppingList.name,
         items: items

@@ -1,10 +1,15 @@
-import { ItemModel } from "../../item/models/item-model";
-
 export class ListItemModel {
-  item: ItemModel;
-  location: string;
+  guid: string;
+  shoppingListGuid: string;
+  name: string;
+  brand: string;
+  comment: string;
   quantity: number;
-  units: string;
+  measurement: string;
   unitPrice: number;
-  subtotal: number;
+  totalPrice: number;
+  isInCart: boolean;
+  enteredCartTime?: Date;
+  hasPurchased: boolean;
+  purchasedTime?: Date;
 }

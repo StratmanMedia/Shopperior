@@ -40,7 +40,7 @@ public class UpdateShoppingListCommand : IUpdateShoppingListCommand
             var validation = await ValidateRequest(request, ct);
             if (!validation.IsSuccess) return new Response(validation.Messages);
 
-            var shoppingList = await _getOneShoppingListQuery.ExecuteAsync(request.Guid, ct);
+            var shoppingList = await _shoppingListRepository.GetOneAsync(request.Guid, ct);
             if (shoppingList == null)
                 return new Response($"Shopping List with {nameof(request.Guid)} of {request.Guid} was not found.");
 
@@ -51,9 +51,9 @@ public class UpdateShoppingListCommand : IUpdateShoppingListCommand
             var newPermissions = new List<UserListPermission>();
             foreach (var permission in request.Permissions)
             {
-                var user = await _getOneUserQuery.ExecuteAsync(permission.UserGuid, ct);
+                var user = await _getOneUserQuery.ExecuteAsync(permission.User.Guid, ct);
                 if (user == null)
-                    return new Response($"User with {nameof(permission.UserGuid)} of {permission.UserGuid} was not found.");
+                    return new Response($"User with {nameof(permission.User.Guid)} of {permission.User.Guid} was not found.");
 
                 var shoppingListPermission = ShoppingListPermission.FromName(permission.Permission, true).ToString();
                 newPermissions.Add(new UserListPermission
@@ -89,9 +89,6 @@ public class UpdateShoppingListCommand : IUpdateShoppingListCommand
                     await _userListPermissionRepository.DeleteAsync(currentPermission, ct);
                 }
             }
-
-
-
 
             return new Response();
         }

@@ -1,4 +1,6 @@
-﻿using Shopperior.Domain.Contracts.ShoppingLists.Queries;
+﻿using Shopperior.Application.ShoppingLists.Models;
+using Shopperior.Domain.Contracts.ShoppingLists.Models;
+using Shopperior.Domain.Contracts.ShoppingLists.Queries;
 using Shopperior.Domain.Contracts.ShoppingLists.Repositories;
 using Shopperior.Domain.Entities;
 
@@ -14,15 +16,20 @@ public class GetOneShoppingListQuery : IGetOneShoppingListQuery
         _shoppingListRepository = shoppingListRepository;
     }
 
-    public Task<ShoppingList> ExecuteAsync(long request, CancellationToken ct = new())
+    public Task<IShoppingListModel> ExecuteAsync(long request, CancellationToken ct = new())
     {
         throw new NotImplementedException();
     }
 
-    public async Task<ShoppingList> ExecuteAsync(Guid request, CancellationToken ct = new())
+    public async Task<IShoppingListModel> ExecuteAsync(Guid guid, CancellationToken ct = new())
     {
-        var shoppingList = await _shoppingListRepository.GetOneAsync(request, ct);
+        var shoppingList = await _shoppingListRepository.GetOneAsync(guid, ct);
+        var model = new ShoppingListModel
+        {
+            Guid = shoppingList.Guid,
+            Name = shoppingList.Name
+        };
 
-        return shoppingList;
+        return model;
     }
 }

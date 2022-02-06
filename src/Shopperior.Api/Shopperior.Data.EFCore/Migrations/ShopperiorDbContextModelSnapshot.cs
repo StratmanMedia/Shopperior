@@ -92,13 +92,19 @@ namespace Shopperior.Data.EFCore.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"), 1L, 1);
 
+                    b.Property<string>("Brand")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<long>("CategoryId")
                         .HasColumnType("bigint");
+
+                    b.Property<string>("Comment")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("CreatedTime")
                         .HasColumnType("datetime2");
 
-                    b.Property<DateTime>("EnteredCartTime")
+                    b.Property<DateTime?>("EnteredCartTime")
                         .HasColumnType("datetime2");
 
                     b.Property<Guid>("Guid")
@@ -116,10 +122,13 @@ namespace Shopperior.Data.EFCore.Migrations
                     b.Property<DateTime?>("LastModifiedTime")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("Measurement")
-                        .HasColumnType("int");
+                    b.Property<string>("Measurement")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("PurchasedTime")
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("PurchasedTime")
                         .HasColumnType("datetime2");
 
                     b.Property<double>("Quantity")

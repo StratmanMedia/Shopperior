@@ -1,11 +1,12 @@
 import { Injectable } from '@angular/core';
 import { Observable, ReplaySubject } from 'rxjs';
-import { map, take } from 'rxjs/operators';
+import { map, take, tap } from 'rxjs/operators';
 import { constants } from 'src/app/shared/classes/constants';
 import { environment } from 'src/environments/environment';
 import { LoggingService } from '../../logging/logging.service';
 import { LocalDataService } from '../local/local-data.service';
 import { ShopperiorApiService } from '../shopperior-api/shopperior-api.service';
+import { ListItemModel } from './models/list-tem-model';
 import { ShoppingListModel } from './models/shopping-list-model';
 
 @Injectable({
@@ -22,12 +23,12 @@ export class ShoppingListService {
     private _local: LocalDataService,
     private _api: ShopperiorApiService) {
       this.loadLists();
-      this._listSubject.subscribe(
-        (lists: ShoppingListModel[]) => {
+      this._listSubject.pipe(
+        tap((lists: ShoppingListModel[]) => {
           this._local.set(constants.storageKeys.shoppingLists, lists);
-        }
+        })
       );
-    }
+  }
 
   public getAll(): Observable<ShoppingListModel[]> {
     return this._listSubject.asObservable();
@@ -35,7 +36,7 @@ export class ShoppingListService {
 
   public getOne(guid: string): Observable<ShoppingListModel> {
     return this._listSubject.pipe(
-      take(1),
+      // take(1),
       map(lists => {
         const list = lists.find(l => l.guid === guid);
         return list;
@@ -67,16 +68,45 @@ export class ShoppingListService {
   }
 
   public update(shoppingList: ShoppingListModel): Observable<void> {
-    return new Observable(observer => {
-      this.getAll().subscribe(savedLists => {
-        let foundList = savedLists.find(l => l.guid === shoppingList.guid);
+    return this._listSubject.pipe(
+      take(1),
+      map(lists => {
+        let foundList = lists.find(l => l.guid === shoppingList.guid);
         foundList.name = shoppingList.name;
+        foundList.permissions = shoppingList.permissions;
         foundList.items = shoppingList.items;
-        this._local.set(constants.storageKeys.shoppingLists, savedLists);
-        observer.next();
-        observer.complete();
-      });
-    });
+        this._listSubject.next(lists);
+        this._api.ShoppingLists.update(shoppingList).subscribe();
+      })
+    );
+  }
+
+  public addItem(item: ListItemModel): Observable<void> {
+    this._logger.debug(`Adding item. ${JSON.stringify(item)}`);
+    return this._listSubject.pipe(
+      take(1),
+      map(lists => {
+        let foundList = lists.find(l => l.guid === item.shoppingListGuid);
+        this._logger.debug(`Found list ${foundList.guid}`);
+        foundList.items.push(item);
+        this._listSubject.next(lists);
+        this._api.ShoppingLists.addItem(item).subscribe();
+      })
+    );
+  }
+
+  public updateItem(item: ListItemModel) : Observable<void> {
+    this._logger.debug(`Updting item. ${JSON.stringify(item)}`);
+    return this._listSubject.pipe(
+      take(1),
+      map(lists => {
+        let foundList = lists.find(l => l.guid === item.shoppingListGuid);
+        let foundItem = foundList.items.find(i => i.guid === item.guid);
+        foundItem = {...item};
+        this._listSubject.next(lists);
+        this._api.ShoppingLists.updateItem(item).pipe(take(1)).subscribe();
+      })
+    );
   }
 
   private loadLists(): void {

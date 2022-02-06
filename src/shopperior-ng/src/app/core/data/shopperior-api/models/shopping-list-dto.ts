@@ -1,4 +1,9 @@
+import { ListItemDto } from "./list-item-dto";
+import { UserListPermissionDto } from "./user-list-permission-dto";
+
 export interface ShoppingListDto {
   guid: string;
   name: string;
+  permissions: UserListPermissionDto[];
+  items: ListItemDto[];
 }

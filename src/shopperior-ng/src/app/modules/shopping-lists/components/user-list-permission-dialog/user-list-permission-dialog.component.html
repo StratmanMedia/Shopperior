@@ -1,0 +1,18 @@
+<div mat-dialog-content>
+  <mat-form-field appearance="outline" class="width-100">
+    <mat-label>Email</mat-label>
+    <input matInput [(ngModel)]="data.userEmail" />
+  </mat-form-field>
+  <mat-form-field appearance="outline" class="width-100">
+    <mat-label>Permission</mat-label>
+    <mat-select [(ngModel)]="data.permission">
+      <mat-option value="VIEWER">Viewer</mat-option>
+      <mat-option value="CONTRIBUTOR">Contributor</mat-option>
+      <mat-option value="ADMINISTRATOR">Administrator</mat-option>
+    </mat-select>
+  </mat-form-field>
+</div>
+<div mat-dialog-actions>
+  <button mat-button (click)="cancel()">Cancel</button>
+  <button mat-raised-button color="primary" (click)="add()" cdkFocusInitial>Add</button>
+</div>

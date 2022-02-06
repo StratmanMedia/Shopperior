@@ -1,7 +1,9 @@
 import { ListItemModel } from "./list-tem-model";
+import { UserListPermissionModel } from "./user-list-permission-model";
 
-export class ShoppingListModel {
+export interface ShoppingListModel {
   guid: string;
   name: string;
-  items: ListItemModel[] = [];
+  permissions: UserListPermissionModel[];
+  items: ListItemModel[];
 }

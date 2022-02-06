@@ -2,12 +2,18 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { AuthService } from '@auth0/auth0-angular';
 import { Observable, of, throwError } from 'rxjs';
-import { concatMap, map, take } from 'rxjs/operators';
+import { concatMap, map, take, tap } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
 import { LoggingService } from '../../logging/logging.service';
+import { ListItemModel } from '../list/models/list-tem-model';
 import { ShoppingListModel } from '../list/models/shopping-list-model';
+import { UserListPermissionModel } from '../list/models/user-list-permission-model';
+import { UserModel } from '../user/models/user-model';
 import { ApiResponseModel } from './models/api-response-model';
+import { ListItemDto } from './models/list-item-dto';
 import { ShoppingListDto } from './models/shopping-list-dto';
+import { UserDto } from './models/user-dto';
+import { UserListPermissionDto } from './models/user-list-permission-dto';
 
 @Injectable({
   providedIn: 'root'
@@ -30,9 +36,34 @@ export class ShopperiorApiService {
       return this._super.get<ShoppingListDto[]>('/api/v1/lists').pipe(
         map((res: ShoppingListDto[]) => {
           return res.map((dto: ShoppingListDto) => {
+            const permissions = dto.permissions.map(p => {
+              return <UserListPermissionModel>{
+                userGuid: p.user.guid,
+                userEmail: p.user.emailAddress,
+                shoppingListGuid: p.shoppingListGuid,
+                permission: p.permission
+              };
+            });
+            const items = dto.items.map(i => {
+              return <ListItemModel>{
+                guid: i.guid,
+                shoppingListGuid: i.shoppingListGuid,
+                name: i.name,
+                brand: i.brand,
+                comment: i.comment,
+                quantity: i.quantity,
+                measurement: i.measurement,
+                unitPrice: i.unitPrice,
+                totalPrice: i.totalPrice,
+                isInCart: i.isInCart,
+                hasPurchased: i.hasPurchased,
+              };
+            });
             return <ShoppingListModel>{
               guid: dto.guid,
-              name: dto.name
+              name: dto.name,
+              permissions: permissions,
+              items: items
             };
           });
         })
@@ -40,8 +71,36 @@ export class ShopperiorApiService {
     }
 
     add(list: ShoppingListModel): Observable<void> {
-      return this._super.post('/api/v1/lists', list).pipe(
-        map((res: ApiResponseModel<void>) => {
+      const data = <ShoppingListDto>{
+        name: list.name
+      };
+      return this._super.post('/api/v1/lists', data).pipe(
+        map((res: void) => {
+          return;
+        })
+      );
+    }
+
+    update(list: ShoppingListModel): Observable<void> {
+      const permissions: UserListPermissionDto[] = [];
+      list.permissions.forEach(p => {
+        const user = <UserDto>{
+          guid: p.userGuid
+        };
+        const permission = <UserListPermissionDto>{
+          user: user,
+          shoppingListGuid: p.shoppingListGuid,
+          permission: p.permission
+        };
+        permissions.push(permission);
+      });
+      const data = <ShoppingListDto>{
+        guid: list.guid,
+        name: list.name,
+        permissions: permissions
+      };
+      return this._super.put(`/api/v1/lists/${list.guid}`, data).pipe(
+        map((res: void) => {
           return;
         })
       );
@@ -49,10 +108,70 @@ export class ShopperiorApiService {
 
     delete(guid: string): Observable<void> {
       return this._super.delete(`/api/v1/lists/${guid}`).pipe(
-        map((res: ApiResponseModel<null>) => {
+        map((res: void) => {
           return;
         })
       );
+    }
+
+    addItem(item: ListItemModel) {
+      this._super._logger.debug(`Posting item.`);
+      const dto = <ListItemDto>{
+        shoppingListGuid: item.shoppingListGuid,
+        name: item.name,
+        brand: item.brand,
+        comment: item.comment,
+        quantity: item.quantity,
+        measurement: item.measurement,
+        unitPrice: item.unitPrice,
+        totalPrice: item.totalPrice,
+        isInCart: item.isInCart
+      };
+      return this._super.post(`/api/v1/lists/${item.shoppingListGuid}/items`, dto).pipe(
+        map((res: void) => {
+          return;
+        })
+      );
+    }
+
+    updateItem(item: ListItemModel) {
+      this._super._logger.debug(`Putting item.`);
+      const dto = <ListItemDto>{
+        guid: item.guid,
+        shoppingListGuid: item.shoppingListGuid,
+        name: item.name,
+        brand: item.brand,
+        comment: item.comment,
+        quantity: item.quantity,
+        measurement: item.measurement,
+        unitPrice: item.unitPrice,
+        totalPrice: item.totalPrice,
+        isInCart: item.isInCart,
+        hasPurchased: item.hasPurchased
+      };
+      return this._super.put(`/api/v1/lists/${item.shoppingListGuid}/items/${item.guid}`, dto).pipe(
+        map((res: void) => {
+          return;
+        })
+      );
+    }
+  }(this);
+
+  Users = new class {
+    constructor(private _super: ShopperiorApiService) { }
+
+    getOneByEmail(email: string): Observable<UserModel> {
+      return this._super.get<UserDto>(`/api/v1/users?emailAddress=${email}`).pipe(
+        map((res: UserDto) => {
+          return <UserModel>{
+            guid: res.guid,
+            username: res.username,
+            firstName: res.firstName,
+            lastName: res.lastName,
+            email: res.emailAddress
+          }
+        })
+      )
     }
   }(this);
 
@@ -63,6 +182,7 @@ export class ShopperiorApiService {
       concatMap(headers => {
         return this._http.get<ApiResponseModel<T>>(uri, {headers});
       }),
+      take(1),
       map((res: ApiResponseModel<T>) => {
         this._logger.debug(`GET:${uri} Completed.`);
         if (!res) { throwError(`GET:${uri}: There was no response from the endpoint.`); }
@@ -79,6 +199,7 @@ export class ShopperiorApiService {
       concatMap(headers => {
         return this._http.post(`${uri}`, data, {headers});
       }),
+      take(1),
       map((res: ApiResponseModel<null>) => {
         this._logger.debug(`POST:${uri} Completed.`);
         if (!res) { throwError(`POST:${uri} There was no response from the endpoint.`); }
@@ -89,7 +210,20 @@ export class ShopperiorApiService {
   }
 
   private put(path: string, data: any): Observable<any> {
-    return this._http.put(`${this._url}${path}`, data);
+    const uri = `${this._url}${path}`;
+    this._logger.debug(`PUT:${uri} Started.`);
+    return this.injectAuthHeader(new HttpHeaders()).pipe(
+      concatMap(headers => {
+        return this._http.put(`${uri}`, data, {headers});
+      }),
+      take(1),
+      map((res: ApiResponseModel<null>) => {
+        this._logger.debug(`PUT:${uri} Completed.`);
+        if (!res) { throwError(`PUT:${uri} There was no response from the endpoint.`); }
+        if (!res.isSuccess) { throwError(res.messages.join()); }
+        return res.data;
+      })
+    );    
   }
 
   private delete(path: string): Observable<any> {

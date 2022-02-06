@@ -1,24 +1,38 @@
 <mat-toolbar>
-  <a mat-icon-button routerLink="/lists"><mat-icon>arrow_back</mat-icon></a>
-  <p>{{shoppingList.name}}</p>
+  <a mat-icon-button routerLink="/app/lists"><mat-icon>arrow_back</mat-icon></a>
+  <span>{{(shoppingList | async)?.name}}</span>
   <span class="toolbar-spacer"></span>
-  <a mat-icon-button routerLink="/lists/{{guid}}/items/add" aria-label="Button with a plus icon">
-    <mat-icon>add</mat-icon>
+  <a mat-icon-button routerLink="/app/lists/{{guid}}/settings" aria-label="Settings button">
+    <mat-icon>settings</mat-icon>
   </a>
 </mat-toolbar>
-<div class="form-container">
-  <mat-form-field appearance="fill" class="width-100">
-    <mat-label>Store</mat-label>
-    <mat-select>
-      <mat-option value="one">First option</mat-option>
-      <mat-option value="two">Second option</mat-option>
-    </mat-select>
-  </mat-form-field>
+<div class="mt-1 mx-2">
+  <mat-nav-list>
+    <mat-list-item *ngFor="let item of (listItems | async)">
+      <div mat-line>{{item.name}}</div>
+      <div mat-line *ngIf="!!item.brand">{{item.brand}}</div>
+      <div class="toolbar-spacer"></div>
+      <div>
+        <mat-checkbox [(ngModel)]="item.isInCart" (change)="updateListItem(item)"></mat-checkbox>
+      </div>
+      <mat-divider></mat-divider>
+    </mat-list-item>
+    <mat-list-item *ngIf="(cartItems | async)?.length > 0">
+      <div mat-line>In Cart</div>
+    </mat-list-item>
+    <mat-list-item *ngFor="let item of (cartItems | async)">
+      <div mat-line><s>{{item.name}}</s></div>
+      <div mat-line *ngIf="!!item.brand"><s>{{item.brand}}</s></div>
+      <div class="toolbar-spacer"></div>
+      <div>
+        <mat-checkbox [(ngModel)]="item.isInCart" (change)="updateListItem(item)"></mat-checkbox>
+      </div>
+      <mat-divider></mat-divider>
+    </mat-list-item>
+  </mat-nav-list>
 </div>
-<mat-nav-list>
-  <mat-list-item *ngFor="let item of shoppingList.items">
-    <div mat-line>{{ item.item.name }}</div>
-    <div mat-line>{{ item.item.details }}</div>
-    <mat-divider></mat-divider>
-  </mat-list-item>
-</mat-nav-list>
+<div class="fab-placement">
+  <button mat-fab color="primary" aria-label="Button to add an item" (click)="openItemDialog()">
+    <mat-icon>add</mat-icon>
+  </button>
+</div>
