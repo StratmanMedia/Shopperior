@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute } from '@angular/router';
-import { Observable } from 'rxjs';
+import { Observable, ReplaySubject, Subject } from 'rxjs';
 import { tap } from 'rxjs/operators';
 import { ListItemModel } from 'src/app/core/data/list/models/list-tem-model';
 import { ShoppingListModel } from 'src/app/core/data/list/models/shopping-list-model';
@@ -23,19 +23,26 @@ export class ShoppingListItemsViewComponent implements OnInit {
   });
   shoppingList = new Observable<ShoppingListModel>();
   guid: string;
+  listItems = new ReplaySubject<ListItemModel[]>(1);
+  cartItems = new ReplaySubject<ListItemModel[]>(1);
 
   constructor(
     private route: ActivatedRoute,
     private shoppingListService: ShoppingListService,
     private navService: NavigationService,
     public dialog: MatDialog,
-    private _shoppingListService: ShoppingListService) {
-
-    this.guid = this.route.snapshot.params.list;
-    this.shoppingList = this.shoppingListService.getOne(this.guid);
-  }
+    private _shoppingListService: ShoppingListService) { }
 
   ngOnInit(): void {
+    this.guid = this.route.snapshot.params.list;
+    this.shoppingList = this.shoppingListService.getOne(this.guid).pipe(
+      tap(list => {
+        let listItems = list.items.filter(i => !i.isInCart);
+        let cartItems = list.items.filter(i => i.isInCart);
+        this.listItems.next(listItems);
+        this.cartItems.next(cartItems);
+      })
+    );
   }
 
   public goBack(): void {
@@ -51,12 +58,24 @@ export class ShoppingListItemsViewComponent implements OnInit {
     });
     dialogRef.afterClosed().subscribe(data => {
       if (!!data) {
-        this._logger.debug(`Saving item. ${JSON.stringify(data)}`);
-        this._shoppingListService.addItem(data).pipe(
-          tap(() => this._logger.debug(`Item saved.`))
-        )
-        .subscribe();
+        this.addListItem(data);
       }
     });
+  }
+
+  public updateListItem(item: ListItemModel): void {
+    this._logger.debug(`Updating item. ${JSON.stringify(item)}`);
+    this._shoppingListService.updateItem(item).pipe(
+      tap(() => this._logger.debug(`Item updated.`))
+    )
+    .subscribe();
+  }
+
+  private addListItem(item: ListItemModel): void {
+    this._logger.debug(`Saving item. ${JSON.stringify(item)}`);
+    this._shoppingListService.addItem(item).pipe(
+      tap(() => this._logger.debug(`Item saved.`))
+    )
+    .subscribe();
   }
 }

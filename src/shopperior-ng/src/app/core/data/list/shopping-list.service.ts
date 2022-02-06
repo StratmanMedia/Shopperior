@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Observable, ReplaySubject } from 'rxjs';
-import { map, take } from 'rxjs/operators';
+import { map, take, tap } from 'rxjs/operators';
 import { constants } from 'src/app/shared/classes/constants';
 import { environment } from 'src/environments/environment';
 import { LoggingService } from '../../logging/logging.service';
@@ -23,10 +23,10 @@ export class ShoppingListService {
     private _local: LocalDataService,
     private _api: ShopperiorApiService) {
       this.loadLists();
-      this._listSubject.subscribe(
-        (lists: ShoppingListModel[]) => {
+      this._listSubject.pipe(
+        tap((lists: ShoppingListModel[]) => {
           this._local.set(constants.storageKeys.shoppingLists, lists);
-        }
+        })
       );
   }
 
@@ -36,7 +36,7 @@ export class ShoppingListService {
 
   public getOne(guid: string): Observable<ShoppingListModel> {
     return this._listSubject.pipe(
-      take(1),
+      // take(1),
       map(lists => {
         const list = lists.find(l => l.guid === guid);
         return list;
@@ -91,6 +91,20 @@ export class ShoppingListService {
         foundList.items.push(item);
         this._listSubject.next(lists);
         this._api.ShoppingLists.addItem(item).subscribe();
+      })
+    );
+  }
+
+  public updateItem(item: ListItemModel) : Observable<void> {
+    this._logger.debug(`Updting item. ${JSON.stringify(item)}`);
+    return this._listSubject.pipe(
+      take(1),
+      map(lists => {
+        let foundList = lists.find(l => l.guid === item.shoppingListGuid);
+        let foundItem = foundList.items.find(i => i.guid === item.guid);
+        foundItem = {...item};
+        this._listSubject.next(lists);
+        this._api.ShoppingLists.updateItem(item).pipe(take(1)).subscribe();
       })
     );
   }

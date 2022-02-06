@@ -56,9 +56,7 @@ export class ShopperiorApiService {
                 unitPrice: i.unitPrice,
                 totalPrice: i.totalPrice,
                 isInCart: i.isInCart,
-                enteredCartTime: i.enteredCartTime,
                 hasPurchased: i.hasPurchased,
-                purchasedTime: i.purchasedTime
               };
             });
             return <ShoppingListModel>{
@@ -130,6 +128,28 @@ export class ShopperiorApiService {
         isInCart: item.isInCart
       };
       return this._super.post(`/api/v1/lists/${item.shoppingListGuid}/items`, dto).pipe(
+        map((res: void) => {
+          return;
+        })
+      );
+    }
+
+    updateItem(item: ListItemModel) {
+      this._super._logger.debug(`Putting item.`);
+      const dto = <ListItemDto>{
+        guid: item.guid,
+        shoppingListGuid: item.shoppingListGuid,
+        name: item.name,
+        brand: item.brand,
+        comment: item.comment,
+        quantity: item.quantity,
+        measurement: item.measurement,
+        unitPrice: item.unitPrice,
+        totalPrice: item.totalPrice,
+        isInCart: item.isInCart,
+        hasPurchased: item.hasPurchased
+      };
+      return this._super.put(`/api/v1/lists/${item.shoppingListGuid}/items/${item.guid}`, dto).pipe(
         map((res: void) => {
           return;
         })

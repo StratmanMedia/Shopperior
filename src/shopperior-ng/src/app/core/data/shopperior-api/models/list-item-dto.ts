@@ -9,7 +9,5 @@ export interface ListItemDto {
   unitPrice: number;
   totalPrice: number;
   isInCart: boolean;
-  enteredCartTime?: Date;
   hasPurchased: boolean;
-  purchasedTime?: Date;
 }
