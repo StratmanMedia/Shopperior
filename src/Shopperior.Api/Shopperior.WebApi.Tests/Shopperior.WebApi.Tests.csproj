@@ -18,6 +18,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Shared\Services\" />
     <Folder Include="Users\Endpoints\" />
   </ItemGroup>
 
