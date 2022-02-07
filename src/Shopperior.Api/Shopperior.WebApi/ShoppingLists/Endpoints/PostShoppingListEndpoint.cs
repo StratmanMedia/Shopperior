@@ -14,13 +14,13 @@ namespace Shopperior.WebApi.ShoppingLists.Endpoints;
 
 public class PostShoppingListEndpoint : BaseEndpoint
 {
-    private readonly ICurrentUserService _currentUserService;
+    private readonly ICurrentUserProvider _currentUserService;
     private readonly ILogger<PostShoppingListEndpoint> _logger;
     private readonly ICreateShoppingListCommand _createShoppingListCommand;
 
     public PostShoppingListEndpoint(
         ILogger<PostShoppingListEndpoint> logger,
-        ICurrentUserService currentUserService,
+        ICurrentUserProvider currentUserService,
         ICreateShoppingListCommand createShoppingListCommand)
     {
         _currentUserService = currentUserService;

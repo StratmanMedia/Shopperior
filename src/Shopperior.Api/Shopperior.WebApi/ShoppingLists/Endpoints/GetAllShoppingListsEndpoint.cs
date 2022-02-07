@@ -14,13 +14,13 @@ namespace Shopperior.WebApi.ShoppingLists.Endpoints;
 public class GetAllShoppingListsEndpoint : BaseEndpoint
 {
     private readonly ILogger<GetAllShoppingListsEndpoint> _logger;
-    private readonly ICurrentUserService _currentUserService;
+    private readonly ICurrentUserProvider _currentUserService;
     private readonly IGetAllShoppingListsQuery _getAllShoppingListsQuery;
     private readonly IListItemDtoResolver _listItemDtoResolver;
 
     public GetAllShoppingListsEndpoint(
         ILogger<GetAllShoppingListsEndpoint> logger,
-        ICurrentUserService currentUserService,
+        ICurrentUserProvider currentUserService,
         IGetAllShoppingListsQuery getAllShoppingListsQuery,
         IListItemDtoResolver listItemDtoResolver)
     {

@@ -12,12 +12,12 @@ namespace Shopperior.WebApi.ShoppingLists.Endpoints;
 public class DeleteShoppingListEndpoint : BaseEndpoint
 {
     private readonly ILogger<DeleteShoppingListEndpoint> _logger;
-    private readonly ICurrentUserService _currentUserService;
+    private readonly ICurrentUserProvider _currentUserService;
     private readonly IDeleteShoppingListCommand _deleteShoppingListCommand;
 
     public DeleteShoppingListEndpoint(
         ILogger<DeleteShoppingListEndpoint> logger,
-        ICurrentUserService currentUserService,
+        ICurrentUserProvider currentUserService,
         IDeleteShoppingListCommand deleteShoppingListCommand)
     {
         _logger = logger;

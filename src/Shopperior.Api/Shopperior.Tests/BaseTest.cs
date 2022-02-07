@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using Autofac.Extras.Moq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
@@ -18,6 +19,13 @@ public class BaseTest<T> : IDisposable
     protected long RandomLong(long min = long.MaxValue, long max = long.MaxValue)
     {
         return _random.NextInt64(min, max);
+    }
+
+    public string RandomString(int length)
+    {
+        const string chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+        return new string(Enumerable.Repeat(chars, length)
+            .Select(s => s[_random.Next(s.Length)]).ToArray());
     }
 
     public void Dispose()

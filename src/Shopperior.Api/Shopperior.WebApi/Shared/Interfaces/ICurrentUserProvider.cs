@@ -2,7 +2,7 @@
 
 namespace Shopperior.WebApi.Shared.Interfaces;
 
-public interface ICurrentUserService
+public interface ICurrentUserProvider
 {
     CurrentUser CurrentUser { get; }
     Task SetCurrentUser(CurrentUser currentUser);
