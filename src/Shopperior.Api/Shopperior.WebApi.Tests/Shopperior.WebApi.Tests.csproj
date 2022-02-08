@@ -19,6 +19,7 @@
 
   <ItemGroup>
     <Folder Include="Shared\Services\" />
+    <Folder Include="ShoppingLists\Endpoints\" />
     <Folder Include="Users\Endpoints\" />
   </ItemGroup>
 

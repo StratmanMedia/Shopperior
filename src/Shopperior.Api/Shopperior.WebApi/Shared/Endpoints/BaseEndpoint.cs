@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics;
+using System.Net;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using Shopperior.Domain.Exceptions;
@@ -34,6 +35,11 @@ public class BaseEndpoint<TEndpoint> : ControllerBase
             _logger.LogInformation(ex, ex.JoinAllMessages());
             return BadRequest(new Response(ex.Message));
         }
+        catch (UnauthorizedAccessException ex)
+        {
+            _logger.LogWarning(ex, ex.JoinAllMessages());
+            return Unauthorized();
+        }
         catch (ResourceNotFoundException ex)
         {
             _logger.LogInformation(ex, ex.JoinAllMessages());
@@ -64,6 +70,11 @@ public class BaseEndpoint<TEndpoint> : ControllerBase
             _logger.LogInformation(ex, ex.JoinAllMessages());
             return BadRequest(new Response(ex.Message));
         }
+        catch (UnauthorizedAccessException ex)
+        {
+            _logger.LogWarning(ex, ex.JoinAllMessages());
+            return Unauthorized();
+        }
         catch (ResourceNotFoundException ex)
         {
             _logger.LogInformation(ex, ex.JoinAllMessages());
@@ -87,7 +98,7 @@ public class BaseEndpoint<TEndpoint> : ControllerBase
 
     protected ActionResult InternalServerError()
     {
-        return StatusCode(500);
+        return StatusCode((int)HttpStatusCode.InternalServerError);
     }
 
     //private void HandleAction(Func<>)

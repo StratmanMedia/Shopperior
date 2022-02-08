@@ -34,6 +34,7 @@
     <Folder Include="Shared\Middleware\" />
     <Folder Include="ShoppingLists\Models\" />
     <Folder Include="ShoppingLists\Endpoints\" />
+    <Folder Include="ShoppingLists\Interfaces\" />
     <Folder Include="ShoppingLists\Resolvers\" />
     <Folder Include="Users\Endpoints\" />
   </ItemGroup>
