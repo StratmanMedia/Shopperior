@@ -15,18 +15,18 @@ public class ShoppingListRepository : Repository<ShopperiorDbContext, ShoppingLi
         _userListRepository = userListRepository;
     }
 
-    public Task<ShoppingList> GetOneAsync(long id, CancellationToken ct = new CancellationToken())
+    public async Task<ShoppingList> GetOneAsync(long id, CancellationToken ct = new CancellationToken())
     {
         var shoppingList = Table.FirstOrDefault(l => l.Id == id);
 
-        return Task.FromResult(shoppingList);
+        return await Task.FromResult(shoppingList);
     }
 
-    public Task<ShoppingList> GetOneAsync(Guid guid, CancellationToken ct = new())
+    public async Task<ShoppingList> GetOneAsync(Guid guid, CancellationToken ct = new())
     {
         var shoppingList = Table.FirstOrDefault(l => l.Guid == guid);
 
-        return Task.FromResult(shoppingList);
+        return await Task.FromResult(shoppingList);
     }
 
     public async Task<IEnumerable<ShoppingList>> GetManyByUserAsync(long userId, CancellationToken ct = new())
