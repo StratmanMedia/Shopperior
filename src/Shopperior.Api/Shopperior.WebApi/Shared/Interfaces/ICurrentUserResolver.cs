@@ -5,5 +5,5 @@ namespace Shopperior.WebApi.Shared.Interfaces;
 
 public interface ICurrentUserResolver
 {
-    Task<CurrentUser> Resolve(ClaimsPrincipal principal, string authorizationHeaderValue, CancellationToken cancellationToken);
+    Task<CurrentUser> Resolve(HttpContext httpContext, CancellationToken cancellationToken);
 }

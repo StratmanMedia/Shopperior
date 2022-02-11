@@ -3,7 +3,7 @@ using Shopperior.WebApi.Users.Models;
 
 namespace Shopperior.WebApi.Shared.Services;
 
-public class CurrentUserService : ICurrentUserService
+public class CurrentUserProvider : ICurrentUserProvider
 {
     public CurrentUser CurrentUser { get; private set; }
 

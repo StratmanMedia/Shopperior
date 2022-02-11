@@ -16,14 +16,14 @@ namespace Shopperior.WebApi.ShoppingLists.Endpoints;
 public class PutShoppingListEndpoint : BaseEndpoint
 {
     private readonly ILogger<PutShoppingListEndpoint> _logger;
-    private readonly ICurrentUserService _currentUserService;
+    private readonly ICurrentUserProvider _currentUserService;
     private readonly IUpdateShoppingListCommand _updateShoppingListCommand;
     private readonly IValidateShoppingListPermissionQuery _validateShoppingListPermissionQuery;
     private readonly IGetOneUserQuery _getOneUserQuery;
 
     public PutShoppingListEndpoint(
         ILogger<PutShoppingListEndpoint> logger,
-        ICurrentUserService currentUserService,
+        ICurrentUserProvider currentUserService,
         IValidateShoppingListPermissionQuery validateShoppingListPermissionQuery,
         IGetOneUserQuery getOneUserQuery,
         IUpdateShoppingListCommand updateShoppingListCommand)

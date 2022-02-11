@@ -15,6 +15,7 @@
     <Folder Include="ListItems\Commands\" />
     <Folder Include="ListItems\Models\" />
     <Folder Include="Shared\Cqrs\" />
+    <Folder Include="Shared\Models\" />
     <Folder Include="ShoppingLists\Commands\" />
     <Folder Include="ShoppingLists\Models\" />
     <Folder Include="ShoppingLists\Queries\" />

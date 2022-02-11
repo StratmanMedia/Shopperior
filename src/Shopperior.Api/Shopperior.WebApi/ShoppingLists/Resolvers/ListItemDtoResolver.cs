@@ -2,6 +2,7 @@
 using Shopperior.Domain.Contracts.ListItems.Models;
 using Shopperior.Domain.Contracts.ShoppingLists.Queries;
 using Shopperior.Domain.Enumerations;
+using Shopperior.WebApi.ShoppingLists.Interfaces;
 using Shopperior.WebApi.ShoppingLists.Models;
 
 namespace Shopperior.WebApi.ShoppingLists.Resolvers;
@@ -15,7 +16,7 @@ public class ListItemDtoResolver : IListItemDtoResolver
     {
         _getOneShoppingListQuery = getOneShoppingListQuery;
     }
-    public Task<ListItemDto> ResolveAsync(IListItemModel model)
+    public async Task<ListItemDto> ResolveAsync(IListItemModel model)
     {
         if (model == null) return null;
 
@@ -34,10 +35,10 @@ public class ListItemDtoResolver : IListItemDtoResolver
             HasPurchased = model.HasPurchased,
         };
 
-        return Task.FromResult(dto);
+        return await Task.FromResult(dto);
     }
 
-    public Task<IListItemModel> ResolveAsync(ListItemDto dto)
+    public async Task<IListItemModel> ResolveAsync(ListItemDto dto)
     {
         if (dto == null) return null;
 
@@ -57,6 +58,6 @@ public class ListItemDtoResolver : IListItemDtoResolver
             HasPurchased = dto.HasPurchased,
         };
 
-        return Task.FromResult((IListItemModel)model);
+        return await Task.FromResult((IListItemModel)model);
     }
 }

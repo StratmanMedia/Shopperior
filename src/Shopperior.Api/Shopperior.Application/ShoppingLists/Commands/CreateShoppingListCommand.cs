@@ -66,14 +66,14 @@ public class CreateShoppingListCommand : ICreateShoppingListCommand
         }
     }
 
-    private Task<Response> ValidateRequest(ICreateShoppingListRequest request)
+    private async Task<Response> ValidateRequest(ICreateShoppingListRequest request)
     {
         if (request.UserGuid == Guid.Empty)
-            return Task.FromResult(new Response("Invalid User GUID was provided."));
+            return await Task.FromResult(new Response("Invalid User GUID was provided."));
 
         if (request.ShoppingList == null)
-            return Task.FromResult(new Response("Shopping List data was not provided."));
+            return await Task.FromResult(new Response("Shopping List data was not provided."));
 
-        return Task.FromResult(new Response());
+        return await Task.FromResult(new Response());
     }
 }

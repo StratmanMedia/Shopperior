@@ -10,25 +10,25 @@ public class UserListPermissionRepository : Repository<ShopperiorDbContext, User
     {
     }
 
-    public Task<IEnumerable<UserListPermission>> GetManyByUserAsync(long userId, CancellationToken ct = new())
+    public async Task<IEnumerable<UserListPermission>> GetManyByUserAsync(long userId, CancellationToken ct = new())
     {
         var userPermissions = Context.UserListPermission.Where(p => p.UserId == userId);
 
-        return Task.FromResult(userPermissions.AsEnumerable());
+        return await Task.FromResult(userPermissions.AsEnumerable());
     }
 
-    public Task<IEnumerable<UserListPermission>> GetManyByListAsync(long shoppingListId, CancellationToken ct = new())
+    public async Task<IEnumerable<UserListPermission>> GetManyByListAsync(long shoppingListId, CancellationToken ct = new())
     {
         var listPermissions = Context.UserListPermission.Where(p => p.ShoppingListId == shoppingListId);
 
-        return Task.FromResult(listPermissions.AsEnumerable());
+        return await Task.FromResult(listPermissions.AsEnumerable());
     }
 
-    public Task<UserListPermission> GetOneAsync(long userId, long shoppingListId, CancellationToken ct = new())
+    public async Task<UserListPermission> GetOneAsync(long userId, long shoppingListId, CancellationToken ct = new())
     {
         var permission = Table.FirstOrDefault(p => p.UserId == userId && p.ShoppingListId == shoppingListId);
 
-        return Task.FromResult(permission);
+        return await Task.FromResult(permission);
     }
 
     public async Task<UserListPermission> GetOneAsync(Guid userGuid, Guid shoppingListGuid, CancellationToken ct = new())

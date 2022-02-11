@@ -32,10 +32,12 @@
     <Folder Include="Shared\Endpoints\" />
     <Folder Include="Shared\Extensions\" />
     <Folder Include="Shared\Middleware\" />
+    <Folder Include="Shared\Models\" />
     <Folder Include="ShoppingLists\Models\" />
     <Folder Include="ShoppingLists\Endpoints\" />
     <Folder Include="ShoppingLists\Resolvers\" />
     <Folder Include="Users\Endpoints\" />
+    <Folder Include="Users\Services\" />
   </ItemGroup>
 
 </Project>

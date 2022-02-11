@@ -29,23 +29,25 @@ public class CurrentUserResolver : ICurrentUserResolver
         _createUserCommand = createUserCommand;
     }
 
-    public async Task<CurrentUser> Resolve(ClaimsPrincipal principal, string authorizationHeaderValue, CancellationToken cancellationToken = new())
+    public async Task<CurrentUser> Resolve(HttpContext httpContext, CancellationToken ct = new())
     {
-        if (principal.Identity == null) return null;
+        var identity = httpContext.User.Identity;
+        if (identity == null) return null;
 
-        var username = principal.Identity.Name;
-        var user = await _getOneUserQuery.ExecuteAsync(username, cancellationToken);
+        var username = identity.Name;
+        var user = await _getOneUserQuery.ExecuteAsync(username, ct);
         if (user != null)
         {
             var currentUser = Map(user);
             return currentUser;
         }
 
-        var userInfo = await _userInfoResolver.Resolve(authorizationHeaderValue);
+        var authHeaderValue = httpContext.Request.Headers["Authorization"].ToString();
+        var userInfo = await _userInfoResolver.Resolve(authHeaderValue);
         if (userInfo == null) return null;
 
         var newUser = Map(userInfo);
-        var response = await _createUserCommand.ExecuteAsync(newUser, cancellationToken);
+        var response = await _createUserCommand.ExecuteAsync(newUser, ct);
         if (!response.IsSuccess)
         {
             _logger.LogError(string.Join('|', response.Messages));
