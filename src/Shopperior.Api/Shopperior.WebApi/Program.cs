@@ -52,6 +52,7 @@ void ConfigureLogging()
         .MinimumLevel.Debug()
         .Enrich.FromLogContext()
         .Enrich.WithProperty("Application", appName)
+        .WriteTo.Console()
         .CreateLogger();
 }
 
