@@ -1,4 +1,7 @@
+using Microsoft.EntityFrameworkCore;
+using Serilog;
 using Shopperior.Application.DependencyInjection.Microsoft;
+using Shopperior.Data.EFCore;
 using Shopperior.Data.EFCore.DependencyInjection.Microsoft;
 using Shopperior.WebApi.Shared.Interfaces;
 using Shopperior.WebApi.Shared.Middleware;
@@ -9,18 +12,58 @@ using Shopperior.WebApi.Users.Interfaces;
 using Shopperior.WebApi.Users.Services;
 using StratmanMedia.Auth;
 
-var builder = WebApplication.CreateBuilder(args);
-var config = builder.Configuration;
+const string appName = "Shopperior API";
+ConfigureLogging();
 
-// Add services to the container.
+try
 {
-    builder.Services.AddShopperiorEFCoreDbContext(new ShopperiorEFCoreConfiguration
+    var builder = WebApplication.CreateBuilder(args);
+    var config = builder.Configuration;
+
+    // Add services to the container.
+    ConfigureServices(builder.Services, config);
+
+    var app = builder.Build();
+
+    // Configure the HTTP request pipeline.
+    Configure(app);
+
+    app.Run();
+}
+catch (Exception ex)
+{
+    Log.Fatal(ex, $"{appName} terminated unexpectedly.");
+}
+finally
+{
+    Log.CloseAndFlush();
+}
+
+
+void ConfigureLogging()
+{
+    //var config = new ConfigurationBuilder()
+    //    .SetBasePath(Directory.GetCurrentDirectory())
+    //    .AddJsonFile(@"appsettings.json")
+    //    .AddJsonFile(@"appsettings.Development.json")
+    //    .Build()
+    //    .GetSection("Logging");
+    Log.Logger = new LoggerConfiguration()
+        .MinimumLevel.Debug()
+        .Enrich.FromLogContext()
+        .Enrich.WithProperty("Application", appName)
+        .CreateLogger();
+}
+
+void ConfigureServices(IServiceCollection services, IConfiguration config)
+{
+    services.AddShopperiorEFCoreDbContext(new ShopperiorEFCoreConfiguration
     {
         ConnectionString = config.GetConnectionString("ShopperiorDb"),
         DatabaseType = DatabaseType.SqlServer
     });
-    builder.Services.AddShopperiorApplication(new ShopperiorApplicationConfiguration());
-    builder.Services.AddCors(options =>
+    services.AddShopperiorApplication(new ShopperiorApplicationConfiguration());
+    services.AddCors(options =>
     {
         options.AddDefaultPolicy(
             policyBuilder =>
@@ -29,27 +72,25 @@ var config = builder.Configuration;
                 policyBuilder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader();
             });
     });
-    builder.Services.AddStratmanMediaAuthentication(options =>
+    services.AddStratmanMediaAuthentication(options =>
     {
-        options.Authority = config.GetValue<string>("OIDC:Authority")+"/";
+        options.Authority = config.GetValue<string>("OIDC:Authority") + "/";
         options.Audience = config.GetValue<string>("OIDC:Audience");
         options.Scopes = config.GetSection("OIDC:Scopes").GetChildren().Select(c => c.Value).ToArray();
     });
-    builder.Services.AddScoped<ICurrentUserResolver, CurrentUserResolver>();
-    builder.Services.AddScoped<ICurrentUserProvider, CurrentUserProvider>();
-    builder.Services.AddScoped<IUserDtoResolver, UserDtoResolver>();
-    builder.Services.AddScoped<IListPermissionDtoResolver, ListPermissionDtoResolver>();
-    builder.Services.AddScoped<IListItemDtoResolver, ListItemDtoResolver>();
-    builder.Services.AddScoped<IShoppingListDtoResolver, ShoppingListDtoResolver>();
-    builder.Services.AddControllers();
+    services.AddScoped<ICurrentUserResolver, CurrentUserResolver>();
+    services.AddScoped<ICurrentUserProvider, CurrentUserProvider>();
+    services.AddScoped<IUserDtoResolver, UserDtoResolver>();
+    services.AddScoped<IListPermissionDtoResolver, ListPermissionDtoResolver>();
+    services.AddScoped<IListItemDtoResolver, ListItemDtoResolver>();
+    services.AddScoped<IShoppingListDtoResolver, ShoppingListDtoResolver>();
+    services.AddControllers();
     // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-    builder.Services.AddEndpointsApiExplorer();
-    builder.Services.AddSwaggerGen();
+    services.AddEndpointsApiExplorer();
+    services.AddSwaggerGen();
 }
 
-var app = builder.Build();
-
-// Configure the HTTP request pipeline.
+void Configure(WebApplication app)
 {
     if (app.Environment.IsDevelopment())
     {
@@ -57,12 +98,12 @@ var app = builder.Build();
         app.UseSwaggerUI();
     }
 
-    //using (var scope = app.Services.CreateScope())
-    //{
-    //    var services = scope.ServiceProvider;
-    //    var context = services.GetRequiredService<ShopperiorDbContext>();
-    //    context.Database.Migrate();
-    //}
+    using (var scope = app.Services.CreateScope())
+    {
+        var services = scope.ServiceProvider;
+        var context = services.GetRequiredService<ShopperiorDbContext>();
+        context.Database.Migrate();
+    }
 
     app.UseHttpsRedirection();
     app.UseCors();
@@ -71,5 +112,3 @@ var app = builder.Build();
     app.UseCurrentUser();
     app.MapControllers();
 }
-
-app.Run();
