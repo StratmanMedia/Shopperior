@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Shopperior.Domain.Contracts.ShoppingLists.Commands;
 using Shopperior.WebApi.Shared.Endpoints;
+using Shopperior.WebApi.ShoppingLists.Interfaces;
 using Shopperior.WebApi.ShoppingLists.Models;
 using Shopperior.WebApi.ShoppingLists.Resolvers;
 using StratmanMedia.ResponseObjects;

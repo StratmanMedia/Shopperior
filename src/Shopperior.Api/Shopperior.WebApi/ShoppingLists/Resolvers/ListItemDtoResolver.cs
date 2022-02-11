@@ -2,6 +2,7 @@
 using Shopperior.Domain.Contracts.ListItems.Models;
 using Shopperior.Domain.Contracts.ShoppingLists.Queries;
 using Shopperior.Domain.Enumerations;
+using Shopperior.WebApi.ShoppingLists.Interfaces;
 using Shopperior.WebApi.ShoppingLists.Models;
 
 namespace Shopperior.WebApi.ShoppingLists.Resolvers;

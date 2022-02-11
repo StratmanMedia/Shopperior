@@ -16,6 +16,11 @@ public class BaseTest<T> : IDisposable
         return Mock.Create<T>();
     }
 
+    protected int RandomInt(int min = int.MaxValue, int max = int.MaxValue)
+    {
+        return _random.Next(min, max);
+    }
+
     protected long RandomLong(long min = long.MaxValue, long max = long.MaxValue)
     {
         return _random.NextInt64(min, max);
