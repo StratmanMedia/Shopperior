@@ -14,10 +14,12 @@ using StratmanMedia.Auth;
 
 const string appName = "Shopperior API";
 ConfigureLogging();
+Log.Logger.Information($"{appName} is starting.");
 
 try
 {
     var builder = WebApplication.CreateBuilder(args);
+    builder.Host.UseSerilog(Log.Logger);
     var config = builder.Configuration;
 
     // Add services to the container.
@@ -42,18 +44,36 @@ finally
 
 void ConfigureLogging()
 {
-    //var config = new ConfigurationBuilder()
-    //    .SetBasePath(Directory.GetCurrentDirectory())
-    //    .AddJsonFile(@"appsettings.json")
-    //    .AddJsonFile(@"appsettings.Development.json")
-    //    .Build()
-    //    .GetSection("Logging");
-    Log.Logger = new LoggerConfiguration()
-        .MinimumLevel.Debug()
+    var config = new ConfigurationBuilder()
+        .SetBasePath(Directory.GetCurrentDirectory())
+        .AddJsonFile(@"appsettings.json")
+        .AddJsonFile(@"appsettings.Development.json")
+        .Build()
+        .GetSection("Logging");
+    var loggerConfig = new LoggerConfiguration()
         .Enrich.FromLogContext()
         .Enrich.WithProperty("Application", appName)
         .WriteTo.Console()
-        .CreateLogger();
+        .WriteTo.File(config["FilePath"], rollingInterval: RollingInterval.Day, retainedFileTimeLimit: TimeSpan.FromDays(7));
+    switch (config["LogLevel:Default"])
+    {
+        case "Verbose":
+            loggerConfig.MinimumLevel.Verbose();
+            break;
+        case "Debug":
+            loggerConfig.MinimumLevel.Debug();
+            break;
+        case "Information":
+            loggerConfig.MinimumLevel.Information();
+            break;
+        case "Warning":
+            loggerConfig.MinimumLevel.Warning();
+            break;
+        default:
+            loggerConfig.MinimumLevel.Error();
+            break;
+    }
+    Log.Logger = loggerConfig.CreateLogger();
 }
 
 void ConfigureServices(IServiceCollection services, IConfiguration config)
