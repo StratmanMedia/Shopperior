@@ -37,8 +37,10 @@ var config = builder.Configuration;
     });
     builder.Services.AddScoped<ICurrentUserResolver, CurrentUserResolver>();
     builder.Services.AddScoped<ICurrentUserProvider, CurrentUserProvider>();
-    builder.Services.AddScoped<IListItemDtoResolver, ListItemDtoResolver>();
     builder.Services.AddScoped<IUserDtoResolver, UserDtoResolver>();
+    builder.Services.AddScoped<IListPermissionDtoResolver, ListPermissionDtoResolver>();
+    builder.Services.AddScoped<IListItemDtoResolver, ListItemDtoResolver>();
+    builder.Services.AddScoped<IShoppingListDtoResolver, ShoppingListDtoResolver>();
     builder.Services.AddControllers();
     // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
     builder.Services.AddEndpointsApiExplorer();
