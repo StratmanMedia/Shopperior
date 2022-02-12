@@ -66,6 +66,7 @@ void ConfigureLoggly()
         EndpointPort = int.Parse(_configuration["Serilog:Loggly:EndpointPort"]),
         LogTransport = LogTransport.Https
     };
+    config.IsEnabled = bool.Parse(_configuration["Serilog:Loggly:IsEnabled"]);
     config.ThrowExceptions = bool.Parse(_configuration["Serilog:Loggly:ThrowExceptions"]);
     config.TagConfig.Tags.AddRange(new ITag[]{
         new ApplicationNameTag {Formatter = "Application-{0}"},
