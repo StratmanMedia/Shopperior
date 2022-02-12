@@ -1,10 +1,7 @@
 using Loggly;
 using Loggly.Config;
-using Microsoft.EntityFrameworkCore;
 using Serilog;
-using Serilog.Core;
 using Shopperior.Application.DependencyInjection.Microsoft;
-using Shopperior.Data.EFCore;
 using Shopperior.Data.EFCore.DependencyInjection.Microsoft;
 using Shopperior.WebApi.Shared.Interfaces;
 using Shopperior.WebApi.Shared.Middleware;
@@ -20,14 +17,14 @@ var _configuration = new ConfigurationBuilder()
     .AddJsonFile(@"appsettings.json")
     .AddJsonFile(@"appsettings.Development.json")
     .Build();
-var _logger = CreateLogger();
+Log.Logger = CreateLogger();
 var appName = "Shopperior API";
-_logger.Information($"{appName} is starting.");
+Log.Information($"{appName} is starting.");
 
 try
 {
     var builder = WebApplication.CreateBuilder(args);
-    builder.Host.UseSerilog(Log.Logger);
+    builder.Host.UseSerilog();
     var config = builder.Configuration;
 
     // Add services to the container.
@@ -42,14 +39,14 @@ try
 }
 catch (Exception ex)
 {
-    _logger.Fatal(ex, $"{appName} terminated unexpectedly.");
+    Log.Fatal(ex, $"{appName} terminated unexpectedly.");
 }
 finally
 {
     Log.CloseAndFlush();
 }
 
-Logger CreateLogger()
+Serilog.ILogger CreateLogger()
 {
     ConfigureLoggly();
     var loggerConfig = new LoggerConfiguration()
