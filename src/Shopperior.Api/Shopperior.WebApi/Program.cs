@@ -1,5 +1,8 @@
+using Loggly;
+using Loggly.Config;
 using Microsoft.EntityFrameworkCore;
 using Serilog;
+using Serilog.Core;
 using Shopperior.Application.DependencyInjection.Microsoft;
 using Shopperior.Data.EFCore;
 using Shopperior.Data.EFCore.DependencyInjection.Microsoft;
@@ -12,9 +15,14 @@ using Shopperior.WebApi.Users.Interfaces;
 using Shopperior.WebApi.Users.Services;
 using StratmanMedia.Auth;
 
-const string appName = "Shopperior API";
-ConfigureLogging();
-Log.Logger.Information($"{appName} is starting.");
+var _configuration = new ConfigurationBuilder()
+    .SetBasePath(Directory.GetCurrentDirectory())
+    .AddJsonFile(@"appsettings.json")
+    .AddJsonFile(@"appsettings.Development.json")
+    .Build();
+var _logger = CreateLogger();
+var appName = "Shopperior API";
+_logger.Information($"{appName} is starting.");
 
 try
 {
@@ -34,46 +42,38 @@ try
 }
 catch (Exception ex)
 {
-    Log.Fatal(ex, $"{appName} terminated unexpectedly.");
+    _logger.Fatal(ex, $"{appName} terminated unexpectedly.");
 }
 finally
 {
     Log.CloseAndFlush();
 }
 
-
-void ConfigureLogging()
+Logger CreateLogger()
 {
-    var config = new ConfigurationBuilder()
-        .SetBasePath(Directory.GetCurrentDirectory())
-        .AddJsonFile(@"appsettings.json")
-        .AddJsonFile(@"appsettings.Development.json")
-        .Build()
-        .GetSection("Logging");
+    ConfigureLoggly();
     var loggerConfig = new LoggerConfiguration()
-        .Enrich.FromLogContext()
-        .Enrich.WithProperty("Application", appName)
-        .WriteTo.Console()
-        .WriteTo.File(config["FilePath"], rollingInterval: RollingInterval.Day, retainedFileTimeLimit: TimeSpan.FromDays(7));
-    switch (config["LogLevel:Default"])
+        .ReadFrom.Configuration(_configuration);
+
+    return loggerConfig.CreateLogger();
+}
+
+void ConfigureLoggly()
+{
+    var config = LogglyConfig.Instance;
+    config.CustomerToken = _configuration["Serilog:Loggly:CustomerToken"];
+    config.ApplicationName = _configuration["Serilog:Loggly:ApplicationName"];
+    config.Transport = new TransportConfiguration()
     {
-        case "Verbose":
-            loggerConfig.MinimumLevel.Verbose();
-            break;
-        case "Debug":
-            loggerConfig.MinimumLevel.Debug();
-            break;
-        case "Information":
-            loggerConfig.MinimumLevel.Information();
-            break;
-        case "Warning":
-            loggerConfig.MinimumLevel.Warning();
-            break;
-        default:
-            loggerConfig.MinimumLevel.Error();
-            break;
-    }
-    Log.Logger = loggerConfig.CreateLogger();
+        EndpointHostname = _configuration["Serilog:Loggly:EndpointHostname"],
+        EndpointPort = int.Parse(_configuration["Serilog:Loggly:EndpointPort"]),
+        LogTransport = LogTransport.Https
+    };
+    config.ThrowExceptions = bool.Parse(_configuration["Serilog:Loggly:ThrowExceptions"]);
+    config.TagConfig.Tags.AddRange(new ITag[]{
+        new ApplicationNameTag {Formatter = "Application-{0}"},
+        new HostnameTag { Formatter = "Host-{0}" }
+    });
 }
 
 void ConfigureServices(IServiceCollection services, IConfiguration config)
