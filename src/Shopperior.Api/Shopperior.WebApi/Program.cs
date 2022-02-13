@@ -1,5 +1,6 @@
 using Loggly;
 using Loggly.Config;
+using Newtonsoft.Json;
 using Serilog;
 using Shopperior.Application.DependencyInjection.Microsoft;
 using Shopperior.Data.EFCore.DependencyInjection.Microsoft;
@@ -20,6 +21,7 @@ var _configuration = new ConfigurationBuilder()
 Log.Logger = CreateLogger();
 var appName = "Shopperior API";
 Log.Information($"{appName} is starting.");
+Console.WriteLine($"STARTUP LOGGING: Serilog config: {JsonConvert.SerializeObject(_configuration.AsEnumerable())}");
 
 try
 {
