@@ -14,15 +14,17 @@ using Shopperior.WebApi.Users.Services;
 using StratmanMedia.Auth;
 
 var _appName = "Shopperior API";
+Log.Logger = CreateLogger();
+Log.Information($"{_appName} is starting.");
 
 try
 {
     var builder = WebApplication.CreateBuilder(args);
-
-    Log.Logger = CreateLogger(builder.Configuration);
-    Log.Information($"{_appName} is starting.");
-
-    builder.Host.UseSerilog((ctx, lc) => lc.ReadFrom.Configuration(builder.Configuration));
+    builder.Host.UseSerilog((ctx, lc) => lc
+        .Enrich.WithProperty("Application", _appName)
+        .Enrich.FromLogContext()
+        .WriteTo.Console()
+        .ReadFrom.Configuration(ctx.Configuration));
 
     // Add services to the container.
     ConfigureServices(builder.Services, builder.Configuration);
@@ -40,34 +42,17 @@ catch (Exception ex)
 }
 finally
 {
+    Log.Information($"{_appName} shutdown complete.");
     Log.CloseAndFlush();
 }
 
-Serilog.ILogger CreateLogger(IConfiguration config)
+Serilog.ILogger CreateLogger()
 {
-    ConfigureLoggly(config);
     return new LoggerConfiguration()
-        .ReadFrom.Configuration(config)
+        .Enrich.WithProperty("Application", _appName)
+        .Enrich.FromLogContext()
+        .WriteTo.Console()
         .CreateBootstrapLogger();
-}
-
-void ConfigureLoggly(IConfiguration config)
-{
-    var logglyConfig = LogglyConfig.Instance;
-    logglyConfig.CustomerToken = config["Serilog:Loggly:CustomerToken"];
-    logglyConfig.ApplicationName = config["Serilog:Loggly:ApplicationName"];
-    logglyConfig.Transport = new TransportConfiguration()
-    {
-        EndpointHostname = config["Serilog:Loggly:EndpointHostname"],
-        EndpointPort = int.Parse(config["Serilog:Loggly:EndpointPort"]),
-        LogTransport = LogTransport.Https
-    };
-    logglyConfig.IsEnabled = bool.Parse(config["Serilog:Loggly:IsEnabled"]);
-    logglyConfig.ThrowExceptions = bool.Parse(config["Serilog:Loggly:ThrowExceptions"]);
-    logglyConfig.TagConfig.Tags.AddRange(new ITag[]{
-        new ApplicationNameTag {Formatter = "Application-{0}"},
-        new HostnameTag { Formatter = "Host-{0}" }
-    });
 }
 
 void ConfigureServices(IServiceCollection services, IConfiguration config)
