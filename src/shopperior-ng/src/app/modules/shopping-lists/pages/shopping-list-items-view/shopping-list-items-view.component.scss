@@ -2,8 +2,20 @@
   flex: 1 1 auto;
 }
 .fab-placement {
-  position: fixed;
   z-index: 99;
   right: 10%;
   bottom: 10%;
+}
+.fixed {
+  position: fixed;
+}
+.above {
+  z-index: 9;
+}
+.content-container {
+  position: absolute;
+  top: 48px;
+  bottom: 0;
+  left: 0;
+  right: 0;
 }

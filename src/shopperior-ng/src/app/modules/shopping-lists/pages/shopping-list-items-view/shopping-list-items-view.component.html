@@ -1,4 +1,4 @@
-<mat-toolbar>
+<mat-toolbar class="fixed above">
   <a mat-icon-button routerLink="/app/lists"><mat-icon>arrow_back</mat-icon></a>
   <span>{{(shoppingList | async)?.name}}</span>
   <span class="toolbar-spacer"></span>
@@ -6,7 +6,7 @@
     <mat-icon>settings</mat-icon>
   </a>
 </mat-toolbar>
-<div class="mt-1 mx-2">
+<div class="content-container">
   <mat-nav-list>
     <mat-list-item *ngFor="let item of (listItems | async)">
       <div mat-line>{{item.name}}</div>
@@ -39,7 +39,7 @@
     </mat-list-item>
   </mat-nav-list>
 </div>
-<div class="fab-placement">
+<div class="fixed fab-placement">
   <button mat-fab color="primary" aria-label="Button to add an item" (click)="openItemDialog()">
     <mat-icon>add</mat-icon>
   </button>
