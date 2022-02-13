@@ -3,6 +3,7 @@ export const environment = {
   minimumLogLevel: 'INFO',
   oidc: {
     authority: '__IDENTITY_AUTHORITY__',
+    audience: '__IDENTITY_AUDIENCE__',
     client_id: '__IDENTITY_CLIENT_ID__',
     redirect_uri: 'https://shopperior.com/app/dashboard',
     scope: 'openid profile',
