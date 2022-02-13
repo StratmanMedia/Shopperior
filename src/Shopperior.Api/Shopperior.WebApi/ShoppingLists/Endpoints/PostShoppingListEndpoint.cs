@@ -30,7 +30,7 @@ public class PostShoppingListEndpoint : BaseEndpoint
 
     [Authorize("shop.api.access")]
     [HttpPost("api/v1/lists")]
-    public async Task<ActionResult<Response>> HandleAsync([FromBody] ShoppingListDto dto, CancellationToken cancellationToken = new())
+    public async Task<ActionResult<Response<Guid>>> HandleAsync([FromBody] ShoppingListDto dto, CancellationToken cancellationToken = new())
     {
         try
         {
@@ -52,7 +52,7 @@ public class PostShoppingListEndpoint : BaseEndpoint
             var result = await _createShoppingListCommand.ExecuteAsync(request, cancellationToken);
             if (!result.IsSuccess) return BadRequest(result.Messages);
 
-            return Created($"/api/v1/{result.Data.Guid}", new Response());
+            return Ok(new Response<Guid>(result.Data.Guid));
         }
         catch (Exception ex)
         {

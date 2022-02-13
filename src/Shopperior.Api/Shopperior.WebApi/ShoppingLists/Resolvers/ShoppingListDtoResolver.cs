@@ -34,7 +34,7 @@ public class ShoppingListDtoResolver : IShoppingListDtoResolver
             Guid = model.Guid,
             Name = model.Name,
             Permissions = permissions,
-            Items = items
+            Items = items.ToArray()
         };
 
         return dto;
