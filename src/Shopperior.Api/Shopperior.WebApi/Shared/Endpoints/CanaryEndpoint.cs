@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using Shopperior.Domain.Contracts.Shared.Queries;
 using Shopperior.WebApi.Shared.Models;
 using StratmanMedia.ResponseObjects;
@@ -8,12 +9,14 @@ namespace Shopperior.WebApi.Shared.Endpoints;
 
 public class CanaryEndpoint : BaseEndpoint<CanaryEndpoint>
 {
+    private readonly ILogger<CanaryEndpoint> _logger;
     private readonly IDatabaseStatusQuery _databaseStatusQuery;
 
     public CanaryEndpoint(
         ILogger<CanaryEndpoint> logger,
         IDatabaseStatusQuery databaseStatusQuery) : base(logger)
     {
+        _logger = logger;
         _databaseStatusQuery = databaseStatusQuery;
     }
 
@@ -21,6 +24,7 @@ public class CanaryEndpoint : BaseEndpoint<CanaryEndpoint>
     [HttpGet("/api/v1/canary")]
     public async Task<ActionResult<Response<CanaryDto>>> HandleAsync(CancellationToken ct = default)
     {
+        _logger.LogInformation("Canary Endpoint was called.");
         return await TryActionAsync<CanaryDto>(() => EndpointAction());
     }
 
@@ -38,10 +42,13 @@ public class CanaryEndpoint : BaseEndpoint<CanaryEndpoint>
             Timestamp = databaseStatus.Timestamp
         };
 
-        return new CanaryDto
+        var result = new CanaryDto
         {
             Server = server,
             Database = database
         };
+        _logger.LogInformation($"Canary Endpoint response: {JsonConvert.SerializeObject(result)}");
+
+        return result;
     }
 }

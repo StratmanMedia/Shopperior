@@ -86,11 +86,13 @@ void ConfigureServices(IServiceCollection services, IConfiguration config)
     services.AddShopperiorApplication(new ShopperiorApplicationConfiguration());
     services.AddCors(options =>
     {
-        options.AddDefaultPolicy(
-            policyBuilder =>
+        options.AddPolicy(name: "AllowSpecificOrigins",
+            builder =>
             {
-                // TODO: use a white list to be more secure
-                policyBuilder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader();
+                var origins = config["AllowedOrigins"].Split(",");
+                builder.WithOrigins(origins);
+                builder.AllowAnyHeader();
+                builder.AllowAnyMethod();
             });
     });
     services.AddStratmanMediaAuthentication(options =>
