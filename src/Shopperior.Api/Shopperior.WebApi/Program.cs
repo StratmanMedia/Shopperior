@@ -13,24 +13,19 @@ using Shopperior.WebApi.Users.Interfaces;
 using Shopperior.WebApi.Users.Services;
 using StratmanMedia.Auth;
 
-var _configuration = new ConfigurationBuilder()
-    .SetBasePath(Directory.GetCurrentDirectory())
-    .AddJsonFile(@"appsettings.json")
-    .AddJsonFile(@"appsettings.Development.json")
-    .Build();
-Log.Logger = CreateLogger();
-var appName = "Shopperior API";
-Log.Information($"{appName} is starting.");
-Console.WriteLine($"STARTUP LOGGING: Serilog config: {JsonConvert.SerializeObject(_configuration.AsEnumerable())}");
+var _appName = "Shopperior API";
 
 try
 {
     var builder = WebApplication.CreateBuilder(args);
-    builder.Host.UseSerilog();
-    var config = builder.Configuration;
+
+    Log.Logger = CreateLogger(builder.Configuration);
+    Log.Information($"{_appName} is starting.");
+
+    builder.Host.UseSerilog((ctx, lc) => lc.ReadFrom.Configuration(builder.Configuration));
 
     // Add services to the container.
-    ConfigureServices(builder.Services, config);
+    ConfigureServices(builder.Services, builder.Configuration);
 
     var app = builder.Build();
 
@@ -41,36 +36,35 @@ try
 }
 catch (Exception ex)
 {
-    Log.Fatal(ex, $"{appName} terminated unexpectedly.");
+    Log.Fatal(ex, $"{_appName} terminated unexpectedly.");
 }
 finally
 {
     Log.CloseAndFlush();
 }
 
-Serilog.ILogger CreateLogger()
+Serilog.ILogger CreateLogger(IConfiguration config)
 {
-    ConfigureLoggly();
-    var loggerConfig = new LoggerConfiguration()
-        .ReadFrom.Configuration(_configuration);
-
-    return loggerConfig.CreateLogger();
+    ConfigureLoggly(config);
+    return new LoggerConfiguration()
+        .ReadFrom.Configuration(config)
+        .CreateBootstrapLogger();
 }
 
-void ConfigureLoggly()
+void ConfigureLoggly(IConfiguration config)
 {
-    var config = LogglyConfig.Instance;
-    config.CustomerToken = _configuration["Serilog:Loggly:CustomerToken"];
-    config.ApplicationName = _configuration["Serilog:Loggly:ApplicationName"];
-    config.Transport = new TransportConfiguration()
+    var logglyConfig = LogglyConfig.Instance;
+    logglyConfig.CustomerToken = config["Serilog:Loggly:CustomerToken"];
+    logglyConfig.ApplicationName = config["Serilog:Loggly:ApplicationName"];
+    logglyConfig.Transport = new TransportConfiguration()
     {
-        EndpointHostname = _configuration["Serilog:Loggly:EndpointHostname"],
-        EndpointPort = int.Parse(_configuration["Serilog:Loggly:EndpointPort"]),
+        EndpointHostname = config["Serilog:Loggly:EndpointHostname"],
+        EndpointPort = int.Parse(config["Serilog:Loggly:EndpointPort"]),
         LogTransport = LogTransport.Https
     };
-    config.IsEnabled = bool.Parse(_configuration["Serilog:Loggly:IsEnabled"]);
-    config.ThrowExceptions = bool.Parse(_configuration["Serilog:Loggly:ThrowExceptions"]);
-    config.TagConfig.Tags.AddRange(new ITag[]{
+    logglyConfig.IsEnabled = bool.Parse(config["Serilog:Loggly:IsEnabled"]);
+    logglyConfig.ThrowExceptions = bool.Parse(config["Serilog:Loggly:ThrowExceptions"]);
+    logglyConfig.TagConfig.Tags.AddRange(new ITag[]{
         new ApplicationNameTag {Formatter = "Application-{0}"},
         new HostnameTag { Formatter = "Host-{0}" }
     });
