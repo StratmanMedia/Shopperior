@@ -23,10 +23,11 @@ export class ShoppingListService {
     private _local: LocalDataService,
     private _api: ShopperiorApiService) {
       this.loadLists();
-      this._listSubject.pipe(
-        tap((lists: ShoppingListModel[]) => {
+      this._listSubject.subscribe(
+        (lists: ShoppingListModel[]) => {
+          this._logger.debug(`Storing updated lists. # of lists: ${lists.length}`);
           this._local.set(constants.storageKeys.shoppingLists, lists);
-        })
+        }
       );
   }
 
@@ -48,6 +49,7 @@ export class ShoppingListService {
     return this._listSubject.pipe(
       take(1),
       map(lists => {
+
         lists.push(shoppingList);
         this._listSubject.next(lists);
         this._api.ShoppingLists.add(shoppingList).subscribe();
@@ -119,7 +121,7 @@ export class ShoppingListService {
         this._logger.debug('Could not load shopping lists from API. Loading from local storage.');
         this._logger.error(error);
         const lists = this._local.get<ShoppingListModel[]>(constants.storageKeys.shoppingLists);
-        this._listSubject.next(lists);
+        this._listSubject.next((!!lists) ? lists : []);
       }
     );
   }
