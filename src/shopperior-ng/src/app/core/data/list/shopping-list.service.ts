@@ -49,10 +49,11 @@ export class ShoppingListService {
     return this._listSubject.pipe(
       take(1),
       map(lists => {
-
-        lists.push(shoppingList);
-        this._listSubject.next(lists);
-        this._api.ShoppingLists.add(shoppingList).subscribe();
+        this._api.ShoppingLists.add(shoppingList).subscribe(
+          guid => {
+            this.loadLists();
+          }
+        );
       })
     );
   }
@@ -73,12 +74,9 @@ export class ShoppingListService {
     return this._listSubject.pipe(
       take(1),
       map(lists => {
-        let foundList = lists.find(l => l.guid === shoppingList.guid);
-        foundList.name = shoppingList.name;
-        foundList.permissions = shoppingList.permissions;
-        foundList.items = shoppingList.items;
-        this._listSubject.next(lists);
-        this._api.ShoppingLists.update(shoppingList).subscribe();
+        this._api.ShoppingLists.update(shoppingList).subscribe(() => {
+          this.loadLists();
+        });
       })
     );
   }
@@ -88,11 +86,11 @@ export class ShoppingListService {
     return this._listSubject.pipe(
       take(1),
       map(lists => {
-        let foundList = lists.find(l => l.guid === item.shoppingListGuid);
-        this._logger.debug(`Found list ${foundList.guid}`);
-        foundList.items.push(item);
-        this._listSubject.next(lists);
-        this._api.ShoppingLists.addItem(item).subscribe();
+        this._api.ShoppingLists.addItem(item).subscribe(
+          () => {
+            this.loadLists();
+          }
+        );
       })
     );
   }
@@ -106,7 +104,11 @@ export class ShoppingListService {
         let foundItem = foundList.items.find(i => i.guid === item.guid);
         foundItem = {...item};
         this._listSubject.next(lists);
-        this._api.ShoppingLists.updateItem(item).pipe(take(1)).subscribe();
+        this._api.ShoppingLists.updateItem(item).pipe(take(1)).subscribe(
+          () => {
+            this.loadLists();
+          }
+        );
       })
     );
   }

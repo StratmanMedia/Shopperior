@@ -70,13 +70,13 @@ export class ShopperiorApiService {
       );
     }
 
-    add(list: ShoppingListModel): Observable<void> {
+    add(list: ShoppingListModel): Observable<string> {
       const data = <ShoppingListDto>{
         name: list.name
       };
       return this._super.post('/api/v1/lists', data).pipe(
-        map((res: void) => {
-          return;
+        map((res: string) => {
+          return res;
         })
       );
     }
