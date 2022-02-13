@@ -37,8 +37,8 @@ export class ShoppingListItemsViewComponent implements OnInit {
     this.guid = this.route.snapshot.params.list;
     this.shoppingList = this.shoppingListService.getOne(this.guid).pipe(
       tap(list => {
-        let listItems = list.items.filter(i => !i.isInCart);
-        let cartItems = list.items.filter(i => i.isInCart);
+        let listItems = list.items.filter(i => !i.isInCart).sort((a, b) => a.name.localeCompare(b.name));
+        let cartItems = list.items.filter(i => i.isInCart).sort((a, b) => a.name.localeCompare(b.name));
         this.listItems.next(listItems);
         this.cartItems.next(cartItems);
       })
