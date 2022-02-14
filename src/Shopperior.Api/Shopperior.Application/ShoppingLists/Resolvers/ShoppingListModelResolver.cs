@@ -29,8 +29,10 @@ public class ShoppingListModelResolver : IShoppingListModelResolver
 
     public async Task<IShoppingListModel> ResolveAsync(ShoppingList entity)
     {
-        var permissions = await GetListPermissionsAsync(entity.Id);
-        var items = await GetListItemsAsync(entity.Id);
+        if (entity == null) return null;
+
+        var permissions = await GetListPermissionsAsync(entity);
+        var items = await GetListItemsAsync(entity);
 
         var model = new ShoppingListModel
         {
@@ -48,11 +50,13 @@ public class ShoppingListModelResolver : IShoppingListModelResolver
         throw new NotImplementedException();
     }
 
-    private async Task<IEnumerable<IUserListPermissionModel>> GetListPermissionsAsync(long listId)
+    private async Task<IEnumerable<IUserListPermissionModel>> GetListPermissionsAsync(ShoppingList entity)
     {
-        var permissions = await _listPermissionRepository.GetManyByListAsync(listId);
+        var permissions = (entity.Permissions.Any())
+            ? entity.Permissions.ToArray()
+            : await _listPermissionRepository.GetManyByListAsync(entity.Id);
         var permissionModels = new List<IUserListPermissionModel>();
-        foreach (var p in permissions.ToArray())
+        foreach (var p in permissions)
         {
             var permissionModel = await _listPermissionModelResolver.ResolveAsync(p);
             permissionModels.Add(permissionModel);
@@ -61,11 +65,13 @@ public class ShoppingListModelResolver : IShoppingListModelResolver
         return permissionModels;
     }
 
-    private async Task<IEnumerable<IListItemModel>> GetListItemsAsync(long listId)
+    private async Task<IEnumerable<IListItemModel>> GetListItemsAsync(ShoppingList entity)
     {
-        var items = await _listItemRepository.GetManyByListAsync(listId);
+        var items = (entity.Items.Any())
+            ? entity.Items.ToArray()
+            : await _listItemRepository.GetManyByListAsync(entity.Id);
         var itemModels = new List<IListItemModel>();
-        foreach (var i in items.ToArray())
+        foreach (var i in items)
         {
             var itemModel = await _listItemModelResolver.ResolveAsync(i);
             itemModels.Add(itemModel);

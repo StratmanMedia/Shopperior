@@ -10,18 +10,18 @@ public class UserListPermissionRepository : Repository<ShopperiorDbContext, User
     {
     }
 
-    public async Task<IEnumerable<UserListPermission>> GetManyByUserAsync(long userId, CancellationToken ct = new())
+    public async Task<UserListPermission[]> GetManyByUserAsync(long userId, CancellationToken ct = new())
     {
         var userPermissions = Context.UserListPermission.Where(p => p.UserId == userId);
 
-        return await Task.FromResult(userPermissions.AsEnumerable());
+        return await Task.FromResult(userPermissions.ToArray());
     }
 
-    public async Task<IEnumerable<UserListPermission>> GetManyByListAsync(long shoppingListId, CancellationToken ct = new())
+    public async Task<UserListPermission[]> GetManyByListAsync(long shoppingListId, CancellationToken ct = new())
     {
         var listPermissions = Context.UserListPermission.Where(p => p.ShoppingListId == shoppingListId);
 
-        return await Task.FromResult(listPermissions.AsEnumerable());
+        return await Task.FromResult(listPermissions.ToArray());
     }
 
     public async Task<UserListPermission> GetOneAsync(long userId, long shoppingListId, CancellationToken ct = new())

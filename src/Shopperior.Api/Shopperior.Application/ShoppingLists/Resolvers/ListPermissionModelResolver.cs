@@ -22,8 +22,10 @@ public class ListPermissionModelResolver : IListPermissionModelResolver
 
     public async Task<IUserListPermissionModel> ResolveAsync(UserListPermission entity)
     {
-        var user = await _userRepository.GetAsync(entity.UserId);
-        var list = await _shopperListRepository.GetOneAsync(entity.ShoppingListId);
+        if (entity == null) return null;
+
+        var user = entity.User ?? await _userRepository.GetAsync(entity.UserId);
+        var list = entity.ShoppingList ?? await _shopperListRepository.GetOneAsync(entity.ShoppingListId);
         var model = new UserListPermissionModel
         {
             User = user,

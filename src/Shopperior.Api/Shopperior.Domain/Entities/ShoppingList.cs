@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Shopperior.Domain.Entities
+﻿namespace Shopperior.Domain.Entities
 {
     public class ShoppingList
     {
@@ -10,5 +8,7 @@ namespace Shopperior.Domain.Entities
         public DateTime CreatedTime { get; set; }
         public DateTime? LastModifiedTime { get; set; }
         public DateTime? TrashedTime { get; set; }
+        public ICollection<UserListPermission> Permissions { get; set; }
+        public ICollection<ListItem> Items { get; set; }
     }
 }

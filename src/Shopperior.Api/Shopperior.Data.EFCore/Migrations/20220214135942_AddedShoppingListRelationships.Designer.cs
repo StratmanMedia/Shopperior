@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Shopperior.Data.EFCore;
 
@@ -11,9 +12,10 @@ using Shopperior.Data.EFCore;
 namespace Shopperior.Data.EFCore.Migrations
 {
     [DbContext(typeof(ShopperiorDbContext))]
-    partial class ShopperiorDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220214135942_AddedShoppingListRelationships")]
+    partial class AddedShoppingListRelationships
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
