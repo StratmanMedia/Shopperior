@@ -1,12 +1,11 @@
-﻿using Shopperior.Domain.Enumerations;
-
-namespace Shopperior.Domain.Entities
+﻿namespace Shopperior.Domain.Entities
 {
     public class ListItem
     {
         public long Id { get; set; }
         public Guid Guid { get; set; }
         public long ShoppingListId { get; set; }
+        public ShoppingList ShoppingList { get; set; }
         public long ItemId { get; set; }
         public string Name { get; set; }
         public string Brand { get; set; }
@@ -18,7 +17,6 @@ namespace Shopperior.Domain.Entities
         public decimal UnitPrice { get; set; }
         public decimal TotalPrice { get; set; }
         public bool IsInCart { get; set; }
-        public DateTime? EnteredCartTime { get; set; }
         public bool HasPurchased { get; set; }
         public DateTime? PurchasedTime { get; set; }
         public DateTime CreatedTime { get; set; }

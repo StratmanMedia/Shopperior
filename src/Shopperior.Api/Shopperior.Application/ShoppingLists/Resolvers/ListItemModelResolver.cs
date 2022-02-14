@@ -25,7 +25,7 @@ public class ListItemModelResolver : IListItemModelResolver
     {
         if (entity == null) return null;
 
-        var shoppingList = await _shoppingListRepository.GetOneAsync(entity.ShoppingListId);
+        var shoppingList = entity.ShoppingList ?? await _shoppingListRepository.GetOneAsync(entity.ShoppingListId);
         var model = new ListItemModel
         {
             Guid = entity.Guid,
@@ -38,7 +38,6 @@ public class ListItemModelResolver : IListItemModelResolver
             UnitPrice = entity.UnitPrice,
             TotalPrice = entity.TotalPrice,
             IsInCart = entity.IsInCart,
-            EnteredCartTime = entity.EnteredCartTime,
             HasPurchased = entity.HasPurchased,
             PurchasedTime = entity.PurchasedTime
         };
@@ -70,7 +69,6 @@ public class ListItemModelResolver : IListItemModelResolver
                 UnitPrice = model.UnitPrice,
                 TotalPrice = model.TotalPrice,
                 IsInCart = model.IsInCart,
-                EnteredCartTime = model.EnteredCartTime,
                 HasPurchased = model.HasPurchased,
                 PurchasedTime = model.PurchasedTime
             };

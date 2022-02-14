@@ -1,4 +1,5 @@
-﻿using Shopperior.Domain.Contracts.ShoppingLists.Repositories;
+﻿using Microsoft.EntityFrameworkCore;
+using Shopperior.Domain.Contracts.ShoppingLists.Repositories;
 using Shopperior.Domain.Entities;
 using StratmanMedia.Repositories.EFCore;
 
@@ -10,35 +11,34 @@ public class UserListPermissionRepository : Repository<ShopperiorDbContext, User
     {
     }
 
-    public async Task<IEnumerable<UserListPermission>> GetManyByUserAsync(long userId, CancellationToken ct = new())
+    public async Task<UserListPermission[]> GetManyByUserAsync(long userId, CancellationToken ct = default)
     {
         var userPermissions = Context.UserListPermission.Where(p => p.UserId == userId);
 
-        return await Task.FromResult(userPermissions.AsEnumerable());
+        return await Task.FromResult(userPermissions.ToArray());
     }
 
-    public async Task<IEnumerable<UserListPermission>> GetManyByListAsync(long shoppingListId, CancellationToken ct = new())
+    public async Task<UserListPermission[]> GetManyByListAsync(long shoppingListId, CancellationToken ct = default)
     {
         var listPermissions = Context.UserListPermission.Where(p => p.ShoppingListId == shoppingListId);
 
-        return await Task.FromResult(listPermissions.AsEnumerable());
+        return await Task.FromResult(listPermissions.ToArray());
     }
 
-    public async Task<UserListPermission> GetOneAsync(long userId, long shoppingListId, CancellationToken ct = new())
+    public async Task<UserListPermission> GetOneAsync(long userId, long shoppingListId, CancellationToken ct = default)
     {
         var permission = Table.FirstOrDefault(p => p.UserId == userId && p.ShoppingListId == shoppingListId);
 
         return await Task.FromResult(permission);
     }
 
-    public async Task<UserListPermission> GetOneAsync(Guid userGuid, Guid shoppingListGuid, CancellationToken ct = new())
+    public async Task<UserListPermission> GetOneAsync(Guid userGuid, Guid shoppingListGuid, CancellationToken ct = default)
     {
-        var user = Context.User.FirstOrDefault(u => u.Guid == userGuid);
-        if (user == null) return null;
+        var query = Table
+            .Include(p => p.User)
+            .Include(p => p.ShoppingList);
+        var permission = query.FirstOrDefault(p => p.User.Guid == userGuid && p.ShoppingList.Guid == shoppingListGuid);
 
-        var shoppingList = Context.ShoppingList.FirstOrDefault(l => l.Guid == shoppingListGuid);
-        if (shoppingList == null) return null;
-
-        return await GetOneAsync(user.Id, shoppingList.Id, ct);
+        return await Task.FromResult(permission);
     }
 }

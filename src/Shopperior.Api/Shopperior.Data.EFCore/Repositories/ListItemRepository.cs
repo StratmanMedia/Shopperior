@@ -12,32 +12,23 @@ namespace Shopperior.Data.EFCore.Repositories
 
         public async Task<ListItem> GetOne(long id)
         {
-            return await Task.Run(() =>
-            {
-                var listItem = Table.FirstOrDefault(i => i.Id == id);
+            var listItem = Table.FirstOrDefault(i => i.Id == id);
 
-                return listItem;
-            });
+            return await Task.FromResult(listItem);
         }
 
         public async Task<ListItem> GetOne(Guid guid)
         {
-            return await Task.Run(() =>
-            {
-                var listItem = Table.FirstOrDefault(i => i.Guid == guid);
+            var listItem = Table.FirstOrDefault(i => i.Guid == guid);
 
-                return listItem;
-            });
+            return await Task.FromResult(listItem);
         }
 
-        public async Task<IEnumerable<ListItem>> GetManyByListAsync(long shoppingListId)
+        public async Task<ListItem[]> GetManyByListAsync(long shoppingListId)
         {
-            return await Task.Run(() =>
-            {
-                var listItems = Table.Where(i => i.ShoppingListId == shoppingListId);
+            var listItems = Table.Where(i => i.ShoppingListId == shoppingListId);
 
-                return listItems;
-            });
+            return await Task.FromResult(listItems.ToArray());
         }
     }
 }
