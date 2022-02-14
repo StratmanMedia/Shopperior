@@ -101,7 +101,7 @@ void Configure(WebApplication app)
     }
 
     app.UseHttpsRedirection();
-    app.UseCors();
+    app.UseCors("AllowSpecificOrigins");
     app.UseAuthentication();
     app.UseAuthorization();
     app.UseCurrentUser();
