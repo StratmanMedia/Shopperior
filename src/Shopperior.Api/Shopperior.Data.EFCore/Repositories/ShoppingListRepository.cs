@@ -32,8 +32,6 @@ public class ShoppingListRepository : Repository<ShopperiorDbContext, ShoppingLi
             .Include(l => l.Permissions).ThenInclude(p => p.User)
             .Include(l => l.Items);
         var lists = query.Where(l => l.Permissions.Select(p => p.UserId).Contains(userId));
-        //var userPermissions = Context.UserListPermission.Where(p => p.UserId == userId);
-        //var lists = query.Where(l => userPermissions.Select(p => p.ShoppingListId).Contains(l.Id));
 
         return await Task.FromResult(lists.ToArray());
     }
