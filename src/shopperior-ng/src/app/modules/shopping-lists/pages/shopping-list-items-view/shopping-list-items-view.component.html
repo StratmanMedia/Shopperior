@@ -23,6 +23,10 @@
     </mat-list-item>
     <mat-list-item *ngIf="(cartItems | async)?.length > 0">
       <div mat-line>In Cart</div>
+      <div class="toolbar-spacer"></div>
+      <button mat-raised-button color="primary" type="button" (click)="checkout()">
+        <mat-icon>shopping_cart_checkout</mat-icon> Checkout
+      </button>
     </mat-list-item>
     <mat-list-item *ngFor="let item of (cartItems | async)">
       <div mat-line><s>{{item.name}}</s></div>

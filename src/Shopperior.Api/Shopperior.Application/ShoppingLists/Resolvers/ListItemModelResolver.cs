@@ -50,14 +50,15 @@ public class ListItemModelResolver : IListItemModelResolver
         if (model == null) return null;
 
         var existing = await _listItemRepository.GetOne(model.Guid);
-        var shoppingList = await _shoppingListRepository.GetOneAsync(model.ShoppingListGuid);
         if (existing == null)
         {
+            var shoppingList = await _shoppingListRepository.GetOneAsync(model.ShoppingListGuid);
             var entity = new ListItem
             {
                 Id = default,
                 Guid = model.Guid,
                 ShoppingListId = shoppingList?.Id ?? 0,
+                ShoppingList = shoppingList,
                 ItemId = 0,
                 Name = model.Name,
                 Brand = model.Brand,

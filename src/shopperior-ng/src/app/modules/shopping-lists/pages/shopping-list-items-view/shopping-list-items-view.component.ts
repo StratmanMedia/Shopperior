@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute } from '@angular/router';
-import { Observable, ReplaySubject, Subject } from 'rxjs';
-import { tap } from 'rxjs/operators';
+import { Observable, ReplaySubject } from 'rxjs';
+import { take, tap } from 'rxjs/operators';
 import { ListItemModel } from 'src/app/core/data/list/models/list-tem-model';
 import { ShoppingListModel } from 'src/app/core/data/list/models/shopping-list-model';
 import { ShoppingListService } from 'src/app/core/data/list/shopping-list.service';
@@ -67,6 +67,20 @@ export class ShoppingListItemsViewComponent implements OnInit {
     this._logger.debug(`Updating item. ${JSON.stringify(item)}`);
     this._shoppingListService.updateItem(item).pipe(
       tap(() => this._logger.debug(`Item updated.`))
+    )
+    .subscribe();
+  }
+
+  public checkout(): void {
+    this.cartItems.pipe(
+      take(1),
+      tap(items => {
+        for (let i=0; i < items.length; i++) {
+          let item = items[i];
+          item.hasPurchased = true;
+          this._shoppingListService.updateItem(item).subscribe();
+        };
+      })
     )
     .subscribe();
   }
