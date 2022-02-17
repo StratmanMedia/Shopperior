@@ -32,7 +32,7 @@ public class ListItemDtoResolver : IListItemDtoResolver
             UnitPrice = model.UnitPrice,
             TotalPrice = model.TotalPrice,
             IsInCart = model.IsInCart,
-            HasPurchased = model.HasPurchased,
+            HasPurchased = model.HasPurchased
         };
 
         return await Task.FromResult(dto);
@@ -55,7 +55,7 @@ public class ListItemDtoResolver : IListItemDtoResolver
             UnitPrice = dto.UnitPrice,
             TotalPrice = dto.TotalPrice,
             IsInCart = dto.IsInCart,
-            HasPurchased = dto.HasPurchased,
+            HasPurchased = dto.HasPurchased
         };
 
         return await Task.FromResult((IListItemModel)model);

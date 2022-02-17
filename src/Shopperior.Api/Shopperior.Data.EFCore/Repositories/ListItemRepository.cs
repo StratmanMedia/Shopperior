@@ -1,4 +1,5 @@
-﻿using Shopperior.Domain.Contracts.ListItems.Repositories;
+﻿using Microsoft.EntityFrameworkCore;
+using Shopperior.Domain.Contracts.ListItems.Repositories;
 using Shopperior.Domain.Entities;
 using StratmanMedia.Repositories.EFCore;
 
@@ -12,21 +13,27 @@ namespace Shopperior.Data.EFCore.Repositories
 
         public async Task<ListItem> GetOne(long id)
         {
-            var listItem = Table.FirstOrDefault(i => i.Id == id);
+            var query = Table
+                .Include(i => i.ShoppingList);
+            var listItem = query.FirstOrDefault(i => i.Id == id);
 
             return await Task.FromResult(listItem);
         }
 
         public async Task<ListItem> GetOne(Guid guid)
         {
-            var listItem = Table.FirstOrDefault(i => i.Guid == guid);
+            var query = Table
+                .Include(i => i.ShoppingList);
+            var listItem = query.FirstOrDefault(i => i.Guid == guid);
 
             return await Task.FromResult(listItem);
         }
 
         public async Task<ListItem[]> GetManyByListAsync(long shoppingListId)
         {
-            var listItems = Table.Where(i => i.ShoppingListId == shoppingListId);
+            var query = Table
+                .Include(i => i.ShoppingList);
+            var listItems = query.Where(i => i.ShoppingListId == shoppingListId);
 
             return await Task.FromResult(listItems.ToArray());
         }

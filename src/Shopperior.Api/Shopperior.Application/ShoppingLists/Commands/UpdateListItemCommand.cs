@@ -18,15 +18,21 @@ public class UpdateListItemCommand : IUpdateListItemCommand
         _listItemRepository = listItemRepository;
     }
 
-    public async Task ExecuteAsync(IListItemModel request, CancellationToken ct = new CancellationToken())
+    public async Task ExecuteAsync(IListItemModel request, CancellationToken ct = default)
     {
         await ValidateRequest(request, ct);
         var entity = await _listItemModelResolver.ResolveAsync(request);
+        if (request.HasPurchased)
+        {
+            await _listItemRepository.DeleteAsync(entity, ct);
+            return;
+        }
+
         entity.LastModifiedTime = DateTime.UtcNow;
         await _listItemRepository.UpdateAsync(entity, ct);
     }
 
-    private Task ValidateRequest(IListItemModel request, CancellationToken ct = new CancellationToken())
+    private Task ValidateRequest(IListItemModel request, CancellationToken ct = default)
     {
         if (request == null) 
             throw new ArgumentNullException(nameof(request));

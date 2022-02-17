@@ -9,7 +9,6 @@ export class ListItemModel {
   unitPrice: number;
   totalPrice: number;
   isInCart: boolean;
-  enteredCartTime?: Date;
   hasPurchased: boolean;
   purchasedTime?: Date;
 }
