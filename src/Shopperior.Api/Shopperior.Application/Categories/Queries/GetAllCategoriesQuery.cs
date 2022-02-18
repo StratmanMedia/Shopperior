@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using Ardalis.GuardClauses;
+﻿using Ardalis.GuardClauses;
 using Microsoft.Extensions.Logging;
-using Shopperior.Domain.Contracts.Categories;
+using Shopperior.Domain.Contracts.Categories.Queries;
 using Shopperior.Domain.Contracts.Categories.Repositories;
 using Shopperior.Domain.Entities;
 

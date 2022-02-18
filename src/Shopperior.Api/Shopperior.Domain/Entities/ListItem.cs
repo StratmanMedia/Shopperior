@@ -12,6 +12,7 @@
         public string Comment { get; set; }
         public long StoreId { get; set; }
         public long CategoryId { get; set; }
+        public Category Category { get; set; }
         public double Quantity { get; set; }
         public string Measurement { get; set; }
         public decimal UnitPrice { get; set; }

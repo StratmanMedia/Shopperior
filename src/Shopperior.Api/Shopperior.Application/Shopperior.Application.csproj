@@ -12,11 +12,12 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Categories\Services\" />
     <Folder Include="Items\" />
     <Folder Include="ListItems\Commands\" />
     <Folder Include="ListItems\Models\" />
     <Folder Include="ListItems\Queries\" />
-    <Folder Include="ListItems\Resolvers\" />
+    <Folder Include="ListItems\Services\" />
     <Folder Include="Shared\Models\" />
     <Folder Include="ShoppingLists\Commands\" />
     <Folder Include="ShoppingLists\Models\" />

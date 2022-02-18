@@ -1,9 +1,8 @@
-using Loggly;
-using Loggly.Config;
-using Newtonsoft.Json;
 using Serilog;
 using Shopperior.Application.DependencyInjection.Microsoft;
 using Shopperior.Data.EFCore.DependencyInjection.Microsoft;
+using Shopperior.WebApi.Categories.Interfaces;
+using Shopperior.WebApi.Categories.Services;
 using Shopperior.WebApi.Shared.Interfaces;
 using Shopperior.WebApi.Shared.Middleware;
 using Shopperior.WebApi.Shared.Services;
@@ -86,6 +85,8 @@ void ConfigureServices(IServiceCollection services, IConfiguration config)
     services.AddScoped<IListPermissionDtoResolver, ListPermissionDtoResolver>();
     services.AddScoped<IListItemDtoResolver, ListItemDtoResolver>();
     services.AddScoped<IShoppingListDtoResolver, ShoppingListDtoResolver>();
+    services.AddScoped<ICategoryDtoResolver, CategoryDtoResolver>();
+
     services.AddControllers();
     // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
     services.AddEndpointsApiExplorer();

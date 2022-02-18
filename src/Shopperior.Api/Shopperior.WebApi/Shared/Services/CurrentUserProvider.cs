@@ -7,11 +7,8 @@ public class CurrentUserProvider : ICurrentUserProvider
 {
     public CurrentUser CurrentUser { get; private set; }
 
-    public async Task SetCurrentUser(CurrentUser currentUser)
+    public void SetCurrentUser(CurrentUser currentUser)
     {
-        await Task.Run(() =>
-        {
-            CurrentUser = currentUser;
-        });
+        CurrentUser = currentUser;
     }
 }

@@ -12,6 +12,8 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Categories\Models\" />
+    <Folder Include="Categories\Services\" />
     <Folder Include="ListItems\Commands\" />
     <Folder Include="ListItems\Models\" />
     <Folder Include="Shared\Cqrs\" />

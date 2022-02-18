@@ -14,7 +14,7 @@ public class CurrentUserMiddleware
     public async Task InvokeAsync(HttpContext context, ICurrentUserResolver currentUserResolver, ICurrentUserProvider currentUserService)
     {
         var currentUser = await currentUserResolver.Resolve(context, new CancellationToken());
-        await currentUserService.SetCurrentUser(currentUser);
+        currentUserService.SetCurrentUser(currentUser);
         await _next(context);
     }
 }
