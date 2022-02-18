@@ -1,4 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
+using Shopperior.Application.Categories.Commands;
+using Shopperior.Application.Categories.Services;
 using Shopperior.Application.ListItems.Commands;
 using Shopperior.Application.Shared.Queries;
 using Shopperior.Application.ShoppingLists.Commands;
@@ -6,6 +8,8 @@ using Shopperior.Application.ShoppingLists.Queries;
 using Shopperior.Application.ShoppingLists.Resolvers;
 using Shopperior.Application.Users.Commands;
 using Shopperior.Application.Users.Queries;
+using Shopperior.Domain.Contracts.Categories.Commands;
+using Shopperior.Domain.Contracts.Categories.Services;
 using Shopperior.Domain.Contracts.ListItems.Commands;
 using Shopperior.Domain.Contracts.Shared.Queries;
 using Shopperior.Domain.Contracts.ShoppingLists.Commands;
@@ -21,6 +25,7 @@ internal static class ServiceRegistrar
     {
         services.AddScoped<IDatabaseStatusQuery, DatabaseStatusQuery>();
         services.AddScoped<ICreateUserCommand, CreateUserCommand>();
+        services.AddScoped<ICreateCategoryCommand, CreateCategoryCommand>();
         services.AddScoped<IGetOneUserQuery, GetOneUserQuery>();
         services.AddScoped<IGetAllShoppingListsQuery, GetAllShoppingListsQuery>();
         services.AddScoped<IGetOneShoppingListQuery, GetOneShoppingListQuery>();
@@ -33,5 +38,7 @@ internal static class ServiceRegistrar
         services.AddScoped<IShoppingListModelResolver, ShoppingListModelResolver>();
         services.AddScoped<IListPermissionModelResolver, ListPermissionModelResolver>();
         services.AddScoped<IListItemModelResolver, ListItemModelResolver>();
+        services.AddScoped<ICategoryModelResolver, CategoryModelResolver>();
+
     }
 }

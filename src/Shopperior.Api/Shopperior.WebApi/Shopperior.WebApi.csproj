@@ -35,6 +35,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Categories\Endpoints\" />
+    <Folder Include="Categories\Models\" />
+    <Folder Include="Categories\Interfaces\" />
+    <Folder Include="Categories\Services\" />
     <Folder Include="Shared\Endpoints\" />
     <Folder Include="Shared\Extensions\" />
     <Folder Include="Shared\Middleware\" />

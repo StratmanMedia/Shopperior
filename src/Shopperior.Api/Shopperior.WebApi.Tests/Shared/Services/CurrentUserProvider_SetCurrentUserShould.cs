@@ -28,7 +28,7 @@ public class CurrentUserProvider_SetCurrentUserShould : BaseTest<CurrentUserProv
     public async Task SetTheCurrentUserProperty()
     {
         var sut = new CurrentUserProvider();
-        await sut.SetCurrentUser(_expectedCurrentUser);
+        sut.SetCurrentUser(_expectedCurrentUser);
 
         Assert.AreEqual(sut.CurrentUser.Guid, _expectedCurrentUser.Guid);
         Assert.AreEqual(sut.CurrentUser.Username, _expectedCurrentUser.Username);
