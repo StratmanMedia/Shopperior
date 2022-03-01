@@ -1,9 +1,5 @@
 <mat-toolbar>
   <span>Lists</span>
-  <span class="toolbar-spacer"></span>
-  <a mat-icon-button routerLink="/app/lists/create" aria-label="Button with a plus icon">
-    <mat-icon>add</mat-icon>
-  </a>
 </mat-toolbar>
 <mat-nav-list>
   <mat-list-item *ngFor="let shoppingList of shoppingLists | async">
@@ -14,3 +10,8 @@
     <mat-divider></mat-divider>
   </mat-list-item>
 </mat-nav-list>
+<div class="fixed fab-placement">
+  <a mat-fab routerLink="/app/lists/create" color="primary" aria-label="Button to add a list">
+    <mat-icon>add</mat-icon>
+  </a>
+</div>

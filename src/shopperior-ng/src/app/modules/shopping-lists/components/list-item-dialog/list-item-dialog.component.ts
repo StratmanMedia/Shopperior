@@ -20,6 +20,12 @@ export class ListItemDialogComponent implements OnInit {
     @Inject(MAT_DIALOG_DATA) public data: ListItemModel) { }
 
   ngOnInit(): void {
+    if (!this.data.quantity) {
+      this.data.quantity = 1;
+    }
+    if (!this.data.measurement) {
+      this.data.measurement = "ea";
+    }
   }
 
   calculateTotal(): void {
