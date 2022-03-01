@@ -28,5 +28,14 @@ namespace Shopperior.Data.EFCore.Repositories
 
             return await Task.FromResult(category);
         }
+
+        public async Task<Category[]> GetManyByUser(Guid guid, CancellationToken ct = default)
+        {
+            var query = Table
+                .Include(c => c.User);
+            var categories = query.Where(c => c.User.Guid == guid);
+
+            return await Task.FromResult(categories.ToArray());
+        }
     }
 }

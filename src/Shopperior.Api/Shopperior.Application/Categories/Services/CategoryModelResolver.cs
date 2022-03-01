@@ -1,4 +1,5 @@
-﻿using Shopperior.Domain.Contracts.Categories.Models;
+﻿using Shopperior.Application.Categories.Models;
+using Shopperior.Domain.Contracts.Categories.Models;
 using Shopperior.Domain.Contracts.Categories.Repositories;
 using Shopperior.Domain.Contracts.Categories.Services;
 using Shopperior.Domain.Contracts.Users.Repositories;
@@ -19,9 +20,18 @@ public class CategoryModelResolver : ICategoryModelResolver
         _userRepository = userRepository;
     }
 
-    public Task<ICategoryModel> ResolveAsync(Category entity, CancellationToken ct = default)
+    public async Task<ICategoryModel> ResolveAsync(Category entity, CancellationToken ct = default)
     {
-        throw new NotImplementedException();
+        if (entity == null) return null;
+
+        var model = new CategoryModel
+        {
+            Guid = entity.Guid,
+            User = entity.User,
+            Name = entity.Name
+        };
+
+        return await Task.FromResult(model);
     }
 
     public async Task<Category> ResolveAsync(ICategoryModel model, CancellationToken ct = default)

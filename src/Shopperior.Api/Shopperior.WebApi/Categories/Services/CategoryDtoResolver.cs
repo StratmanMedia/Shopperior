@@ -16,9 +16,18 @@ public class CategoryDtoResolver : ICategoryDtoResolver
         _getOneUserQuery = getOneUserQuery;
     }
 
-    public Task<CategoryDto> ResolveAsync(ICategoryModel model, CancellationToken ct = default)
+    public async Task<CategoryDto> ResolveAsync(ICategoryModel model, CancellationToken ct = default)
     {
-        throw new NotImplementedException();
+        if (model == null) return null;
+
+        var dto = new CategoryDto
+        {
+            Guid = model.Guid,
+            UserGuid = model.User.Guid,
+            Name = model.Name
+        };
+
+        return await Task.FromResult(dto);
     }
 
     public async Task<ICategoryModel> ResolveAsync(CategoryDto dto, CancellationToken ct = default)
