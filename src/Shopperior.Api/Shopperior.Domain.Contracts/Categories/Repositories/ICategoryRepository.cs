@@ -7,5 +7,6 @@ namespace Shopperior.Domain.Contracts.Categories.Repositories
     {
         Task<Category> GetOneAsync(long id, CancellationToken ct = default);
         Task<Category> GetOneAsync(Guid guid, CancellationToken ct = default);
+        Task<Category[]> GetManyByUser(Guid guid, CancellationToken ct = default);
     }
 }
