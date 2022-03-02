@@ -7,6 +7,10 @@ const routes: Routes = [
     loadChildren: () => import('../dashboard/dashboard.module').then(m => m.DashboardModule)
   },
   {
+    path: 'categories',
+    loadChildren: () => import('../categories/categories.module').then(m => m.CategoriesModule)
+  },
+  {
     path: 'lists',
     loadChildren: () => import('../shopping-lists/shopping-lists.module').then(m => m.ShoppingListsModule)
   }

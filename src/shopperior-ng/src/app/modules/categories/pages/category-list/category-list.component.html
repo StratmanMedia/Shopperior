@@ -1,0 +1,14 @@
+<mat-toolbar>
+  <span>Categories</span>
+</mat-toolbar>
+<mat-nav-list>
+  <mat-list-item *ngFor="let category of categories | async">
+    {{ category.name }}
+    <mat-divider></mat-divider>
+  </mat-list-item>
+</mat-nav-list>
+<div class="fixed fab-placement">
+  <a mat-fab routerLink="/app/categories/create" color="primary" aria-label="Button to add a category">
+    <mat-icon>add</mat-icon>
+  </a>
+</div>

@@ -47,6 +47,13 @@ export class ShopperiorApiService {
         })
       );
     }
+
+    add(category: CategoryModel): Observable<void> {
+      const data = <CategoryDto>{
+        name: category.name
+      };
+      return this._super.post('/api/v1/categories', data);
+    }
   }(this);
 
   ShoppingLists = new class {
