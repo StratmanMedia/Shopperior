@@ -1,6 +1,7 @@
 export interface ListItemDto {
   guid: string;
   shoppingListGuid: string;
+  categoryGuid: string;
   name: string;
   brand: string;
   comment: string;

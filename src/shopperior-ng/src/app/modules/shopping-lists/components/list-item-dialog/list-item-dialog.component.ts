@@ -1,5 +1,8 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { Observable } from 'rxjs';
+import { CategoryService } from 'src/app/core/data/category/category.service';
+import { CategoryModel } from 'src/app/core/data/category/models/category-model';
 import { ListItemModel } from 'src/app/core/data/list/models/list-tem-model';
 import { LoggingService } from 'src/app/core/logging/logging.service';
 import { environment } from 'src/environments/environment';
@@ -14,12 +17,15 @@ export class ListItemDialogComponent implements OnInit {
     minimumLogLevel: environment.minimumLogLevel,
     callerName: 'ListItemDialogComponent'
   });
+  categories: Observable<CategoryModel[]>;
   
   constructor(
     public dialogRef: MatDialogRef<ListItemDialogComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: ListItemModel) { }
+    @Inject(MAT_DIALOG_DATA) public data: ListItemModel,
+    private _categoryService: CategoryService) { }
 
   ngOnInit(): void {
+    this.categories = this._categoryService.getMine();
     if (!this.data.quantity) {
       this.data.quantity = 1;
     }

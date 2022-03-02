@@ -5,11 +5,13 @@ import { Observable, of, throwError } from 'rxjs';
 import { concatMap, map, take, tap } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
 import { LoggingService } from '../../logging/logging.service';
+import { CategoryModel } from '../category/models/category-model';
 import { ListItemModel } from '../list/models/list-tem-model';
 import { ShoppingListModel } from '../list/models/shopping-list-model';
 import { UserListPermissionModel } from '../list/models/user-list-permission-model';
 import { UserModel } from '../user/models/user-model';
 import { ApiResponseModel } from './models/api-response-model';
+import { CategoryDto } from './models/category-dto';
 import { ListItemDto } from './models/list-item-dto';
 import { ShoppingListDto } from './models/shopping-list-dto';
 import { UserDto } from './models/user-dto';
@@ -28,6 +30,24 @@ export class ShopperiorApiService {
   constructor(
     private _http: HttpClient,
     private _auth: AuthService) { }
+  
+  Categories = new class {
+    constructor(private _super: ShopperiorApiService) { }
+
+    getAllForUser(): Observable<CategoryModel[]> {
+      return this._super.get<CategoryDto[]>('/api/v1/categories').pipe(
+        map((res: CategoryDto[]) => {
+          return res.map((dto: CategoryDto) => {
+            return <CategoryModel>{
+              guid: dto.guid,
+              userGuid: dto.userGuid,
+              name: dto.name
+            };
+          });
+        })
+      );
+    }
+  }(this);
 
   ShoppingLists = new class {
     constructor(private _super: ShopperiorApiService) { }
