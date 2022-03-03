@@ -33,6 +33,10 @@ export class CategoryService {
       return this._api.Categories.getAllForUser();
     }
 
+    add(category: CategoryModel): Observable<void> {
+      return this._api.Categories.add(category);
+    }
+
     private loadCategories(): void {
       this._logger.debug('Loading categories from API.');
       this._api.Categories.getAllForUser().subscribe(
