@@ -1,4 +1,4 @@
-﻿using Shopperior.Domain.Contracts.ShoppingLists.Models;
+﻿using Shopperior.Domain.Contracts.Categories.Models;
 using Shopperior.Domain.Enumerations;
 
 namespace Shopperior.Domain.Contracts.ListItems.Models;
@@ -7,6 +7,7 @@ public interface IListItemModel
 {
     public Guid Guid { get; set; }
     public Guid ShoppingListGuid { get; set; }
+    public ICategoryModel Category { get; set; }
     public string Name { get; set; }
     public string Brand { get; set; }
     public string Comment { get; set; }

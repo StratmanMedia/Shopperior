@@ -1,4 +1,5 @@
 ﻿using Shopperior.Application.ListItems.Models;
+using Shopperior.Domain.Contracts.Categories.Services;
 using Shopperior.Domain.Contracts.ListItems.Models;
 using Shopperior.Domain.Contracts.ListItems.Repositories;
 using Shopperior.Domain.Contracts.ShoppingLists.Repositories;
@@ -12,13 +13,16 @@ public class ListItemModelResolver : IListItemModelResolver
 {
     private readonly IListItemRepository _listItemRepository;
     private readonly IShoppingListRepository _shoppingListRepository;
+    private readonly ICategoryModelResolver _categoryModelResolver;
 
     public ListItemModelResolver(
         IListItemRepository listItemRepository,
-        IShoppingListRepository shoppingListRepository)
+        IShoppingListRepository shoppingListRepository,
+        ICategoryModelResolver categoryModelResolver)
     {
         _listItemRepository = listItemRepository;
         _shoppingListRepository = shoppingListRepository;
+        _categoryModelResolver = categoryModelResolver;
     }
 
     public async Task<IListItemModel> ResolveAsync(ListItem entity)
@@ -30,6 +34,7 @@ public class ListItemModelResolver : IListItemModelResolver
         {
             Guid = entity.Guid,
             ShoppingListGuid = shoppingList.Guid,
+            Category = await _categoryModelResolver.ResolveAsync(entity.Category),
             Name = entity.Name,
             Brand = entity.Brand,
             Comment = entity.Comment,
@@ -59,6 +64,7 @@ public class ListItemModelResolver : IListItemModelResolver
                 Guid = model.Guid,
                 ShoppingListId = shoppingList?.Id ?? 0,
                 ShoppingList = shoppingList,
+                Category = await _categoryModelResolver.ResolveAsync(model.Category),
                 ItemId = 0,
                 Name = model.Name,
                 Brand = model.Brand,

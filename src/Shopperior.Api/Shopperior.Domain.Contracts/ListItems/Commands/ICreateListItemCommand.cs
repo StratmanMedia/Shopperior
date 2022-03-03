@@ -5,5 +5,5 @@ namespace Shopperior.Domain.Contracts.ListItems.Commands;
 
 public interface ICreateListItemCommand
 {
-    Task ExecuteAsync(IListItemModel request, CancellationToken ct = new CancellationToken());
+    Task ExecuteAsync(IListItemModel request, CancellationToken ct = default);
 }

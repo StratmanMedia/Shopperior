@@ -1,4 +1,5 @@
 ﻿using Shopperior.Application.ListItems.Models;
+using Shopperior.Domain.Contracts.Categories.Queries;
 using Shopperior.Domain.Contracts.ListItems.Models;
 using Shopperior.Domain.Contracts.ShoppingLists.Queries;
 using Shopperior.Domain.Enumerations;
@@ -10,11 +11,14 @@ namespace Shopperior.WebApi.ShoppingLists.Resolvers;
 public class ListItemDtoResolver : IListItemDtoResolver
 {
     private readonly IGetOneShoppingListQuery _getOneShoppingListQuery;
+    private readonly IGetOneCategoryQuery _getOneCategoryQuery;
 
     public ListItemDtoResolver(
-        IGetOneShoppingListQuery getOneShoppingListQuery)
+        IGetOneShoppingListQuery getOneShoppingListQuery,
+        IGetOneCategoryQuery getOneCategoryQuery)
     {
         _getOneShoppingListQuery = getOneShoppingListQuery;
+        _getOneCategoryQuery = getOneCategoryQuery;
     }
     public async Task<ListItemDto> ResolveAsync(IListItemModel model)
     {
@@ -24,6 +28,7 @@ public class ListItemDtoResolver : IListItemDtoResolver
         {
             Guid = model.Guid,
             ShoppingListGuid = model.ShoppingListGuid,
+            CategoryGuid = model.Category?.Guid ?? Guid.Empty,
             Name = model.Name,
             Brand = model.Brand,
             Comment = model.Comment,
@@ -47,6 +52,7 @@ public class ListItemDtoResolver : IListItemDtoResolver
         {
             Guid = dto.Guid,
             ShoppingListGuid = dto.ShoppingListGuid,
+            Category = await _getOneCategoryQuery.ExecuteAsync(dto.CategoryGuid),
             Name = dto.Name,
             Brand = dto.Brand,
             Comment = dto.Comment,
