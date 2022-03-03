@@ -75,6 +75,7 @@ export class ShopperiorApiService {
               return <ListItemModel>{
                 guid: i.guid,
                 shoppingListGuid: i.shoppingListGuid,
+                categoryGuid: i.categoryGuid,
                 name: i.name,
                 brand: i.brand,
                 comment: i.comment,
@@ -167,6 +168,7 @@ export class ShopperiorApiService {
       const dto = <ListItemDto>{
         guid: item.guid,
         shoppingListGuid: item.shoppingListGuid,
+        categoryGuid: item.categoryGuid,
         name: item.name,
         brand: item.brand,
         comment: item.comment,
