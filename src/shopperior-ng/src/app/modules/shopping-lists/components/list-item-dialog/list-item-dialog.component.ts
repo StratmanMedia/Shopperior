@@ -49,6 +49,7 @@ export class ListItemDialogComponent implements OnInit {
   }
 
   saveItem(): void {
+    this._logger.debug(`Saving item: ${JSON.stringify(this.data)}`);
     this.dialogRef.close(this.data);
   }
 
