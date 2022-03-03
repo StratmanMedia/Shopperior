@@ -61,6 +61,9 @@ public class PostListItemEndpoint : BaseEndpoint
         if (listGuid != dto.ShoppingListGuid)
             return new Response("The GUID in the URI and ShoppingListGuid in the request body do not match.");
 
+        if (dto.CategoryGuid == Guid.Empty)
+            return new Response("The request body did not contain a valid CategoryGuid.");
+
         if (dto.Quantity <= 0)
             return new Response("The request body did not contain Quantity.");
 

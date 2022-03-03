@@ -3,7 +3,6 @@ using Shopperior.Domain.Contracts.ListItems.Commands;
 using Shopperior.Domain.Contracts.ListItems.Models;
 using Shopperior.Domain.Contracts.ListItems.Repositories;
 using Shopperior.Domain.Contracts.ShoppingLists.Resolvers;
-using StratmanMedia.Exceptions.Extensions;
 
 namespace Shopperior.Application.ListItems.Commands;
 
@@ -23,7 +22,7 @@ public class CreateListItemCommand : ICreateListItemCommand
         _listItemRepository = listItemRepository;
     }
 
-    public async Task ExecuteAsync(IListItemModel request, CancellationToken ct = new CancellationToken())
+    public async Task ExecuteAsync(IListItemModel request, CancellationToken ct = default)
     {
         await ValidateRequest(request);
         var listItem = await _listItemModelResolver.ResolveAsync(request);

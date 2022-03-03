@@ -28,6 +28,7 @@ internal static class ServiceRegistrar
         services.AddScoped<IDatabaseStatusQuery, DatabaseStatusQuery>();
         services.AddScoped<ICreateUserCommand, CreateUserCommand>();
         services.AddScoped<ICreateCategoryCommand, CreateCategoryCommand>();
+        services.AddScoped<IGetOneCategoryQuery, GetOneCategoryQuery>();
         services.AddScoped<IGetOneUserQuery, GetOneUserQuery>();
         services.AddScoped<IGetAllCategoriesByUserQuery, GetAllCategoriesByUserQuery>();
         services.AddScoped<IGetAllShoppingListsQuery, GetAllShoppingListsQuery>();
