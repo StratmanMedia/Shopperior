@@ -145,6 +145,7 @@ export class ShopperiorApiService {
       this._super._logger.debug(`Posting item.`);
       const dto = <ListItemDto>{
         shoppingListGuid: item.shoppingListGuid,
+        categoryGuid: item.categoryGuid,
         name: item.name,
         brand: item.brand,
         comment: item.comment,

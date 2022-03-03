@@ -96,7 +96,7 @@ export class ShoppingListService {
   }
 
   public updateItem(item: ListItemModel) : Observable<void> {
-    this._logger.debug(`Updting item. ${JSON.stringify(item)}`);
+    this._logger.debug(`Updating item. ${JSON.stringify(item)}`);
     return this._listSubject.pipe(
       take(1),
       map(lists => {
