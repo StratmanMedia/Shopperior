@@ -1,14 +1,13 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
-import { BehaviorSubject } from 'rxjs';
-import { ItemModel } from 'src/app/core/data/item/models/item-model';
-import { ItemService } from 'src/app/core/data/item/item.service';
+import { Router } from '@angular/router';
+import { Observable } from 'rxjs';
 import { ListItemModel } from 'src/app/core/data/list/models/list-tem-model';
-import { ShoppingListModel } from 'src/app/core/data/list/models/shopping-list-model';
 import { ShoppingListService } from 'src/app/core/data/list/shopping-list.service';
 import { LoggingService } from 'src/app/core/logging/logging.service';
 import { environment } from 'src/environments/environment';
+import { CategoryModel } from 'src/app/core/data/category/models/category-model';
+import { CategoryService } from 'src/app/core/data/category/category.service';
 
 @Component({
   selector: 'app-list-item-form',
@@ -18,50 +17,39 @@ import { environment } from 'src/environments/environment';
 export class ListItemFormComponent implements OnInit {
   private _logger = new LoggingService({
     minimumLogLevel: environment.minimumLogLevel,
-    callerName: typeof ListItemFormComponent
+    callerName: 'ListItemFormComponent'
   });
-  itemForm: FormGroup = this.buildItemForm();
-  private shoppingListSubject = new BehaviorSubject<ShoppingListModel>(null);
+  itemForm: FormGroup;
+  @Input() listGuid: string;
+  categories: Observable<CategoryModel[]>;
   
   constructor(
-    private route: ActivatedRoute,
-    private shoppingListService: ShoppingListService,
-    private itemService: ItemService,
-    private router: Router) {
-
-    this.shoppingListService.getOne(this.route.snapshot.params.list).subscribe(list => {
-      this.shoppingListSubject.next(list);
-    });
-  }
+    private _shoppingListService: ShoppingListService,
+    private _categoryService: CategoryService,
+    private _router: Router) { }
 
   ngOnInit(): void {
-  }
-
-  get shoppingList(): ShoppingListModel {
-    return this.shoppingListSubject.value;
+    this.categories = this._categoryService.getMine();
+    this.itemForm = this.buildItemForm();
   }
 
   onSubmit(): void {
-    this._logger.warn(this.itemForm.value);
-    const formItem = <ItemModel>{
+    const item = <ListItemModel>{
       guid: '',
+      shoppingListGuid: this.listGuid,
       name: this.itemForm.controls.name.value,
-      details: this.itemForm.controls.details.value,
-      brand: this.itemForm.controls.brand.value
+      brand: this.itemForm.controls.brand.value,
+      comment: this.itemForm.controls.details.value,
+      categoryGuid: this.itemForm.controls.category.value,
+      quantity: this.itemForm.controls.quantity.value,
+      measurement: this.itemForm.controls.measurement.value,
+      isInCart: this.itemForm.controls.isInCart.value
     }
-    this.itemService.getOrAdd(formItem).subscribe(item => {
-      let items = (this.shoppingList.items !== null) ? this.shoppingList.items : [];
-      const listItem = <ListItemModel>{
-      };
-      items.push(listItem);
-      const shoppingListModel = <ShoppingListModel>{
-        guid: this.shoppingList.guid,
-        name: this.shoppingList.name,
-        items: items
-      };
-      this.shoppingListService.update(shoppingListModel).subscribe(() => {
-        this.router.navigateByUrl(`/lists/${this.shoppingList.guid}`);
-      });
+    this._logger.debug(`Saving item. ${JSON.stringify(item)}`);
+    this._shoppingListService.addItem(item).pipe()
+    .subscribe(() => {
+      this._logger.debug(`Item saved.`);
+      this._router.navigateByUrl(`/app/lists/${this.listGuid}`);
     });
   }
 
@@ -78,13 +66,14 @@ export class ListItemFormComponent implements OnInit {
   private buildItemForm(): FormGroup {
     const form = new FormGroup({
       name: new FormControl('', Validators.required),
-      details: new FormControl(''),
       brand: new FormControl(''),
-      location: new FormControl(''),
-      quantity: new FormControl(0),
-      units: new FormControl(''),
+      details: new FormControl(''),
+      category: new FormControl('', Validators.required),
+      quantity: new FormControl(1, Validators.min(0)),
+      measurement: new FormControl('ea', Validators.required),
       unitPrice: new FormControl(0),
-      subtotal: new FormControl(0)
+      subtotal: new FormControl(0),
+      isInCart: new FormControl(false)
     });
     return form;
   }

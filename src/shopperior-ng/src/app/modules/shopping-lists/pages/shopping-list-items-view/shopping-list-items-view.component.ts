@@ -30,7 +30,6 @@ export class ShoppingListItemsViewComponent implements OnInit {
     private route: ActivatedRoute,
     private shoppingListService: ShoppingListService,
     private navService: NavigationService,
-    public dialog: MatDialog,
     private _shoppingListService: ShoppingListService) { }
 
   ngOnInit(): void {
@@ -47,20 +46,6 @@ export class ShoppingListItemsViewComponent implements OnInit {
 
   public goBack(): void {
     this.navService.goBack();
-  }
-
-  public openItemDialog(): void {
-    const dialogRef = this.dialog.open(ListItemDialogComponent, {
-      width: '100%',
-      data: <ListItemModel>{
-        shoppingListGuid: this.guid
-      }
-    });
-    dialogRef.afterClosed().subscribe(data => {
-      if (!!data) {
-        this.addListItem(data);
-      }
-    });
   }
 
   public updateListItem(item: ListItemModel): void {
