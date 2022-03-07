@@ -6,22 +6,22 @@ import { MaterialModule } from 'src/app/core/material/material.module';
 import { ShoppingListCreateComponent } from './pages/shopping-list-create/shopping-list-create.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ShoppingListItemsViewComponent } from './pages/shopping-list-items-view/shopping-list-items-view.component';
-import { ShoppingListItemAddComponent } from './pages/shopping-list-item-add/shopping-list-item-add.component';
 import { ListItemFormComponent } from './components/list-item-form/list-item-form.component';
 import { ShoppingListSettingsComponent } from './pages/shopping-list-settings/shopping-list-settings.component';
 import { UserListPermissionDialogComponent } from './components/user-list-permission-dialog/user-list-permission-dialog.component';
 import { ListItemDialogComponent } from './components/list-item-dialog/list-item-dialog.component';
+import { ShoppingListAddItemComponent } from './pages/shopping-list-add-item/shopping-list-add-item.component';
 
 @NgModule({
   declarations: [
     ShoppingListsViewComponent,
     ShoppingListCreateComponent,
     ShoppingListItemsViewComponent,
-    ShoppingListItemAddComponent,
     ListItemFormComponent,
     ShoppingListSettingsComponent,
     UserListPermissionDialogComponent,
-    ListItemDialogComponent
+    ListItemDialogComponent,
+    ShoppingListAddItemComponent
   ],
   imports: [
     CommonModule,
