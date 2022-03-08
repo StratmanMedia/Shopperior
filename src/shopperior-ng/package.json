@@ -9,7 +9,7 @@
     "lint": "ng lint",
     "e2e": "ng e2e",
     "postinstall": "ngcc",
-    "build-prd": "ng build --configuration=production --optimization=true"
+    "build-prd": "ng build --prod"
   },
   "private": true,
   "dependencies": {
