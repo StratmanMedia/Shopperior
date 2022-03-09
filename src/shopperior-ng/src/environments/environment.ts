@@ -7,7 +7,7 @@ export const environment = {
     authority: secrets.auth0Domain,
     audience: secrets.auth0Audience,
     client_id: secrets.auth0ClientId,
-    redirect_uri: 'http://localhost:8080/app/dashboard',
+    redirect_uri: 'http://localhost:4200/app/dashboard',
     scope: 'openid profile',
     response_type: 'id_token token',
     response_mode: '',
