@@ -1,4 +1,4 @@
-<div class="row mt-1 mx-1">
+<div class="row mt-2 mx-1">
   <form *ngIf="!!listForm" [formGroup]="listForm" (submit)="submitForm()">
     <div class="col-12">
       <mat-form-field appearance="outline" class="width-100">
@@ -9,7 +9,7 @@
     <div class="col-12 mb-2">
       <div class="card">
         <div class="card-header d-flex justify-content-between align-items-start">
-          <div class="ms-2 me-auto">
+          <div class="ms-2 me-auto my-auto">
             <div>Categories</div>
           </div>
           <a mat-icon-button aria-label="Button to add a category">
@@ -21,7 +21,7 @@
     <div class="col-12 my-2">
       <div class="card">
         <div class="card-header d-flex justify-content-between align-items-start">
-          <div class="ms-2 me-auto">
+          <div class="ms-2 me-auto my-auto">
             <div>Permissions</div>
           </div>
           <a mat-icon-button aria-label="Button to add a permission" (click)="openPermissionDialog()">
@@ -41,9 +41,9 @@
         </ul>
       </div>
     </div>
-    <mat-action-list>
-      <button mat-raised-button color="primary" type="submit" class="width-100" [disabled]="!listForm.valid">Save</button>
+    <div class="col-12">
+      <button mat-raised-button color="primary" type="submit" class="width-100 my-2" [disabled]="!listForm.valid">Save</button>
       <button mat-raised-button type="button" class="width-100 mt-2" (click)="cancel()">Cancel</button>
-    </mat-action-list>
+    </div>
   </form>
 </div>
