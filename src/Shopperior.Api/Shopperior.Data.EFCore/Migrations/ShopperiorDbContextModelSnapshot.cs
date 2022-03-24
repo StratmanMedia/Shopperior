@@ -42,17 +42,17 @@ namespace Shopperior.Data.EFCore.Migrations
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<long>("ShoppingListId")
+                        .HasColumnType("bigint");
+
                     b.Property<DateTime?>("TrashedTime")
                         .HasColumnType("datetime2");
 
-                    b.Property<long>("UserId")
-                        .HasColumnType("bigint");
-
                     b.HasKey("Id");
 
-                    b.HasIndex("UserId");
+                    b.HasIndex("ShoppingListId");
 
-                    b.ToTable("Category", (string)null);
+                    b.ToTable("Category");
                 });
 
             modelBuilder.Entity("Shopperior.Domain.Entities.Item", b =>
@@ -86,7 +86,7 @@ namespace Shopperior.Data.EFCore.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Item", (string)null);
+                    b.ToTable("Item");
                 });
 
             modelBuilder.Entity("Shopperior.Domain.Entities.ListItem", b =>
@@ -157,7 +157,7 @@ namespace Shopperior.Data.EFCore.Migrations
 
                     b.HasIndex("ShoppingListId");
 
-                    b.ToTable("ListItem", (string)null);
+                    b.ToTable("ListItem");
                 });
 
             modelBuilder.Entity("Shopperior.Domain.Entities.ShoppingList", b =>
@@ -185,7 +185,7 @@ namespace Shopperior.Data.EFCore.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("ShoppingList", (string)null);
+                    b.ToTable("ShoppingList");
                 });
 
             modelBuilder.Entity("Shopperior.Domain.Entities.Store", b =>
@@ -213,7 +213,7 @@ namespace Shopperior.Data.EFCore.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Store", (string)null);
+                    b.ToTable("Store");
                 });
 
             modelBuilder.Entity("Shopperior.Domain.Entities.User", b =>
@@ -256,7 +256,7 @@ namespace Shopperior.Data.EFCore.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("User", (string)null);
+                    b.ToTable("User");
                 });
 
             modelBuilder.Entity("Shopperior.Domain.Entities.UserListPermission", b =>
@@ -285,18 +285,18 @@ namespace Shopperior.Data.EFCore.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("UserListPermission", (string)null);
+                    b.ToTable("UserListPermission");
                 });
 
             modelBuilder.Entity("Shopperior.Domain.Entities.Category", b =>
                 {
-                    b.HasOne("Shopperior.Domain.Entities.User", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId")
+                    b.HasOne("Shopperior.Domain.Entities.ShoppingList", "ShoppingList")
+                        .WithMany("Categories")
+                        .HasForeignKey("ShoppingListId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("User");
+                    b.Navigation("ShoppingList");
                 });
 
             modelBuilder.Entity("Shopperior.Domain.Entities.ListItem", b =>
@@ -304,7 +304,7 @@ namespace Shopperior.Data.EFCore.Migrations
                     b.HasOne("Shopperior.Domain.Entities.Category", "Category")
                         .WithMany()
                         .HasForeignKey("CategoryId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.HasOne("Shopperior.Domain.Entities.ShoppingList", "ShoppingList")
@@ -339,6 +339,8 @@ namespace Shopperior.Data.EFCore.Migrations
 
             modelBuilder.Entity("Shopperior.Domain.Entities.ShoppingList", b =>
                 {
+                    b.Navigation("Categories");
+
                     b.Navigation("Items");
 
                     b.Navigation("Permissions");

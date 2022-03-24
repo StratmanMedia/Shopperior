@@ -19,6 +19,12 @@ namespace Shopperior.Data.EFCore
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<ListItem>()
+                .HasOne(i => i.Category)
+                .WithMany()
+                .HasForeignKey("CategoryId")
+                .OnDelete(DeleteBehavior.NoAction)
+                .IsRequired();
         }
     }
 }
