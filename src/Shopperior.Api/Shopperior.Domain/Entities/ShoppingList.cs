@@ -9,6 +9,7 @@
         public DateTime? LastModifiedTime { get; set; }
         public DateTime? TrashedTime { get; set; }
         public ICollection<UserListPermission> Permissions { get; set; }
+        public ICollection<Category> Categories { get; set; }
         public ICollection<ListItem> Items { get; set; }
     }
 }

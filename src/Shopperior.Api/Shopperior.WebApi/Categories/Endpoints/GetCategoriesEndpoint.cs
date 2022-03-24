@@ -12,34 +12,30 @@ namespace Shopperior.WebApi.Categories.Endpoints;
 public class GetCategoriesEndpoint : BaseEndpoint<GetCategoriesEndpoint>
 {
     private readonly ICurrentUserProvider _currentUserProvider;
-    private readonly IGetAllCategoriesByUserQuery _getAllCategoriesByUserQuery;
+    private readonly IGetAllCategoriesByShoppingListQuery _getAllCategoriesByShoppinglistQuery;
     private readonly ICategoryDtoResolver _categoryDtoResolver;
 
     public GetCategoriesEndpoint(
         ILogger<GetCategoriesEndpoint> logger,
         ICurrentUserProvider currentUserProvider,
-        IGetAllCategoriesByUserQuery getAllCategoriesByUserQuery,
+        IGetAllCategoriesByShoppingListQuery getAllCategoriesByShoppinglistQuery,
         ICategoryDtoResolver categoryDtoResolver) : base(logger)
     {
         _currentUserProvider = currentUserProvider;
-        _getAllCategoriesByUserQuery = getAllCategoriesByUserQuery;
+        _getAllCategoriesByShoppinglistQuery = getAllCategoriesByShoppinglistQuery;
         _categoryDtoResolver = categoryDtoResolver;
     }
 
     [Authorize]
     [HttpGet("api/v1/categories")]
-    public async Task<ActionResult<Response<CategoryDto[]>>> HandleAsync(CancellationToken ct = default)
+    public async Task<ActionResult<Response<CategoryDto[]>>> HandleAsync(Guid shoppingList, CancellationToken ct = default)
     {
-        return await TryActionAsync(() => EndpointAction(ct));
+        return await TryActionAsync(() => EndpointAction(shoppingList, ct));
     }
 
-    private async Task<CategoryDto[]> EndpointAction(CancellationToken ct = default)
+    private async Task<CategoryDto[]> EndpointAction(Guid shoppingListGuid, CancellationToken ct = default)
     {
-        var currentUser = _currentUserProvider.CurrentUser;
-        if (currentUser == null)
-            throw new UnauthorizedAccessException();
-
-        var categories = await _getAllCategoriesByUserQuery.ExecuteAsync(currentUser.Guid, ct);
+        var categories = await _getAllCategoriesByShoppinglistQuery.ExecuteAsync(shoppingListGuid, ct);
         var dtos = new List<CategoryDto>();
         foreach (var categoryModel in categories)
         {

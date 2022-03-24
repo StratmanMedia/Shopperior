@@ -52,7 +52,7 @@ namespace Shopperior.Data.EFCore.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Category");
+                    b.ToTable("Category", (string)null);
                 });
 
             modelBuilder.Entity("Shopperior.Domain.Entities.Item", b =>
@@ -86,7 +86,7 @@ namespace Shopperior.Data.EFCore.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Item");
+                    b.ToTable("Item", (string)null);
                 });
 
             modelBuilder.Entity("Shopperior.Domain.Entities.ListItem", b =>
@@ -157,7 +157,7 @@ namespace Shopperior.Data.EFCore.Migrations
 
                     b.HasIndex("ShoppingListId");
 
-                    b.ToTable("ListItem");
+                    b.ToTable("ListItem", (string)null);
                 });
 
             modelBuilder.Entity("Shopperior.Domain.Entities.ShoppingList", b =>
@@ -185,7 +185,7 @@ namespace Shopperior.Data.EFCore.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("ShoppingList");
+                    b.ToTable("ShoppingList", (string)null);
                 });
 
             modelBuilder.Entity("Shopperior.Domain.Entities.Store", b =>
@@ -213,7 +213,7 @@ namespace Shopperior.Data.EFCore.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Store");
+                    b.ToTable("Store", (string)null);
                 });
 
             modelBuilder.Entity("Shopperior.Domain.Entities.User", b =>
@@ -256,7 +256,7 @@ namespace Shopperior.Data.EFCore.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("User");
+                    b.ToTable("User", (string)null);
                 });
 
             modelBuilder.Entity("Shopperior.Domain.Entities.UserListPermission", b =>
@@ -285,7 +285,7 @@ namespace Shopperior.Data.EFCore.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("UserListPermission");
+                    b.ToTable("UserListPermission", (string)null);
                 });
 
             modelBuilder.Entity("Shopperior.Domain.Entities.Category", b =>

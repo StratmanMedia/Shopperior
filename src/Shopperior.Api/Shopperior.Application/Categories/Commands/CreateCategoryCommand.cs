@@ -38,7 +38,7 @@ namespace Shopperior.Application.Categories.Commands
         private Task ValidateRequest(ICategoryModel request, CancellationToken ct = default)
         {
             Guard.Against.Null(request, nameof(request));
-            Guard.Against.Null(request.User, nameof(request.User));
+            Guard.Against.Null(request.ShoppingListGuid, nameof(request.ShoppingListGuid));
             Guard.Against.NullOrWhiteSpace(request.Name, nameof(request.Name));
 
             return Task.CompletedTask;
