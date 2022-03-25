@@ -12,8 +12,8 @@ using Shopperior.Data.EFCore;
 namespace Shopperior.Data.EFCore.Migrations
 {
     [DbContext(typeof(ShopperiorDbContext))]
-    [Migration("20220117000317_UserListPermission")]
-    partial class UserListPermission
+    [Migration("20220324200224_reset")]
+    partial class reset
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -44,10 +44,15 @@ namespace Shopperior.Data.EFCore.Migrations
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<long>("ShoppingListId")
+                        .HasColumnType("bigint");
+
                     b.Property<DateTime?>("TrashedTime")
                         .HasColumnType("datetime2");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("ShoppingListId");
 
                     b.ToTable("Category");
                 });
@@ -94,13 +99,16 @@ namespace Shopperior.Data.EFCore.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"), 1L, 1);
 
+                    b.Property<string>("Brand")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<long>("CategoryId")
                         .HasColumnType("bigint");
 
-                    b.Property<DateTime>("CreatedTime")
-                        .HasColumnType("datetime2");
+                    b.Property<string>("Comment")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("EnteredCartTime")
+                    b.Property<DateTime>("CreatedTime")
                         .HasColumnType("datetime2");
 
                     b.Property<Guid>("Guid")
@@ -118,10 +126,13 @@ namespace Shopperior.Data.EFCore.Migrations
                     b.Property<DateTime?>("LastModifiedTime")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("Measurement")
-                        .HasColumnType("int");
+                    b.Property<string>("Measurement")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("PurchasedTime")
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("PurchasedTime")
                         .HasColumnType("datetime2");
 
                     b.Property<double>("Quantity")
@@ -143,6 +154,10 @@ namespace Shopperior.Data.EFCore.Migrations
                         .HasColumnType("decimal(18,2)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("CategoryId");
+
+                    b.HasIndex("ShoppingListId");
 
                     b.ToTable("ListItem");
                 });
@@ -257,27 +272,80 @@ namespace Shopperior.Data.EFCore.Migrations
                     b.Property<DateTime>("CreatedTime")
                         .HasColumnType("datetime2");
 
-                    b.Property<Guid>("Guid")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime?>("LastModifiedTime")
-                        .HasColumnType("datetime2");
-
                     b.Property<string>("Permission")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<long>("ShoppingListId")
                         .HasColumnType("bigint");
 
-                    b.Property<DateTime?>("TrashedTime")
-                        .HasColumnType("datetime2");
-
                     b.Property<long>("UserId")
                         .HasColumnType("bigint");
 
                     b.HasKey("Id");
 
+                    b.HasIndex("ShoppingListId");
+
+                    b.HasIndex("UserId");
+
                     b.ToTable("UserListPermission");
+                });
+
+            modelBuilder.Entity("Shopperior.Domain.Entities.Category", b =>
+                {
+                    b.HasOne("Shopperior.Domain.Entities.ShoppingList", "ShoppingList")
+                        .WithMany("Categories")
+                        .HasForeignKey("ShoppingListId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("ShoppingList");
+                });
+
+            modelBuilder.Entity("Shopperior.Domain.Entities.ListItem", b =>
+                {
+                    b.HasOne("Shopperior.Domain.Entities.Category", "Category")
+                        .WithMany()
+                        .HasForeignKey("CategoryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Shopperior.Domain.Entities.ShoppingList", "ShoppingList")
+                        .WithMany("Items")
+                        .HasForeignKey("ShoppingListId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Category");
+
+                    b.Navigation("ShoppingList");
+                });
+
+            modelBuilder.Entity("Shopperior.Domain.Entities.UserListPermission", b =>
+                {
+                    b.HasOne("Shopperior.Domain.Entities.ShoppingList", "ShoppingList")
+                        .WithMany("Permissions")
+                        .HasForeignKey("ShoppingListId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Shopperior.Domain.Entities.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("ShoppingList");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("Shopperior.Domain.Entities.ShoppingList", b =>
+                {
+                    b.Navigation("Categories");
+
+                    b.Navigation("Items");
+
+                    b.Navigation("Permissions");
                 });
 #pragma warning restore 612, 618
         }

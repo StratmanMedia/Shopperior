@@ -12,8 +12,8 @@ using Shopperior.Data.EFCore;
 namespace Shopperior.Data.EFCore.Migrations
 {
     [DbContext(typeof(ShopperiorDbContext))]
-    [Migration("20220214135942_AddedShoppingListRelationships")]
-    partial class AddedShoppingListRelationships
+    [Migration("20220324213942_UpdateListItemCascade")]
+    partial class UpdateListItemCascade
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -44,10 +44,15 @@ namespace Shopperior.Data.EFCore.Migrations
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<long>("ShoppingListId")
+                        .HasColumnType("bigint");
+
                     b.Property<DateTime?>("TrashedTime")
                         .HasColumnType("datetime2");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("ShoppingListId");
 
                     b.ToTable("Category");
                 });
@@ -149,6 +154,8 @@ namespace Shopperior.Data.EFCore.Migrations
                         .HasColumnType("decimal(18,2)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("CategoryId");
 
                     b.HasIndex("ShoppingListId");
 
@@ -283,13 +290,32 @@ namespace Shopperior.Data.EFCore.Migrations
                     b.ToTable("UserListPermission");
                 });
 
+            modelBuilder.Entity("Shopperior.Domain.Entities.Category", b =>
+                {
+                    b.HasOne("Shopperior.Domain.Entities.ShoppingList", "ShoppingList")
+                        .WithMany("Categories")
+                        .HasForeignKey("ShoppingListId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("ShoppingList");
+                });
+
             modelBuilder.Entity("Shopperior.Domain.Entities.ListItem", b =>
                 {
+                    b.HasOne("Shopperior.Domain.Entities.Category", "Category")
+                        .WithMany()
+                        .HasForeignKey("CategoryId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
                     b.HasOne("Shopperior.Domain.Entities.ShoppingList", "ShoppingList")
                         .WithMany("Items")
                         .HasForeignKey("ShoppingListId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Category");
 
                     b.Navigation("ShoppingList");
                 });
@@ -315,6 +341,8 @@ namespace Shopperior.Data.EFCore.Migrations
 
             modelBuilder.Entity("Shopperior.Domain.Entities.ShoppingList", b =>
                 {
+                    b.Navigation("Categories");
+
                     b.Navigation("Items");
 
                     b.Navigation("Permissions");

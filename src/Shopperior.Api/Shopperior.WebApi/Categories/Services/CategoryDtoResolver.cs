@@ -1,6 +1,6 @@
 ﻿using Shopperior.Application.Categories.Models;
 using Shopperior.Domain.Contracts.Categories.Models;
-using Shopperior.Domain.Contracts.Users;
+using Shopperior.Domain.Contracts.ShoppingLists.Queries;
 using Shopperior.WebApi.Categories.Interfaces;
 using Shopperior.WebApi.Categories.Models;
 
@@ -8,12 +8,12 @@ namespace Shopperior.WebApi.Categories.Services;
 
 public class CategoryDtoResolver : ICategoryDtoResolver
 {
-    private readonly IGetOneUserQuery _getOneUserQuery;
+    private readonly IGetOneShoppingListQuery _getOneShoppingListQuery;
 
     public CategoryDtoResolver(
-        IGetOneUserQuery getOneUserQuery)
+        IGetOneShoppingListQuery getOneShoppingListQuery)
     {
-        _getOneUserQuery = getOneUserQuery;
+        _getOneShoppingListQuery = getOneShoppingListQuery;
     }
 
     public async Task<CategoryDto> ResolveAsync(ICategoryModel model, CancellationToken ct = default)
@@ -23,7 +23,7 @@ public class CategoryDtoResolver : ICategoryDtoResolver
         var dto = new CategoryDto
         {
             Guid = model.Guid,
-            UserGuid = model.User.Guid,
+            ShoppingListGuid = model.ShoppingListGuid,
             Name = model.Name
         };
 
@@ -33,12 +33,11 @@ public class CategoryDtoResolver : ICategoryDtoResolver
     public async Task<ICategoryModel> ResolveAsync(CategoryDto dto, CancellationToken ct = default)
     {
         if (dto == null) return null;
-
-        var user = await _getOneUserQuery.ExecuteAsync(dto.UserGuid, ct);
+        
         var model = new CategoryModel
         {
             Guid = dto.Guid,
-            User = user,
+            ShoppingListGuid = dto.ShoppingListGuid,
             Name = dto.Name
         };
 

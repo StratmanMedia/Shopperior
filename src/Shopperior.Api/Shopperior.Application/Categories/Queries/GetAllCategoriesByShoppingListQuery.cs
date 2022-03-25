@@ -7,14 +7,14 @@ using Shopperior.Domain.Contracts.Categories.Services;
 
 namespace Shopperior.Application.Categories.Queries
 {
-    public class GetAllCategoriesByUserQuery : IGetAllCategoriesByUserQuery
+    public class GetAllCategoriesByShoppingListQuery : IGetAllCategoriesByShoppingListQuery
     {
         private readonly ILogger _logger;
         private readonly ICategoryRepository _categoryRepository;
         private readonly ICategoryModelResolver _categoryModelResolver;
 
-        public GetAllCategoriesByUserQuery(
-            ILogger<GetAllCategoriesByUserQuery> logger,
+        public GetAllCategoriesByShoppingListQuery(
+            ILogger<GetAllCategoriesByShoppingListQuery> logger,
             ICategoryRepository categoryRepository,
             ICategoryModelResolver categoryModelResolver)
         {
@@ -23,9 +23,9 @@ namespace Shopperior.Application.Categories.Queries
             _categoryModelResolver = Guard.Against.Null(categoryModelResolver, nameof(categoryModelResolver));
         }
 
-        public async Task<IEnumerable<ICategoryModel>> ExecuteAsync(Guid userGuid, CancellationToken ct = default)
+        public async Task<IEnumerable<ICategoryModel>> ExecuteAsync(Guid shoppingListGuid, CancellationToken ct = default)
         {
-            var entities = await _categoryRepository.GetManyByUser(userGuid, ct);
+            var entities = await _categoryRepository.GetManyByShoppingList(shoppingListGuid, ct);
             var categories = new List<ICategoryModel>();
             foreach (var entity in entities)
             {

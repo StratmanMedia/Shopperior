@@ -29,6 +29,7 @@ public class PostCategoryEndpoint_HandleAsyncShould : BaseTest<PostCategoryEndpo
     {
         _request = new CategoryDto
         {
+            ShoppingListGuid = Guid.NewGuid(),
             Name = RandomString(16)
         };
         _currentUser = new CurrentUser
@@ -90,6 +91,23 @@ public class PostCategoryEndpoint_HandleAsyncShould : BaseTest<PostCategoryEndpo
         var response = badRequestObjectResult.Subject.Value.Should().BeOfType<Response>();
         response.Subject.IsSuccess.Should().BeFalse();
         response.Subject.Messages.Should().Contain("The request body was malformed.");
+    }
+
+    [TestMethod]
+    public async Task ReturnBadRequestWhenShoppingListGuidIsEmptyInRequest()
+    {
+        _currentUserProvider
+            .Setup(m => m.CurrentUser)
+            .Returns(_currentUser);
+        _request.ShoppingListGuid = default;
+        var sut = new PostCategoryEndpoint(_logger.Object, _currentUserProvider.Object, _categoryDtoResolver.Object, _createCategoryCommand.Object);
+
+        var actionResult = await sut.HandleAsync(_request, It.IsAny<CancellationToken>());
+
+        var badRequestObjectResult = actionResult.Result.Should().BeOfType<BadRequestObjectResult>();
+        var response = badRequestObjectResult.Subject.Value.Should().BeOfType<Response>();
+        response.Subject.IsSuccess.Should().BeFalse();
+        response.Subject.Messages.Should().Contain($"The request body did not contain a valid {nameof(_request.ShoppingListGuid)}");
     }
 
     [TestMethod]

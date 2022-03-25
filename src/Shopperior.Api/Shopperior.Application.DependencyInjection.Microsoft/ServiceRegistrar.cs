@@ -30,7 +30,7 @@ internal static class ServiceRegistrar
         services.AddScoped<ICreateCategoryCommand, CreateCategoryCommand>();
         services.AddScoped<IGetOneCategoryQuery, GetOneCategoryQuery>();
         services.AddScoped<IGetOneUserQuery, GetOneUserQuery>();
-        services.AddScoped<IGetAllCategoriesByUserQuery, GetAllCategoriesByUserQuery>();
+        services.AddScoped<IGetAllCategoriesByShoppingListQuery, GetAllCategoriesByShoppingListQuery>();
         services.AddScoped<IGetAllShoppingListsQuery, GetAllShoppingListsQuery>();
         services.AddScoped<IGetOneShoppingListQuery, GetOneShoppingListQuery>();
         services.AddScoped<ICreateShoppingListCommand, CreateShoppingListCommand>();

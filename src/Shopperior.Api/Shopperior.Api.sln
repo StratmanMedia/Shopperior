@@ -35,9 +35,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StratmanMedia.Exceptions", 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StratmanMedia.Auth", "StratmanMedia.Auth\StratmanMedia.Auth.csproj", "{E89B414E-E931-4299-9BD0-33CD388E9893}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shopperior.Tests", "Shopperior.Tests\Shopperior.Tests.csproj", "{D91ED6C6-4830-4BE0-B4B1-CEE27092602D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Shopperior.Tests", "Shopperior.Tests\Shopperior.Tests.csproj", "{D91ED6C6-4830-4BE0-B4B1-CEE27092602D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shopperior.WebApi.Tests", "Shopperior.WebApi.Tests\Shopperior.WebApi.Tests.csproj", "{BD4B5F25-D38B-4BEA-9DA1-B4AAC0F0559C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Shopperior.WebApi.Tests", "Shopperior.WebApi.Tests\Shopperior.WebApi.Tests.csproj", "{BD4B5F25-D38B-4BEA-9DA1-B4AAC0F0559C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
