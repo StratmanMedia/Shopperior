@@ -30,6 +30,7 @@ public class ShoppingListRepository : Repository<ShopperiorDbContext, ShoppingLi
     {
         var query = Table
             .Include(l => l.Permissions).ThenInclude(p => p.User)
+            .Include(l => l.Categories)
             .Include(l => l.Items);
         var lists = query.Where(l => l.Permissions.Select(p => p.UserId).Contains(userId));
 

@@ -1,4 +1,7 @@
 ﻿using Shopperior.Application.ShoppingLists.Models;
+using Shopperior.Domain.Contracts.Categories.Models;
+using Shopperior.Domain.Contracts.Categories.Repositories;
+using Shopperior.Domain.Contracts.Categories.Services;
 using Shopperior.Domain.Contracts.ListItems.Models;
 using Shopperior.Domain.Contracts.ListItems.Repositories;
 using Shopperior.Domain.Contracts.ShoppingLists.Models;
@@ -11,19 +14,25 @@ namespace Shopperior.Application.ShoppingLists.Resolvers;
 public class ShoppingListModelResolver : IShoppingListModelResolver
 {
     private readonly IUserListPermissionRepository _listPermissionRepository;
+    private readonly ICategoryRepository _categoryRepository;
     private readonly IListItemRepository _listItemRepository;
     private readonly IListPermissionModelResolver _listPermissionModelResolver;
+    private readonly ICategoryModelResolver _categoryModelResolver;
     private readonly IListItemModelResolver _listItemModelResolver;
 
     public ShoppingListModelResolver(
         IUserListPermissionRepository listPermissionRepository,
+        ICategoryRepository categoryRepository,
         IListItemRepository listItemRepository,
         IListPermissionModelResolver listPermissionModelResolver,
+        ICategoryModelResolver categoryModelResolver,
         IListItemModelResolver listItemModelResolver)
     {
         _listPermissionRepository = listPermissionRepository;
+        _categoryRepository = categoryRepository;
         _listItemRepository = listItemRepository;
         _listPermissionModelResolver = listPermissionModelResolver;
+        _categoryModelResolver = categoryModelResolver;
         _listItemModelResolver = listItemModelResolver;
     }
 
@@ -32,6 +41,7 @@ public class ShoppingListModelResolver : IShoppingListModelResolver
         if (entity == null) return null;
 
         var permissions = await GetListPermissionsAsync(entity);
+        var categories = await GetCategoriesAsync(entity);
         var items = await GetListItemsAsync(entity);
 
         var model = new ShoppingListModel
@@ -39,6 +49,7 @@ public class ShoppingListModelResolver : IShoppingListModelResolver
             Guid = entity.Guid,
             Name = entity.Name,
             Permissions = permissions,
+            Categories = categories,
             Items = items
         };
 
@@ -63,6 +74,21 @@ public class ShoppingListModelResolver : IShoppingListModelResolver
         }
 
         return permissionModels;
+    }
+
+    private async Task<IEnumerable<ICategoryModel>> GetCategoriesAsync(ShoppingList entity)
+    {
+        var categories = (entity.Categories.Any())
+            ? entity.Categories.ToArray()
+            : await _categoryRepository.GetManyByShoppingList(entity.Guid);
+        var categoryModels = new List<ICategoryModel>();
+        foreach (var c in categories)
+        {
+            var categoryModel = await _categoryModelResolver.ResolveAsync(c);
+            categoryModels.Add(categoryModel);
+        }
+
+        return categoryModels;
     }
 
     private async Task<IEnumerable<IListItemModel>> GetListItemsAsync(ShoppingList entity)

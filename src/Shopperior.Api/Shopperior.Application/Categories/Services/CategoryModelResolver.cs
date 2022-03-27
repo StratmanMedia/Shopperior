@@ -2,7 +2,7 @@
 using Shopperior.Domain.Contracts.Categories.Models;
 using Shopperior.Domain.Contracts.Categories.Repositories;
 using Shopperior.Domain.Contracts.Categories.Services;
-using Shopperior.Domain.Contracts.Users.Repositories;
+using Shopperior.Domain.Contracts.ShoppingLists.Repositories;
 using Shopperior.Domain.Entities;
 
 namespace Shopperior.Application.Categories.Services;
@@ -10,24 +10,26 @@ namespace Shopperior.Application.Categories.Services;
 public class CategoryModelResolver : ICategoryModelResolver
 {
     private readonly ICategoryRepository _categoryRepository;
-    private readonly IUserRepository _userRepository;
+    private readonly IShoppingListRepository _shoppingListRepository;
 
     public CategoryModelResolver(
         ICategoryRepository categoryRepository,
-        IUserRepository userRepository)
+        IShoppingListRepository shoppingListRepository)
     {
         _categoryRepository = categoryRepository;
-        _userRepository = userRepository;
+        _shoppingListRepository = shoppingListRepository;
     }
 
     public async Task<ICategoryModel> ResolveAsync(Category entity, CancellationToken ct = default)
     {
         if (entity == null) return null;
 
+        var shoppingList = entity.ShoppingList ?? await _shoppingListRepository.GetOneAsync(entity.ShoppingListId, ct);
+
         var model = new CategoryModel
         {
             Guid = entity.Guid,
-            User = entity.User,
+            ShoppingListGuid = shoppingList.Guid,
             Name = entity.Name
         };
 
@@ -41,11 +43,12 @@ public class CategoryModelResolver : ICategoryModelResolver
         var existing = await _categoryRepository.GetOneAsync(model.Guid, ct);
         if (existing == null)
         {
-            var user = await _userRepository.GetAsync(model.User.Guid);
+            var shoppingList = await _shoppingListRepository.GetOneAsync(model.ShoppingListGuid, ct);
             var entity = new Category
             {
                 Guid = model.Guid,
-                User = user,
+                ShoppingListId = shoppingList.Id,
+                ShoppingList = shoppingList,
                 Name = model.Name
             };
 

@@ -42,7 +42,6 @@ public class PostCategoryEndpoint : BaseEndpoint<PostCategoryEndpoint>
             throw new UnauthorizedAccessException();
 
         await ValidateRequest(dto, ct);
-        dto.UserGuid = user.Guid;
         var model = await _categoryDtoResolver.ResolveAsync(dto, ct);
         await _createCategoryCommand.ExecuteAsync(model, ct);
     }
@@ -51,6 +50,9 @@ public class PostCategoryEndpoint : BaseEndpoint<PostCategoryEndpoint>
     {
         if (dto == null)
             throw new BadHttpRequestException("The request body was malformed.");
+
+        if (dto.ShoppingListGuid == Guid.Empty)
+            throw new BadHttpRequestException($"The request body did not contain a valid {nameof(dto.ShoppingListGuid)}");
 
         if (string.IsNullOrWhiteSpace(dto.Name))
             throw new BadHttpRequestException($"The request body did not contain {nameof(dto.Name)}.");

@@ -13,27 +13,21 @@ namespace Shopperior.Data.EFCore.Repositories
 
         public async Task<Category> GetOneAsync(long id, CancellationToken ct = default)
         {
-            var query = Table
-                .Include(c => c.User);
-            var category = query.FirstOrDefault(c => c.Id == id);
+            var category = Table.FirstOrDefault(c => c.Id == id);
 
             return await Task.FromResult(category);
         }
 
         public async Task<Category> GetOneAsync(Guid guid, CancellationToken ct = default)
         {
-            var query = Table
-                .Include(c => c.User);
-            var category = query.FirstOrDefault(c => c.Guid == guid);
+            var category = Table.FirstOrDefault(c => c.Guid == guid);
 
             return await Task.FromResult(category);
         }
 
-        public async Task<Category[]> GetManyByUser(Guid guid, CancellationToken ct = default)
+        public async Task<Category[]> GetManyByShoppingList(Guid guid, CancellationToken ct = default)
         {
-            var query = Table
-                .Include(c => c.User);
-            var categories = query.Where(c => c.User.Guid == guid);
+            var categories = Table.Where(c => c.ShoppingList.Guid == guid);
 
             return await Task.FromResult(categories.ToArray());
         }
