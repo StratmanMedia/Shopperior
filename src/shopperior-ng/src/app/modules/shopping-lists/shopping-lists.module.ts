@@ -11,6 +11,8 @@ import { ShoppingListSettingsComponent } from './pages/shopping-list-settings/sh
 import { UserListPermissionDialogComponent } from './components/user-list-permission-dialog/user-list-permission-dialog.component';
 import { ListItemDialogComponent } from './components/list-item-dialog/list-item-dialog.component';
 import { ShoppingListAddItemComponent } from './pages/shopping-list-add-item/shopping-list-add-item.component';
+import { CategoryDialogComponent } from './components/category-dialog/category-dialog.component';
+import { CategoriesModule } from '../categories/categories.module';
 
 @NgModule({
   declarations: [
@@ -21,13 +23,15 @@ import { ShoppingListAddItemComponent } from './pages/shopping-list-add-item/sho
     ShoppingListSettingsComponent,
     UserListPermissionDialogComponent,
     ListItemDialogComponent,
-    ShoppingListAddItemComponent
+    ShoppingListAddItemComponent,
+    CategoryDialogComponent
   ],
   imports: [
     CommonModule,
     MaterialModule,
     FormsModule,
     ReactiveFormsModule,
+    CategoriesModule,
     ShoppingListsRoutingModule
   ]
 })

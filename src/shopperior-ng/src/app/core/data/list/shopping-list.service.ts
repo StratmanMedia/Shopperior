@@ -71,10 +71,11 @@ export class ShoppingListService {
   }
 
   public update(shoppingList: ShoppingListModel): Observable<void> {
+    this._logger.debug('Updating shopping list: ' + JSON.stringify(shoppingList));
     return this._listSubject.pipe(
       take(1),
       map(lists => {
-        this._api.ShoppingLists.update(shoppingList).subscribe(() => {
+        this._api.ShoppingLists.update(shoppingList).pipe(take(1)).subscribe(() => {
           this.loadLists();
         });
       })

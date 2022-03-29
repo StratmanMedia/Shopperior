@@ -18,7 +18,7 @@ export class CategoryListComponent implements OnInit {
   categories: Observable<CategoryModel[]>;
   
   constructor(private _categoryService: CategoryService) {
-    this.categories = this._categoryService.getMine();
+    // this.categories = this._categoryService.getMine();
   }
 
   ngOnInit(): void {

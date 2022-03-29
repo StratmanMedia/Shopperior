@@ -1,5 +1,5 @@
 export interface CategoryDto {
   guid: string;
-  userGuid: string;
+  shoppingListGuid: string;
   name: string;
 }

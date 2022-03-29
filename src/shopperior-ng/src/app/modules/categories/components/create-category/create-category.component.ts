@@ -1,7 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
-import { CategoryService } from 'src/app/core/data/category/category.service';
 import { CategoryModel } from 'src/app/core/data/category/models/category-model';
 import { LoggingService } from 'src/app/core/logging/logging.service';
 import { environment } from 'src/environments/environment';
@@ -17,26 +15,28 @@ export class CreateCategoryComponent implements OnInit {
     callerName: 'CreateCategoryComponent'
   });
   categoryForm: FormGroup = this.buildListForm();
+  @Input() category: CategoryModel;
+  @Output() onSave = new EventEmitter<CategoryModel>();
+  @Output() onCancel = new EventEmitter();
 
-  constructor(
-    private router: Router,
-    private _categoryService: CategoryService) { }
+  constructor() { }
 
   ngOnInit(): void {
   }
 
   submitForm(): void {
-    const categoryModel = <CategoryModel>{
-      name: this.categoryForm.controls.name.value
-    };
-    this._categoryService.add(categoryModel).subscribe(() => {
-      this.router.navigateByUrl('/app/categories');
-    });
+    this.category.name = this.categoryForm.controls.name.value;
+    this._logger.debug('Emitting category: ' + JSON.stringify(this.category));
+    this.onSave.emit(this.category);
+  }
+
+  cancelForm(): void {
+    this.onCancel.emit();
   }
 
   private buildListForm(): FormGroup {
     const form = new FormGroup({
-      name: new FormControl('', Validators.required)
+      name: new FormControl(this.category, Validators.required)
     });
     return form;
   }
