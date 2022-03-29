@@ -25,7 +25,8 @@ export class ListItemDialogComponent implements OnInit {
     private _categoryService: CategoryService) { }
 
   ngOnInit(): void {
-    this.categories = this._categoryService.getMine();
+    
+    // this.categories = this._categoryService.getMine();
     if (!this.data.quantity) {
       this.data.quantity = 1;
     }

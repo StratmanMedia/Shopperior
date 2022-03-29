@@ -1,5 +1,5 @@
 export interface CategoryModel {
   guid: string;
-  userGuid: string;
+  shoppingListGuid: string;
   name: string;
 }

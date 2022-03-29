@@ -8,6 +8,8 @@ import { LoggingService } from 'src/app/core/logging/logging.service';
 import { environment } from 'src/environments/environment';
 import { CategoryModel } from 'src/app/core/data/category/models/category-model';
 import { CategoryService } from 'src/app/core/data/category/category.service';
+import { ShoppingListModel } from 'src/app/core/data/list/models/shopping-list-model';
+import { map } from 'rxjs/operators';
 
 @Component({
   selector: 'app-list-item-form',
@@ -25,11 +27,14 @@ export class ListItemFormComponent implements OnInit {
   
   constructor(
     private _shoppingListService: ShoppingListService,
-    private _categoryService: CategoryService,
     private _router: Router) { }
 
   ngOnInit(): void {
-    this.categories = this._categoryService.getMine();
+    this.categories = this._shoppingListService.getOne(this.listGuid).pipe(
+      map((list: ShoppingListModel) => {
+        return list.categories;
+      })
+    );
     this.itemForm = this.buildItemForm();
   }
 
@@ -46,11 +51,11 @@ export class ListItemFormComponent implements OnInit {
       isInCart: this.itemForm.controls.isInCart.value
     }
     this._logger.debug(`Saving item. ${JSON.stringify(item)}`);
-    this._shoppingListService.addItem(item).pipe()
-    .subscribe(() => {
-      this._logger.debug(`Item saved.`);
-      this._router.navigateByUrl(`/app/lists/${this.listGuid}`);
-    });
+    this._shoppingListService.addItem(item)
+      .subscribe(() => {
+        this._logger.debug(`Item saved.`);
+        this._router.navigateByUrl(`/app/lists/${this.listGuid}`);
+      });
   }
 
   calculateSubtotal(): void {

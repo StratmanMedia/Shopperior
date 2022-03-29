@@ -34,22 +34,10 @@ export class ShopperiorApiService {
   Categories = new class {
     constructor(private _super: ShopperiorApiService) { }
 
-    getAllForUser(): Observable<CategoryModel[]> {
-      return this._super.get<CategoryDto[]>('/api/v1/categories').pipe(
-        map((res: CategoryDto[]) => {
-          return res.map((dto: CategoryDto) => {
-            return <CategoryModel>{
-              guid: dto.guid,
-              userGuid: dto.userGuid,
-              name: dto.name
-            };
-          });
-        })
-      );
-    }
-
     add(category: CategoryModel): Observable<void> {
+      this._super._logger.debug('Adding category: ' + JSON.stringify(category));
       const data = <CategoryDto>{
+        shoppingListGuid: category.shoppingListGuid,
         name: category.name
       };
       return this._super.post('/api/v1/categories', data);
@@ -69,6 +57,13 @@ export class ShopperiorApiService {
                 userEmail: p.user.emailAddress,
                 shoppingListGuid: p.shoppingListGuid,
                 permission: p.permission
+              };
+            });
+            const categories = dto.categories.map(c => {
+              return <CategoryModel>{
+                guid: c.guid,
+                shoppingListGuid: c.shoppingListGuid,
+                name: c.name
               };
             });
             const items = dto.items.map(i => {
@@ -91,6 +86,7 @@ export class ShopperiorApiService {
               guid: dto.guid,
               name: dto.name,
               permissions: permissions,
+              categories: categories,
               items: items
             };
           });
@@ -110,6 +106,7 @@ export class ShopperiorApiService {
     }
 
     update(list: ShoppingListModel): Observable<void> {
+      this._super._logger.debug('Updating shopping list: ' + JSON.stringify(list));
       const permissions: UserListPermissionDto[] = [];
       list.permissions.forEach(p => {
         const user = <UserDto>{
@@ -122,10 +119,18 @@ export class ShopperiorApiService {
         };
         permissions.push(permission);
       });
+      const categories: CategoryDto[] = list.categories.map(c => {
+        return <CategoryDto>{
+          guid: c.guid,
+          shoppingListGuid: c.shoppingListGuid,
+          name: c.name
+        };
+      });
       const data = <ShoppingListDto>{
         guid: list.guid,
         name: list.name,
-        permissions: permissions
+        permissions: permissions,
+        categories: categories
       };
       return this._super.put(`/api/v1/lists/${list.guid}`, data).pipe(
         map((res: void) => {
@@ -207,9 +212,9 @@ export class ShopperiorApiService {
 
   private get<T>(path: string): Observable<T> {
     const uri = `${this._url}${path}`;
-    this._logger.debug(`GET:${uri} Started.`);
     return this.injectAuthHeader(new HttpHeaders()).pipe(
       concatMap(headers => {
+        this._logger.debug(`GET:${uri} Started.`);
         return this._http.get<ApiResponseModel<T>>(uri, {headers});
       }),
       take(1),
@@ -223,10 +228,11 @@ export class ShopperiorApiService {
   }
 
   private post(path: string, data: any): Observable<any> {
+    this._logger.debug('POST data: ' + JSON.stringify(data));
     const uri = `${this._url}${path}`;
-    this._logger.debug(`POST:${uri} Started.`);
     return this.injectAuthHeader(new HttpHeaders()).pipe(
       concatMap(headers => {
+        this._logger.debug(`POST:${uri} Started.`);
         return this._http.post(`${uri}`, data, {headers});
       }),
       take(1),
@@ -240,10 +246,11 @@ export class ShopperiorApiService {
   }
 
   private put(path: string, data: any): Observable<any> {
+    this._logger.debug('PUT data: ' + JSON.stringify(data));
     const uri = `${this._url}${path}`;
-    this._logger.debug(`PUT:${uri} Started.`);
     return this.injectAuthHeader(new HttpHeaders()).pipe(
       concatMap(headers => {
+        this._logger.debug(`PUT:${uri} Started.`);
         return this._http.put(`${uri}`, data, {headers});
       }),
       take(1),
@@ -258,9 +265,9 @@ export class ShopperiorApiService {
 
   private delete(path: string): Observable<any> {
     const uri = `${this._url}${path}`;
-    this._logger.debug(`DELETE:${uri} Started.`);
     return this.injectAuthHeader(new HttpHeaders()).pipe(
       concatMap(headers => {
+        this._logger.debug(`DELETE:${uri} Started.`);
         return this._http.delete(`${this._url}${path}`, {headers});
       }),
       take(1),

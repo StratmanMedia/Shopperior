@@ -1,15 +1,18 @@
-import { Component, HostListener, OnDestroy, OnInit } from '@angular/core';
-import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Observable, Subject } from 'rxjs';
-import { take, takeUntil } from 'rxjs/operators';
+import { Subject } from 'rxjs';
+import { concatMap, take } from 'rxjs/operators';
+import { CategoryService } from 'src/app/core/data/category/category.service';
+import { CategoryModel } from 'src/app/core/data/category/models/category-model';
 import { ShoppingListModel } from 'src/app/core/data/list/models/shopping-list-model';
 import { UserListPermissionModel } from 'src/app/core/data/list/models/user-list-permission-model';
 import { ShoppingListService } from 'src/app/core/data/list/shopping-list.service';
 import { LoggingService } from 'src/app/core/logging/logging.service';
 import { NavigationService } from 'src/app/core/navigation/navigation.service';
 import { environment } from 'src/environments/environment';
+import { CategoryDialogComponent } from '../../components/category-dialog/category-dialog.component';
 import { UserListPermissionDialogComponent } from '../../components/user-list-permission-dialog/user-list-permission-dialog.component';
 
 @Component({
@@ -20,7 +23,7 @@ import { UserListPermissionDialogComponent } from '../../components/user-list-pe
 export class ShoppingListSettingsComponent implements OnInit, OnDestroy {
   private _logger = new LoggingService({
     minimumLogLevel: environment.minimumLogLevel,
-    callerName: typeof ShoppingListSettingsComponent
+    callerName: 'ShoppingListSettingsComponent'
   });
   private ngUnsubscribe = new Subject<void>();
   listForm: FormGroup;
@@ -35,11 +38,12 @@ export class ShoppingListSettingsComponent implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private router: Router,
     private shoppingListService: ShoppingListService,
+    private _categoryService: CategoryService,
     private navService: NavigationService) { }
 
   ngOnInit(): void {
     this.guid = this.route.snapshot.params.list;
-    this.shoppingListService.getOne(this.guid).pipe(take(1))
+    this.shoppingListService.getOne(this.guid).pipe()
       .subscribe(
         list => {
           this.shoppingList = JSON.parse(JSON.stringify(list));
@@ -55,6 +59,24 @@ export class ShoppingListSettingsComponent implements OnInit, OnDestroy {
 
   goBack(): void {
     this.navService.goBack();
+  }
+
+  openCategoryDialog(): void {
+    const dialogRef = this.dialog.open(CategoryDialogComponent, {
+      width: '100%',
+      data: <CategoryModel>{
+        shoppingListGuid: this.guid,
+        name: ''
+      }
+    });
+    dialogRef.afterClosed().pipe(
+      concatMap((result: CategoryModel) => {
+        if (!!result) {
+          this._logger.debug('Saving category: ' + JSON.stringify(result));
+          return this._categoryService.add(result);
+        }
+      })
+    ).subscribe();
   }
 
   removePermission(list: UserListPermissionModel) {
