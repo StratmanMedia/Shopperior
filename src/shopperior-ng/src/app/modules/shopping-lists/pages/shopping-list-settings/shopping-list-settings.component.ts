@@ -47,6 +47,7 @@ export class ShoppingListSettingsComponent implements OnInit, OnDestroy {
       .subscribe(
         list => {
           this.shoppingList = JSON.parse(JSON.stringify(list));
+          this.shoppingList.categories.sort((a, b) => a.name.localeCompare(b.name));
           this.listForm = this.buildListForm(this.shoppingList);
         }
       );

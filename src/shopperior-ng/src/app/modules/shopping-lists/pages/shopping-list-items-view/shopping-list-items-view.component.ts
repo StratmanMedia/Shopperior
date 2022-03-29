@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute } from '@angular/router';
 import { Observable, ReplaySubject } from 'rxjs';
 import { take, tap } from 'rxjs/operators';
@@ -9,7 +8,7 @@ import { ShoppingListService } from 'src/app/core/data/list/shopping-list.servic
 import { LoggingService } from 'src/app/core/logging/logging.service';
 import { NavigationService } from 'src/app/core/navigation/navigation.service';
 import { environment } from 'src/environments/environment';
-import { ListItemDialogComponent } from '../../components/list-item-dialog/list-item-dialog.component';
+import { ShoppingListItemsViewModel } from '../../models/shopping-list-items-view-model';
 
 @Component({
   selector: 'app-shopping-list-items-view',
@@ -23,7 +22,7 @@ export class ShoppingListItemsViewComponent implements OnInit {
   });
   shoppingList = new Observable<ShoppingListModel>();
   guid: string;
-  listItems = new ReplaySubject<ListItemModel[]>(1);
+  listVM = new ReplaySubject<ShoppingListItemsViewModel[]>(1);
   cartItems = new ReplaySubject<ListItemModel[]>(1);
 
   constructor(
@@ -36,9 +35,24 @@ export class ShoppingListItemsViewComponent implements OnInit {
     this.guid = this.route.snapshot.params.list;
     this.shoppingList = this.shoppingListService.getOne(this.guid).pipe(
       tap(list => {
-        let listItems = list.items.filter(i => !i.isInCart).sort((a, b) => a.name.localeCompare(b.name));
+        let listItems = list.items.filter(i => !i.isInCart);
+        listItems.sort((a, b) => a.name.localeCompare(b.name));
         let cartItems = list.items.filter(i => i.isInCart).sort((a, b) => a.name.localeCompare(b.name));
-        this.listItems.next(listItems);
+        const listVM = listItems.reduce((viewModels, item) => {
+          const category = list.categories.find(c => c.guid === item.categoryGuid);
+          if(!!category?.name) {
+            let vm = viewModels.find(v => v.categoryName === category.name);
+            if (!!vm) {
+              vm.items.push(item);
+              return viewModels;
+            }
+            vm = <ShoppingListItemsViewModel>{ categoryName: category.name, items: [] };
+            vm.items.push(item);
+            viewModels.push(vm);
+            return viewModels;
+          }
+        }, new Array<ShoppingListItemsViewModel>());
+        this.listVM.next(listVM.sort((a, b) => a.categoryName.localeCompare(b.categoryName)));
         this.cartItems.next(cartItems);
       })
     );
