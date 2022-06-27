@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ShoppingListModel } from 'src/app/core/data/list/models/shopping-list-model';
 import { ShoppingListService } from 'src/app/core/data/list/shopping-list.service';
@@ -16,7 +16,7 @@ export class ShoppingListCreateComponent implements OnInit {
     minimumLogLevel: environment.minimumLogLevel,
     callerName: typeof ShoppingListCreateComponent
   });
-  listForm: UntypedFormGroup = this.buildListForm();
+  listForm: FormGroup = this.buildListForm();
 
   constructor(
     private shoppingListService: ShoppingListService,
@@ -34,9 +34,9 @@ export class ShoppingListCreateComponent implements OnInit {
     });
   }
 
-  private buildListForm(): UntypedFormGroup {
-    const form = new UntypedFormGroup({
-      name: new UntypedFormControl('', Validators.required)
+  private buildListForm(): FormGroup {
+    const form = new FormGroup({
+      name: new FormControl('', Validators.required)
     });
     return form;
   }

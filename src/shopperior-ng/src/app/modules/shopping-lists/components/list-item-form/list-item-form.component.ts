@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { ListItemModel } from 'src/app/core/data/list/models/list-tem-model';
@@ -19,7 +19,7 @@ export class ListItemFormComponent implements OnInit {
     minimumLogLevel: environment.minimumLogLevel,
     callerName: 'ListItemFormComponent'
   });
-  itemForm: UntypedFormGroup;
+  itemForm: FormGroup;
   @Input() listGuid: string;
   categories: Observable<CategoryModel[]>;
   
@@ -63,17 +63,17 @@ export class ListItemFormComponent implements OnInit {
     this.itemForm.controls.unitPrice.setValue(newUnitPrice);
   }
 
-  private buildItemForm(): UntypedFormGroup {
-    const form = new UntypedFormGroup({
-      name: new UntypedFormControl('', Validators.required),
-      brand: new UntypedFormControl(''),
-      details: new UntypedFormControl(''),
-      category: new UntypedFormControl('', Validators.required),
-      quantity: new UntypedFormControl(1, Validators.min(0)),
-      measurement: new UntypedFormControl('ea', Validators.required),
-      unitPrice: new UntypedFormControl(0),
-      subtotal: new UntypedFormControl(0),
-      isInCart: new UntypedFormControl(false)
+  private buildItemForm(): FormGroup {
+    const form = new FormGroup({
+      name: new FormControl('', Validators.required),
+      brand: new FormControl(''),
+      details: new FormControl(''),
+      category: new FormControl('', Validators.required),
+      quantity: new FormControl(1, Validators.min(0)),
+      measurement: new FormControl('ea', Validators.required),
+      unitPrice: new FormControl(0),
+      subtotal: new FormControl(0),
+      isInCart: new FormControl(false)
     });
     return form;
   }

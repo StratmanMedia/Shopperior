@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { CategoryService } from 'src/app/core/data/category/category.service';
 import { CategoryModel } from 'src/app/core/data/category/models/category-model';
@@ -16,7 +16,7 @@ export class CreateCategoryComponent implements OnInit {
     minimumLogLevel: environment.minimumLogLevel,
     callerName: 'CreateCategoryComponent'
   });
-  categoryForm: UntypedFormGroup = this.buildListForm();
+  categoryForm: FormGroup = this.buildListForm();
 
   constructor(
     private router: Router,
@@ -34,9 +34,9 @@ export class CreateCategoryComponent implements OnInit {
     });
   }
 
-  private buildListForm(): UntypedFormGroup {
-    const form = new UntypedFormGroup({
-      name: new UntypedFormControl('', Validators.required)
+  private buildListForm(): FormGroup {
+    const form = new FormGroup({
+      name: new FormControl('', Validators.required)
     });
     return form;
   }
