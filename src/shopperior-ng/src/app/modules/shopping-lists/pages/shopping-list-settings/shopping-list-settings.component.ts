@@ -1,5 +1,5 @@
 import { Component, HostListener, OnDestroy, OnInit } from '@angular/core';
-import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormArray, UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Observable, Subject } from 'rxjs';
@@ -23,11 +23,11 @@ export class ShoppingListSettingsComponent implements OnInit, OnDestroy {
     callerName: typeof ShoppingListSettingsComponent
   });
   private ngUnsubscribe = new Subject<void>();
-  listForm: FormGroup;
+  listForm: UntypedFormGroup;
   shoppingList: ShoppingListModel;
   guid: string;
   showPermissionForm: boolean = false;
-  permissionForm: FormGroup;
+  permissionForm: UntypedFormGroup;
   newPermission: UserListPermissionModel;
 
   constructor(
@@ -99,9 +99,9 @@ export class ShoppingListSettingsComponent implements OnInit, OnDestroy {
     this.router.navigateByUrl(`/app/lists/${this.guid}`);
   }
 
-  private buildListForm(shoppingList: ShoppingListModel): FormGroup {
-    const form = new FormGroup({
-      name: new FormControl(shoppingList.name, Validators.required)
+  private buildListForm(shoppingList: ShoppingListModel): UntypedFormGroup {
+    const form = new UntypedFormGroup({
+      name: new UntypedFormControl(shoppingList.name, Validators.required)
     });
     return form;
   }
