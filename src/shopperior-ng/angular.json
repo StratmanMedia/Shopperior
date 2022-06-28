@@ -130,6 +130,7 @@
       }
     }
   },
+  "defaultProject": "shopperior-ng",
   "cli": {
     "analytics": false
   }
