@@ -8,7 +8,7 @@
   <mat-sidenav #sidenav mode="over" (keydown.escape)="sidenav.close()">
     <mat-nav-list>
       <mat-list-item>
-        {{ (user | async)?.name }}
+        <a routerLink="/app/dashboard">{{ (user | async)?.name }}</a>
       </mat-list-item>
       <mat-list-item>
         <a routerLink="/app/lists">Lists</a>
