@@ -17,7 +17,7 @@ export class HomeComponent implements OnInit {
     this._authService.isAuthenticated$.subscribe(
       isAuth => {
         if (isAuth) {
-          this._router.navigateByUrl('/app/lists');
+          this._router.navigateByUrl('/app/dashboard');
         }
       }
     )
