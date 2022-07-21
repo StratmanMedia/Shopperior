@@ -12,8 +12,8 @@ using Shopperior.Data.EFCore;
 namespace Shopperior.Data.EFCore.Migrations
 {
     [DbContext(typeof(ShopperiorDbContext))]
-    [Migration("20220324200224_reset")]
-    partial class reset
+    [Migration("20220721193245_initial")]
+    partial class initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -306,7 +306,7 @@ namespace Shopperior.Data.EFCore.Migrations
                     b.HasOne("Shopperior.Domain.Entities.Category", "Category")
                         .WithMany()
                         .HasForeignKey("CategoryId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.HasOne("Shopperior.Domain.Entities.ShoppingList", "ShoppingList")

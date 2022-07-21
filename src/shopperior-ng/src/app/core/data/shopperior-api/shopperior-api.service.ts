@@ -16,6 +16,7 @@ import { ListItemDto } from './models/list-item-dto';
 import { ShoppingListDto } from './models/shopping-list-dto';
 import { UserDto } from './models/user-dto';
 import { UserListPermissionDto } from './models/user-list-permission-dto';
+import { retryWithBackoff } from './retry-with-backoff';
 
 @Injectable({
   providedIn: 'root'
@@ -217,6 +218,7 @@ export class ShopperiorApiService {
         this._logger.debug(`GET:${uri} Started.`);
         return this._http.get<ApiResponseModel<T>>(uri, {headers});
       }),
+      // retryWithBackoff(5000),
       take(1),
       map((res: ApiResponseModel<T>) => {
         this._logger.debug(`GET:${uri} Completed.`);
@@ -235,6 +237,7 @@ export class ShopperiorApiService {
         this._logger.debug(`POST:${uri} Started.`);
         return this._http.post(`${uri}`, data, {headers});
       }),
+      retryWithBackoff(5000),
       take(1),
       map((res: ApiResponseModel<null>) => {
         this._logger.debug(`POST:${uri} Completed.`);
@@ -253,6 +256,7 @@ export class ShopperiorApiService {
         this._logger.debug(`PUT:${uri} Started.`);
         return this._http.put(`${uri}`, data, {headers});
       }),
+      retryWithBackoff(5000),
       take(1),
       map((res: ApiResponseModel<null>) => {
         this._logger.debug(`PUT:${uri} Completed.`);
@@ -270,6 +274,7 @@ export class ShopperiorApiService {
         this._logger.debug(`DELETE:${uri} Started.`);
         return this._http.delete(`${this._url}${path}`, {headers});
       }),
+      retryWithBackoff(5000),
       take(1),
       map((res: ApiResponseModel<null>) => {
         this._logger.debug(`DELETE:${uri} Completed.`);
