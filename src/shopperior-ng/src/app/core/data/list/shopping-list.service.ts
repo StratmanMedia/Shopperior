@@ -50,25 +50,23 @@ export class ShoppingListService {
   public add(shoppingList: ShoppingListModel): Observable<void> {
     return this._listSubject.pipe(
       take(1),
-      concatMap(lists => {
+      map(lists => {
         lists.push(shoppingList);
         this._listSubject.next(lists);
-        return this._api.ShoppingLists.add(shoppingList).pipe(take(1));
-      }),
-      map(guid => this.loadLists())
+        this._api.ShoppingLists.add(shoppingList).pipe(take(1)).subscribe(guid => this.loadLists());
+      })
     );
   }
 
   public delete(guid: string): Observable<void> {
     return this._listSubject.pipe(
       take(1),
-      concatMap(lists => {
+      map(lists => {
         const index = lists.findIndex(a => a.guid === guid);
         lists.splice(index, 1);
         this._listSubject.next(lists);
-        return this._api.ShoppingLists.delete(guid).pipe(take(1));
-      }),
-      map(() => this.loadLists())
+        this._api.ShoppingLists.delete(guid).pipe(take(1)).subscribe(() => this.loadLists());
+      })
     );
   }
 
@@ -76,13 +74,12 @@ export class ShoppingListService {
     this._logger.debug('Updating shopping list: ' + JSON.stringify(shoppingList));
     return this._listSubject.pipe(
       take(1),
-      concatMap(lists => {
+      map(lists => {
         let foundList = lists.find(l => l.guid === shoppingList.guid);
         foundList = {...shoppingList};
         this._listSubject.next(lists);
-        return this._api.ShoppingLists.update(shoppingList).pipe(take(1));
-      }),
-      map(() => this.loadLists())
+        this._api.ShoppingLists.update(shoppingList).pipe(take(1)).subscribe(() => this.loadLists());
+      })
     );
   }
 
@@ -90,13 +87,12 @@ export class ShoppingListService {
     this._logger.debug(`Adding item. ${JSON.stringify(item)}`);
     return this._listSubject.pipe(
       take(1),
-      concatMap(lists => {
+      map(lists => {
         var foundList = lists.find(l => l.guid === item.shoppingListGuid);
         foundList.items.push(item);
         this._listSubject.next(lists);
-        return this._api.ShoppingLists.addItem(item).pipe(take(1));
-      }),
-      map(() => this.loadLists())
+        this._api.ShoppingLists.addItem(item).pipe(take(1)).subscribe(() => this.loadLists());
+      })
     );
   }
 
@@ -104,14 +100,13 @@ export class ShoppingListService {
     this._logger.debug(`Updating item. ${JSON.stringify(item)}`);
     return this._listSubject.pipe(
       take(1),
-      concatMap(lists => {
+      map(lists => {
         let foundList = lists.find(l => l.guid === item.shoppingListGuid);
         let foundItem = foundList.items.find(i => i.guid === item.guid);
         foundItem = {...item};
         this._listSubject.next(lists);
-        return this._api.ShoppingLists.updateItem(item).pipe(take(1));
-      }),
-      map(() => this.loadLists())
+        this._api.ShoppingLists.updateItem(item).pipe(take(1)).subscribe(() => this.loadLists());
+      })
     );
   }
 
